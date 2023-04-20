@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>View Users</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewCustomer.css" rel="stylesheet" />
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/home" class="btn btn-info text-white float-end">Go Back</a>
+			</div>
+			<div class="col-sm-12 col-md-12">
+				<form th:action="@{/viewCustomerInfo}" method="post" class="singleInputButtonForm">
+					<h3 class="text-center heading">View Customer Information Form</h3>
+					<input type="text" id="customerId" name="customerId" placeholder="Customer Id"
+						class=".ui-box .top-leftStart-backward" required />
+					<input type="submit" class="submitBtn" value="Submit" />
+				</form>
+			</div>
+		</div>
+		<div th:if="${customerList != null}">
+			<h3 class="customeHeading heading text-center">Customer Information</h3>
+			<div class="row customerInfoDiv" th:each="customer : ${customerList}">
+				<div class="col-sm-3 col-md-3 mt-4">
+					<div class="card mb-4">
+						<div class="card-body text-center">
+							<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEBAPDw8PDw0NDw8PEA8PDw0PFREWFhURFRUYHSggGBolGxUVITIhJSkrLi8vFx8/OjMtQyguLjcBCgoKDg0OFxAQGC0dHR0tLS0tLSstLSstLS0rNy0rLSstLS0tLSstLSs3Ly0vLS0rLSswLS0vLSstKy0vLS4rK//AABEIAKgBLAMBIgACEQEDEQH/xAAcAAACAwEBAQEAAAAAAAAAAAACAwABBAUGBwj/xAA+EAACAgEBBQUFBQYEBwAAAAABAgADEQQFEiExURNBYXGhBhRSgZEHIkKx8CMyQ2KSwRWi0fEWJDM0csLh/8QAGQEAAwEBAQAAAAAAAAAAAAAAAAECAwQF/8QAJxEBAQEBAAMAAgEDBAMAAAAAAAERAgMSIRMxUYHR8ARBwfEiMmH/2gAMAwEAAhEDEQA/APk4jBFZk3p1Sa4jSZYMWOMYomkTWvSmbA0w6fnNSmZ9ftnWhWjFaIBkzCRNN1T8JyrOc6FvETA3PE6fD8hT9kWPMVpm20RJpzOnXRzkYGMCa7NMYC6czHri2tp1CAZDxmv3WJevEL47hzqVnxIY3EBhMOuMXKCOURJho+JPNkopkE2QWskWsGO9W/8AqWfyaryNKNWO+ItBEOurzPsKSU2CVgo8ZiKWdQ/0URKjGWARM+oqUMkkmJBpJJKMQSDLMqRaaSZkkxEaSpcqAdgwRDxJuzq5rjMSMBi1hZlIp1TcZrRpz1PGa0MXURWoQwJnDzRW0n9IAxMz2LnzmyzjFvVNuO8T+nNsBHOWidJqsr6xTJjlOrnrV+wTw5iAWHTEIuRKa3PMCWcA5Ey2LHtjpFt5RtOWRklEcOUfuw6qh3yPRp7457LBKzY9XHhKWvB4zDrw/WnuxEQ6gek6DaUdItkxIngy7o/LKWYm7lHMIDJH3NmDllBmitxAaqBic83hpcrQYtlghzJvyr1KnLF7khSX2kE2RX1P6EiCVhb8m/M7OVfQ7smJe9Kk/AmJJMyorTSVLkiDrB5ReZw0venTI5vVoVo1TMavGrZKxN5aDNNL5ExB4yh+MM+M7G8RqPFIYaiQzrTXNAmZI9Wk2lICyqZ3qm2AwmnHdibMc96sQCPATY3GAwGJ0c+QtYbG8JnM121ZiTSZvOo15sSpPCE2mJ48pp01eBxmhUz5SOvJiL39+OeNNgZMQ9WTOtYn0iq6IvyfPpzyMqJgRVlJJ4fOdLseMUUO9u44dZP5DnTnWaaZmTjOvbXMOoXENla8d1jZYpkHGFZmATM+sdEIMkJ+cEzk6jWKkkkEkKl4h4glYYNDiQjEkuI1CXiWRBhQkkJRJuwwa17soxglMJ0SufS8ww0WwkEqKxoVpA+DEAwsyon1dXS255zes42mnUoeZ9z/AHc/U+tKxqRIMarTLRhqwpQMhMWiwJURRqmitsEEHBBBHLmJ7jadWpsbZ/YDRjttnaGxxaNnILb3Lb7MlnE5+7yHlL97Ezx6+e9ljmMQuxHOfRF09K6na9FaV1Iuzbi2/UUWm8CtXasuvaLXlmIA5gjAPCecu9m7C2lFNld6axLbKrQLK1AqJFu+HAKhcE5xy+kqeWl14rP084K890aF6TsNs0pSNXTZXfUlq1Pms5qsIyu/XYuCh7jxHcQDwnX9p9jvbtHaHZruU0WV75St3CbyKEVa0BJJIPADHA5IhfJpfiuPGuMxtdeBPX7O2YNI+p0+urS7TnQjWKyVp22691KLdVYyCxWAZvuHAyuCO+I0uiOms1FbdhdW2i1Gp095pqtW5VrY121lwSvE8R1HHlI68vxfPhv+7y5SL3eM7C7Jd13g9ZsND6wVDe3jSu9k5A3VP3Sd0kf2mqvRVV2bOZCtvbuu/vVkrZnUbhwG7gBjkD38Jn155I14/wBN11f4n+R5e1OMy20g8539foCO1sV62CXFHRS29XvMd3PDBHAjgTOVYs048vtPiO/H1xcri3acRHYTpXJziQhnR7KndYLNPwmZq52exmO+nB4Sblac+Rz9wysTW6xREi8RtOiQZeYRSVgyfXD0MkvjJgycPVYlgZhCrrGrgQxNoAmJREYYJgWtIaWREb0cjS2dityX2cYIQWPU6R2UJao6UZcpe1HSMTZU2JiQ8ZqSLpFblMYGmWswwxmOJ1rDwg0zBoSvDBrSuMjJwMjJAyQO84756DbWr0WoOl/balV0+i0uibOlqJfst7Lj9tgZ3uR5eM8yGl70Br2f/E2nsfUtZ26LZs4bKowiXWbg3cXXMXXLZXiB158ONbO9pKKK9nhRba2lGuq1FbVoi2Vao5YI++TlfEcfCeODSnuAi9Vfkv7eiTXUV6e3S1vea9TfQ9ttlKBkpq3iqhBYd5t5gScgcJ1dZ7RaS3Ua4WLqDpNe1F2+i1pqdLdV+6VBYqw4kHjyM8VXZmMzFYfPX8PSaW7Rf80O3trV9KdJW1tT22XN21dvbPunCDKbu6O7HfmZtl7c7Oi7T2L2iNTqV07fi01tibrY/kbvHUA9Zwy0Av1ivMpzux6bTbX0yCsA3IvulmntqRF3Bc1bK15O8O0JJHPGB34AExVbQpxoizWhtI53lCBgyC/tQQd4cTnHn68QOD3zRs/TG61Kx3nLk8krHF3Y9yhQST4SL4Z/n9f7tZ/qOp/H+Z/ZpbVVbmrXefN71un3BjCuzfe48P3sTktNeo0rBa7ACFvazsEOS7orY3sdMndHUq3SY2Mrnn13/wC/9I8nkvebP1/e3/kt1imrjWMWWl6zws8ImwcDHOYrP5RyhjeuIaudArE2JLna50wlIO7NREWyx60nROJYEMiQCK09VuybsOViRo0JErEuVEaGGhig0NTNIVh6mNDRCw8wZ2DZoO9AYyCXBg96aaGmMmNpsxHf0Vnx0EtjQ4mENGKZneWbaGkB4zKtkPth3xetJpDSi0ze8DrBa3Mqc0sajbADZMzgzZUnCO5yMMpPGaC0zoZu2RULNRRW3FXvpVge9S4yPpmY9faufI9Bsr2A2lqa1tSlUrcBkNzrWXUjgQvEj5gTj+0Hs/qtC4XU1bm8DusGV0fHPBB9Dgz9IaXUoy8CMKQh7sHgMcfGfIvth1gsYAHPZ2AcjgZ4SOevta9+POZY8BszRG+6qlSFa11QM3BVzzY+Q4z1uzKdNbqH0FROn0VSPZrtQf8AudYlRGULfgUsQAowO/iZ5DZtdr2KKQe1B3lxgYI5HJ4Djgceo6z6RtPbGltqXZ20XXRah6qrr7dPV+zrtOCtNvFm3gu6T3ZPlLY59eR2ztHtEu1SqEF93uGnVRhdPpKa1LInTIesZ6b/AMRnmp3fanWaTFGm0RsfT6YWntbOD32uRvPyHD7o7pwCYquITFvIzTM9kJDo2aLYyt+CzeErCUXlMZWfKCTAwNAMMwDDVQDHv+sEmEwzAaNUTMrP0gEyExKwRMqUTJECt6ErQvdLPh9RCXR2fD6iOVfwSvD35Q0lnw+ohDR2fD6iXsZ2RQaGDLGjs+H1EtdHZ8PqI9ibA4kxHro7Ph9RCGis+H1EftEgRo4NIujs+H8oY0dnw/lC2JsCWibHjzorfh9RLGz7fh/KOWFIyqY4HAmhdA/wyn0Fp5L6iP3gJrbJE3dtMq6C4fg9Y/3S0/gMjrKVhq2ZnW9mMnWabgcC5CTjhznGpqvRlYKcoyuCDyIORy8p9P2F7b6h0wyJvjmCbM+eS0zs+/KrmS3OvkfVdDogayr8QLVtX94YKsHXme4gT5D9qqhbLcspJsVsZweY6kz1tX2gXbv/AEKjgYzvuMzzHtJ7a32EndWrh+BnH95nOMtrq68nHUzXnPZbRWot2oaq1qlpG7Ule9Zq3Y/s1X7pIQEAsw7gIHtttrU6vsWt01unSpNzL1Mge08/vFRwwAAPA9Zza/aDV9stys7dm2VDPayMeXEb07g+0HaA/h0fLth/7ypv8uf053bfrxwaUzx+uttutstYfetdnbB7yfHjMzad+nrAg2GZn5TUaH6Rb6Zukcp2MgfEIvKt0dnQfURY0tg6f1CaXD9Rkyt6ENNZ09ZPd36SRgcwTDNDdJOybpJPCTAePNTdIDUt0hps5iyZoahukWdM3SGrhe9LzC93bpK7BukNV8ep93Xw+kIVAf7GCt2Op+sYt3nE5/olqB5D0jRpx1/yxa6qNGpjT9GmmXxMeulXofWZ+3HxfSGmoHUnzAgV1oWhPL5QhTX19ItdQP1iGNSI9TlMFSjx+WIxak6EfKJGqH64xq6wfrENLKaKah3iGKqviX6iK97HQekRbaPwomepxHpZW7squsplrHLj05Tk32kjiBn+Uw9Oi/CP7xafq6a6cHr/AJDj1lnS/ogf6zMpUcuHlGrqQO8+kepytFGz2dgqIXY8AqqWY/Ken2X7C6pW37KBjGAvaJn54aeY0u1mqYPW7Iy8irMp8sgid+r7RNUowd1vEls/nE08cm/+Xx6bSbCqRCLtBe7ZPFHZvRTPC+1WyRvNu0WUoc4DizI+Zno1+1O4AA6eonrvOMznbQ+0TVWnKnsR8KHh6iLbf26e/Jz1ufP6PEaMImKnwGXgp5Bx3Y8ZoZKxzZR5sBHbW17aont7LXzzG/ug/Sc4aSkfhY+dljfm0HPcrR+yP46/61gmuv4k/qWLrSteKrj5t/rGNqY9LE93Q8iPrAfTr+sSHUxbaiAyqOnH6Ai2oHUSWOD4eRxMVunzyb6gGLVSND1D4h6RD145EfMGLWth+Mn5CHlvi9IlYoJ/4/LIk7IS+1PeQfqIBtgf1GqEW1Alm8d+RB7RT3+sD+gNHn9IJrHX0jd8dYJfx/KIyjWIJr8I0vB34g0DMIKek6HuTd3GWKyPwH5DMrEezAKz4xgQ9J0FU/A3zGI1Ks/w2+kCvTmCkwhQfGdavSt3I3pNK6Q/AfSPE3txFqPSGKz0ndXRE/gPpHLs4/CfSPE/kjzwRuksq3SekGzT8MMbL8IYX5I8wEboflBsD44An856sbK8JDsnwhg/JHjuJ4ZOenIyFSOs9TdsZefI9REVaAHmM+Yiw/yRwEsblxmgVt1M7n+G1/CPnDXZ693H+0eF+SOFg+MrjPQnZuO8fnFHQDz+UMHvHCJMEkzuNofA/SLbRD9CGH7xxSTALGdltD4fSJOlEWH7RyixglzOm2l8IptKIHsc42QDYZvbTRbaeJWxhNkA2TY2nim08DljKbYJtmhqYo0xK+EmyKfwP1mhqfKLNURxnJI/+QDaZoNcWyeEFFjUdRC7YQWrgbmOv0gfw3tJXaRePCVEMfSBT4ARtenJ5DPywJ16qh4TVWBNsebe3Kq2WW58PCba9lqO6dBCOsati9RHkRe6xJs8dI5NAvSaTeO6PpsB4cD5R4i9Vnr0axy6FTNSrgcAIaPjgI8T7VnXZo6Q12YI8arHfGjXr3xp3pm/w4dJR2cOk0HXjuAl++D9YgN6c3UbL3uXD5cJytTQ1X8MMP5eZnpzqhMWpfe7xx8BFYrnqvN++1jgylT5DhOjo1qsX7m6eHz+cHWaYsOABJ4csYnNp071HOHHiCT6SWvyxufQgfh8+4N85mfTOCcMd3uXp9I6rbAHAtg/zDhNXvOeOUPrAfY5AByQd4dDzzGNRw+9z+U2W2k94mC7rvjyzmCp9Z+z6dfqPKVfSOfTvlveF44OeuJmu1W9zAx07z5xLkoWQRL1iWb17uEVZZ4xKkA9YiLK4b2eMz2XxLgHSJZZVmp8D8oo6qJclWwi2xI1w6GKe8eP0MDxGEWyymv8D9IttR4H6RaqQTLFlYJ1I8vMGUb16iJWKZYtlhGwQDZAwmBvDwh73hBJ8IjfShtMdZDtgdxkkmuuP0iDaue+GNp+MkkNHpD69pjrHVbWA75JIan0jXVto9+PrHja46iSSPai8RR2svWU21EkkhpekZrNojuMQ21sHnJJDVTiFnbRB/ezGrtYHjvSSRaq+OLO1h1i22qOskkNL0jDrdYrDjiY69djhkY7pJItaTmYd/iA8IttpASSQ0/SFPtAHviH1gMkkWqnMZn1A6xLanofrJJBWEtqTFtqZckWqwlr4prhJJEqQs3QDqZJIHijqIJvEkkDwJtEEuJJIhgSwlb8kkDUXg70kkA//9k="
+								alt="avatar" class="img-fluid">
+							<!--<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+								alt="avatar" class="rounded-circle img-fluid mt-4 " style="width: 150px; height: 50px;">-->
+						</div>
+					</div>
+
+				</div>
+				<div class="col-sm-9">
+					<div class="card mb-4">
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-sm-3">
+									<p class="mb-0">Full Name</p>
+								</div>
+								<div class="col-sm-9">
+									<p class="text-muted mb-0" th:text="${customer.name}"></p>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-sm-3">
+									<p class="mb-0" >Address</p>
+								</div>
+								<div class="col-sm-9">
+									<p class="text-muted mb-0" th:text="${customer.address}"></p>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-sm-3">
+									<p class="mb-0">Mobile</p>
+								</div>
+								<div class="col-sm-9">
+									<p class="text-muted mb-0" th:text="${customer.mobileNo}"></p>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-sm-3">
+									<p class="mb-0">Date of Birth</p>
+								</div>
+								<div class="col-sm-9">
+									<p class="text-muted mb-0" th:text="${customer.dateofbirth}"></p>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-sm-3">
+									<p class="mb-0">Aadhar Card No</p>
+								</div>
+								<div class="col-sm-9">
+									<p class="text-muted mb-0" th:text="${customer.aadharcardNo}"></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--<div class="table-responsive" id="table">
+					<table class="table table-editable">
+						<thead class="thead-dark">
+							<tr class="table-success">
+								<th>Customer Id</th>
+								<th>Account Code</th>
+								<th>Name</th>
+								<th>Ledger Balance</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="agent : ${agentList}">
+								<td th:text="${agent.customerId}"></td>
+								<td th:text="${agent.accountCode}"></td>
+								<td th:text="${agent.name}"></td>
+							
+								<td><input type="number" id="ledgerbalance" name="ledgerbalance"
+										th:value="${agent.ledgerbalance}" /></td>
+			
+							</tr>
+						</tbody>
+					</table>
+				</div>-->
+				</div>
+
+			</div>
+		</div>
+		<script th:replace="includes/script :: script"></script>
+		<script th:if="${isDataMissing != null}">
+			alert("No data available!");
+		</script>
+
+</body>
+
+</html>

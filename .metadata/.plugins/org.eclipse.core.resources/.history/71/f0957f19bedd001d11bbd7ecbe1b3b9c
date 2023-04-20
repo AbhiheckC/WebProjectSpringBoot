@@ -1,0 +1,47 @@
+package com.idsspl.webproject.serviceImpl;
+
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.idsspl.webproject.entity.CustomerEntity;
+import com.idsspl.webproject.model.CustomerModel;
+import com.idsspl.webproject.repo.CustomerRepo;
+import com.idsspl.webproject.service.CustomerService;
+
+@Service
+public class CustomerServiceImpl implements CustomerService {
+
+	@Autowired
+	private CustomerRepo customerRepo;
+	
+	@Override
+	public List<CustomerModel> getCustomerList(CustomerModel customer) {
+		
+		List<CustomerEntity> customerEntityList = customerRepo.findByCustomerId(customer.getCustomerId());
+		List<CustomerModel> customerModelList = new ArrayList<>();
+		
+		customerEntityList.stream().forEach(customerEntity -> {
+			CustomerModel customerModel = new CustomerModel();
+			customerModel.setCustomerId(customerEntity.getCustomerId());
+			customerModel.setName(customerEntity.getName());
+			customerModel.setAddress(customerEntity.getAddress());
+			customerModel.setMobileNo(customerEntity.getMobileNo());
+			customerModel.setDateofbirth(customerEntity.getDateofbirth());
+			customerModel.setAadharcardNo(customerEntity.getAadharcardNo());
+			byte[] imageData = customerEntity.getSignature().getBytes(1, (int) customerEntity.getSignature().length());
+//			customerModel.setSignature(Base64.getEncoder().encodeToString(customerEntity.getSignature()));
+			customerModel.setSignature(imageData);
+//			System.out.println("hqhqhqhqhqhqhqhq------"+Base64.getEncoder().encodeToString(customerEntity.getSignature()));
+			System.out.println("NAME------"+customerEntity.getName());
+			customerModelList.add(customerModel);
+		});
+		
+		return customerModelList;
+	}
+	
+
+}

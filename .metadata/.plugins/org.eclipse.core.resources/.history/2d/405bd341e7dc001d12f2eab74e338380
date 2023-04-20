@@ -1,0 +1,24 @@
+<div class="container" th:fragment="header">
+	<div class="row">
+		<div class="col-md-12 headerContainer">
+			<form th:action="@{/logout}" method="post">
+				    <input class="btn btn-danger logoutBtn" type="submit" value="Logout" />
+			</form>
+			<p class="userInfo" th:text="'Welcome, ' + ${userName} + '!'"></p>
+			<!--<a class="btn btn-danger float-end" href="/logout">Logout</a>-->
+		</div>
+	</div>
+	<div class="row mb-4">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<img src="images/bank_heading.png" class="img-fluid img_heading" alt="heading">
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<img src="images/bank_logo.png" class="img-fluid rounded mx-auto d-block img_logo" alt="logo">
+		</div>
+
+	</div>
+</div>
