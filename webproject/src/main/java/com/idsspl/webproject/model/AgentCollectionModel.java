@@ -10,7 +10,7 @@ public class AgentCollectionModel {
 
 	private String name;
 
-	private Double ledgerBalance;
+	private Double ledgerbalance;
 
 	private Double collectionAmount;
 
@@ -46,12 +46,12 @@ public class AgentCollectionModel {
 		this.name = name;
 	}
 
-	public Double getLedgerBalance() {
-		return ledgerBalance;
+	public Double getLedgerbalance() {
+		return ledgerbalance;
 	}
 
-	public void setLedgerBalance(Double ledgerBalance) {
-		this.ledgerBalance = ledgerBalance;
+	public void setLedgerbalance(Double ledgerbalance) {
+		this.ledgerbalance = ledgerbalance;
 	}
 
 	public Double getCollectionAmount() {

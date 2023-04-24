@@ -1,9 +1,9 @@
-const successCallback = (position) => {
-  console.log(position);
-};
-
-const errorCallback = (error) => {
-  console.log(error);
-};
-
-navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+document.getElementById("saveCollection").addEventListener("click",()=>{
+	navigator.geolocation.getCurrentPosition(function(position) {
+	document.getElementById("latitude").value = position.coords.latitude;
+	document.getElementById("longitude").value = position.coords.longitude;
+	console.log("lat--", position.coords.latitude);
+	console.log("lap--", position.coords.longitude);
+	alert("lat--"+position.coords.latitude+"lap--"+position.coords.longitude)
+});
+})

@@ -16,7 +16,7 @@ public class AgentEntity {
 	private String name;
 
 	@Column(name = "ledgerbalance")
-	private Integer ledgerbalance;
+	private Double ledgerbalance;
 
 	@Column(name = "customer_id")
 	private String customerId;
@@ -40,11 +40,11 @@ public class AgentEntity {
 		this.name = name;
 	}
 
-	public Integer getLedgerbalance() {
+	public Double getLedgerbalance() {
 		return ledgerbalance;
 	}
 
-	public void setLedgerbalance(Integer ledgerbalance) {
+	public void setLedgerbalance(Double ledgerbalance) {
 		this.ledgerbalance = ledgerbalance;
 	}
 

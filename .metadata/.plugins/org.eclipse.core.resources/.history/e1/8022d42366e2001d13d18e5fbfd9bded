@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>View Users</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/home" class="btn btn-info text-white float-end">Go Back</a>
+			</div>
+			<div class="col-sm-12 col-md-12">
+				<form th:action="@{/viewAgentList}" method="post" class="singleInputButtonForm">
+					<h3 class="text-center heading">View Agent Form</h3>
+					<input type="text" id="customerId" name="customerId" placeholder="Customer Id"
+						class=".ui-box .top-leftStart-backward" required />
+					<input type="submit" class="submitBtn" value="Submit" />
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 col-md-12 mt-4" th:if="${agentList != null}">
+
+				<h3 class="heading text-center">Agent List</h3>
+				<h6><b>Customer ID: </b><span th:text="${agentList[0].customerId}"></span></h6>
+				<h6><b>Name: </b><span th:text="${agentList[0].name}"></span></h6>
+				<div class="text-center">
+					<form method="post" th:action="@{/saveCollection}" th:object="${agentCollectionList}">
+						<!--th:object="${agentList}" -->
+						<div class="table-responsive" id="table">
+							<table class="table table-editable">
+								<thead class="thead">
+									<tr class="table-success">
+										<!-- <th>Customer Id</th>-->
+										<th>Account Code</th>
+										<th>Account Type</th>
+										<!-- <th>Name</th>-->
+										<th>Ledger Balance</th>
+										<th>Collection Amount</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="agent : ${agentList}">
+										<input type="hidden" name="customerId" th:value="${agent.customerId}" />
+										<td th:text="${agent.accountCode}"></td>
+										<input type="hidden" name="accountCode" th:value="${agent.accountCode}" />
+										<td th:text="${agent.accountType}"></td>
+										<input type="hidden" name="accountType" th:value="${agent.accountType}" />
+										<input type="hidden" name="name" th:value="${agent.name}" />
+										<td th:text="${agent.ledgerbalance}"></td>
+										<input type="hidden" name="ledgerbalance" th:value="${agent.ledgerbalance}" />
+										<td><input type="number" id="collectionAmount" name="collectionAmount"
+												min="0" /></td>
+										<!-- th:value="${agent.ledgerbalance}"	 -->
+										<!-- <td><a th:href="@{/editUser/{id}(id=${user.userId})}">Edit</a></td> -->
+
+										<!--<td class="d-none">
+											<input type="text" id="customerId" name="customerId" th:value="${agent.customerId}"/>
+										</td>
+										<td>
+											<input type="text" th:value="${agent.accountCode}" id="accountCode" name="accountCode" readonly/>
+										</td>
+										<td th:text="${agent.accountType}" id="accountType" name="accountType" th:field="*{accountType}"></td>
+										<td class="d-none" th:text="${agent.name}" id="name" name="name" th:field="*{name}"></td>
+										<td th:text="${agent.ledgerbalance}" id="ledgerbalance" name="ledgerbalance" th:field="*{ledgerbalance}"></td>
+										<td><input type="number" id="collectionAmount" name="collectionAmount" min="0"/></td>-->
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<input type="hidden" id="latitude" name="latitude" />
+						<input type="hidden" id="longitude" name="longitude" />
+						<input type="submit" class="float-center btn btn-success mb-4"
+							value="save" /><!--onclick="alert('Saved Successfully')" -->
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:replace="includes/script :: script"></script>
+	<script th:if="${isDataMissing != null}">
+		alert("No data available!");
+	</script>
+	<script src="script/location.js"></script>-->
+	<script>
+		
+
+	</script>
+
+
+	<!--<footer th:replace="includes/footer :: footer"></footer>-->
+</body>
+
+</html>

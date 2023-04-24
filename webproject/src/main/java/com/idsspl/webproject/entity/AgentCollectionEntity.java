@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "agent_collection")
+@Table(name = "CUSTOMER_AGENT_COLLECTION", schema = "CUSTOMER")
 public class AgentCollectionEntity {
  
     @Id
@@ -22,8 +22,8 @@ public class AgentCollectionEntity {
     @Column(name = "name")
     private String name;
     
-    @Column(name = "ledger_balance")
-    private Double ledgerBalance;
+    @Column(name = "ledgerbalance")
+	private Double ledgerbalance;
     
     @Column(name = "collection_amount")
     private Double collectionAmount;
@@ -60,12 +60,12 @@ public class AgentCollectionEntity {
 		this.name = name;
 	}
 
-	public Double getLedgerBalance() {
-		return ledgerBalance;
+	public Double getLedgerbalance() {
+		return ledgerbalance;
 	}
 
-	public void setLedgerBalance(Double ledgerBalance) {
-		this.ledgerBalance = ledgerBalance;
+	public void setLedgerbalance(Double ledgerbalance) {
+		this.ledgerbalance = ledgerbalance;
 	}
 
 	public Double getCollectionAmount() {

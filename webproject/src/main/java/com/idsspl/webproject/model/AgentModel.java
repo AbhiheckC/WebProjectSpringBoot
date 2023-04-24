@@ -6,7 +6,7 @@ public class AgentModel {
 
 	private String name;
 
-	private Integer ledgerbalance;
+	private Double ledgerbalance;
 
 	private String customerId;
 	
@@ -28,11 +28,11 @@ public class AgentModel {
 		this.name = name;
 	}
 
-	public Integer getLedgerbalance() {
+	public Double getLedgerbalance() {
 		return ledgerbalance;
 	}
 
-	public void setLedgerbalance(Integer ledgerbalance) {
+	public void setLedgerbalance(Double ledgerbalance) {
 		this.ledgerbalance = ledgerbalance;
 	}
 

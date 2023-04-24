@@ -1,0 +1,7 @@
+
+navigator.geolocation.getCurrentPosition(function (position) {
+			document.getElementById("latitude").value = position.coords.latitude;
+			document.getElementById("longitude").value = position.coords.longitude;
+			console.log("lat--",position.coords.latitude);
+			console.log("lap--",position.coords.longitude);
+});

@@ -11,20 +11,25 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.idsspl.webproject.entity.AgentCollectionEntity;
 import com.idsspl.webproject.entity.AgentEntity;
 import com.idsspl.webproject.model.AgentCollectionModel;
 import com.idsspl.webproject.model.AgentModel;
+import com.idsspl.webproject.repo.AgentCollectionRepo;
 import com.idsspl.webproject.repo.AgentRepo;
 import com.idsspl.webproject.service.AgentService;
 
 @Service
-public class AgentServiceImpl implements AgentService{
+public class AgentServiceImpl implements AgentService {
 	@Autowired
 	private AgentRepo agentRepo;
+	
+	@Autowired
+	private AgentCollectionRepo agentCollectionRepo;
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@Override
 	public String sayHello() {
 		String response = restTemplate.getForObject("http://localhost:3000/king", String.class);
@@ -39,7 +44,7 @@ public class AgentServiceImpl implements AgentService{
 //		String response = restTemplate.exchange(apiUrl, HttpMethod.GET, request, String.class).getBody();
 //		return response;
 	}
-	
+
 	@Override
 	public List<AgentModel> getAgentsList(AgentModel agent) {
 
@@ -61,11 +66,28 @@ public class AgentServiceImpl implements AgentService{
 	}
 
 	@Override
-	public List<AgentCollectionModel> saveAgentCollection(AgentCollectionModel agentCollection) {
-		// TODO Auto-generated method stub
-		return null;
+	public String saveAgentCollection(ArrayList<AgentCollectionModel> agentCollection) {
+		AgentCollectionEntity newAgent = null;
+		for (AgentCollectionModel agent : agentCollection) {
+			newAgent.setAccountCode(agent.getAccountCode());
+			newAgent.setAccountType(agent.getAccountType());
+			newAgent.setCollectionAmount(agent.getCollectionAmount());
+			newAgent.setCustomerId(agent.getCustomerId());
+			newAgent.setLedgerbalance(agent.getLedgerbalance());
+			newAgent.setName(agent.getName());
+			System.out.println("customerId-----" + newAgent.getCustomerId());
+			System.out.println("accountCode-----" + newAgent.getAccountCode());
+			System.out.println("accountType-----" + newAgent.getAccountType());
+			System.out.println("name-----" + newAgent.getName());
+			System.out.println("ledgerbalance-----" + newAgent.getLedgerbalance());
+			System.out.println("CollectionAmount-----" + newAgent.getCollectionAmount());
+			
+
+			agentCollectionRepo.save(newAgent);
+		}
+		return "success";
 	}
-	
+
 //	@Override
 //	public List<AgentCollectionModel> saveAgentCollection(AgentCollectionModel agentCollection) {
 //

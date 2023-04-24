@@ -35,7 +35,6 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.entity.CustomerEntity"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.repo.CustomerRepo"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="java.sql.Blob"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.service.CustomerService"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.model.CustomerModel"/>
@@ -49,9 +48,11 @@
     <fullyQualifiedTypeName name="javax.persistence.Entity"/>
     <fullyQualifiedTypeName name="javax.persistence.GenerationType"/>
     <fullyQualifiedTypeName name="javax.persistence.Column"/>
-    <fullyQualifiedTypeName name="com.idsspl.webproject.entity.AgentCollectionEntity"/>
     <fullyQualifiedTypeName name="org.springframework.validation.BindingResult"/>
-    <fullyQualifiedTypeName name="com.idsspl.webproject.model.AgentCollectionModel"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMethod"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.model.AgentCollectionModel"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.entity.AgentCollectionEntity"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.repo.AgentCollectionRepo"/>
 </qualifiedTypeNameHistroy>

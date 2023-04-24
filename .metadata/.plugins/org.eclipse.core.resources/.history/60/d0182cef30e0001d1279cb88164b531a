@@ -1,0 +1,16 @@
+package com.idsspl.webproject.service;
+
+import java.util.List;
+
+import com.idsspl.webproject.model.AgentCollectionModel;
+import com.idsspl.webproject.model.AgentModel;
+
+
+public interface AgentService {
+	
+	public String sayHello();
+	
+	public List<AgentModel> getAgentsList(AgentModel agent);
+
+	public List<AgentCollectionModel> saveAgentCollection(AgentCollectionModel agentCollection);
+}
