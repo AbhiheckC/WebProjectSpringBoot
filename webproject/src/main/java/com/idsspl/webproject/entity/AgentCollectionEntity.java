@@ -10,6 +10,9 @@ import javax.persistence.Table;
 public class AgentCollectionEntity {
  
     @Id
+    @Column(name = "id")
+    private String id;
+    
     @Column(name = "customer_id")
     private String customerId;
     
@@ -27,6 +30,20 @@ public class AgentCollectionEntity {
     
     @Column(name = "collection_amount")
     private Double collectionAmount;
+    
+    @Column(name = "latitude")
+    private String latitude;
+    
+    @Column(name = "longitude")
+    private String longitude; 
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getCustomerId() {
 		return customerId;
@@ -74,6 +91,22 @@ public class AgentCollectionEntity {
 
 	public void setCollectionAmount(Double collectionAmount) {
 		this.collectionAmount = collectionAmount;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
  
     

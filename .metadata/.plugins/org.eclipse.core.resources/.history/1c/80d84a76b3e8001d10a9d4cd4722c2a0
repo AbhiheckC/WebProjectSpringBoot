@@ -1,0 +1,21 @@
+.inputs{
+	display: flex;
+}
+.form{
+	display:flex
+	flex-flex-direction: column;
+}
+
+
+
+/*#customerId, #name{
+	background-color: rgb(209, 211, 213);
+	border: 2px solid white;
+	padding: 1rem 1.8rem;
+	outline: none;
+	font-weight: 600;
+}*/
+
+input[type="text"]{
+	text-align: center;
+}

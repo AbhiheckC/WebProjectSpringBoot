@@ -13,5 +13,5 @@ public interface AgentService {
 	
 	public List<AgentModel> getAgentsList(AgentModel agent);
 
-	public String saveAgentCollection(ArrayList<AgentCollectionModel> agentCollection);
+	public String saveAgentCollection(AgentCollectionModel agentCollection);
 }

@@ -92,9 +92,17 @@
 	    <artifactId>spring-boot-starter-tomcat</artifactId>
 	    <version>3.0.5</version>
 	</dependency>-->
+	
 
 	</dependencies>
 
+<session-config>
+    <session-timeout>1</session-timeout>
+    <cookie-config>
+        <http-only>true</http-only>
+        <secure>true</secure>
+    </cookie-config>
+</session-config>
 	<build>
 		<plugins>
 			<plugin>

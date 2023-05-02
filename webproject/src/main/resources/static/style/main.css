@@ -99,6 +99,14 @@ input[type="text"]:focus {
 	margin: auto;
 }
 
+.singleInputButtonForm input[type="text"] {
+	background-color: rgb(209, 211, 213);
+	border: 2px solid white;
+	padding: 1rem 1.8rem;
+	outline: none;
+	font-weight: 600;
+}
+
 footer{
 	margin-top:3rem;
   position: absolute;

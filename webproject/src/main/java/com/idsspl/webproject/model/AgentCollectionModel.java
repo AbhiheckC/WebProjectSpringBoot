@@ -1,6 +1,8 @@
 package com.idsspl.webproject.model;
 
 public class AgentCollectionModel {
+	
+	private String id;
 
 	private String customerId;
 
@@ -13,6 +15,18 @@ public class AgentCollectionModel {
 	private Double ledgerbalance;
 
 	private Double collectionAmount;
+
+	private String latitude;
+
+	private String longitude;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getCustomerId() {
 		return customerId;
@@ -61,6 +75,21 @@ public class AgentCollectionModel {
 	public void setCollectionAmount(Double collectionAmount) {
 		this.collectionAmount = collectionAmount;
 	}
-	
-	
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
 }

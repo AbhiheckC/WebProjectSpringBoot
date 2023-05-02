@@ -115,6 +115,18 @@ public class UserController {
 		return "ViewAgent";
 	}
 
+	@PostMapping(path = "/saveCollection")
+	public String updateAgent(@ModelAttribute("agentCollectionList") AgentCollectionModel agentCollectionList,
+			BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			return "redirect:/home";
+		}
+		String result = agentService.saveAgentCollection(agentCollectionList);
+		model.addAttribute("isCollectionSaved", result);
+		System.out.println("result===============" + result);
+		return "ViewAgent";
+	}
+
 	// TO GET VIEW AGENT PAGE
 	@GetMapping(path = "/viewCustomer")
 	public String GetViewCustomerPage(Model model) {
@@ -129,20 +141,9 @@ public class UserController {
 			String isDataMissing = "No data Found!";
 			model.addAttribute("isDataMissing", isDataMissing);
 		} else if (customers != null || !customers.isEmpty()) {
-//			System.out.println("heheheheheheheheeh----"+customers.get(0).getSignature());
 			model.addAttribute("customerList", customers);
 		}
 		return "ViewCustomer";
-	}
-	@PostMapping(path = "/saveCollection")
-	public String updateAgent(@ModelAttribute("agentCollectionList") ArrayList<AgentCollectionModel> agentCollectionList,
-	        BindingResult bindingResult) {
-	    if (bindingResult.hasErrors()) {
-	        return "redirect:/home";
-	    }
-	    String result = agentService.saveAgentCollection(agentCollectionList);
-	    System.out.println("result==============="+result);
-	    return "redirect:/viewAgent";
 	}
 
 //	@PostMapping(path = "/saveCollection")
@@ -169,10 +170,6 @@ public class UserController {
 //		}
 //		return "redirect:/viewAgent";
 //	}
-
-
-
-
 
 //	@PostMapping(path = "/saveCollection")
 ////	@RequestMapping(value = "/saveCollection", method = RequestMethod.POST)

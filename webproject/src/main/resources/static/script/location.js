@@ -1,9 +1,22 @@
-document.getElementById("saveCollection").addEventListener("click",()=>{
-	navigator.geolocation.getCurrentPosition(function(position) {
-	document.getElementById("latitude").value = position.coords.latitude;
-	document.getElementById("longitude").value = position.coords.longitude;
-	console.log("lat--", position.coords.latitude);
-	console.log("lap--", position.coords.longitude);
-	alert("lat--"+position.coords.latitude+"lap--"+position.coords.longitude)
+document.getElementById("saveBtn").addEventListener("click", function(event) {
+  event.preventDefault(); // prevent the default form submission
+
+  // get the user's current location
+  navigator.geolocation.getCurrentPosition(function(position) {
+    // assign the latitude and longitude values to the hidden input fields
+    document.getElementById("latitude").value = position.coords.latitude;
+    document.getElementById("longitude").value = position.coords.longitude;
+
+    // submit the form
+    document.getElementById("collectionForm").submit();
+  }, function(error) {
+    // handle errors
+    console.log(error.message);
+  });
 });
-})
+console.log("hhhhhhhhhhhhhhhhhhhhhhhhhh")
+
+//document.getElementById("hehe").textContent="lat--"+position.coords.latitude+"lap--"+position.coords.longitude;
+//function getData(){
+	//return false;
+//}

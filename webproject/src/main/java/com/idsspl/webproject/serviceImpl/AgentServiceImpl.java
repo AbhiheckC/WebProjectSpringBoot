@@ -2,12 +2,9 @@ package com.idsspl.webproject.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +20,7 @@ import com.idsspl.webproject.service.AgentService;
 public class AgentServiceImpl implements AgentService {
 	@Autowired
 	private AgentRepo agentRepo;
-	
+
 	@Autowired
 	private AgentCollectionRepo agentCollectionRepo;
 
@@ -66,26 +63,34 @@ public class AgentServiceImpl implements AgentService {
 	}
 
 	@Override
-	public String saveAgentCollection(ArrayList<AgentCollectionModel> agentCollection) {
-		AgentCollectionEntity newAgent = null;
-		for (AgentCollectionModel agent : agentCollection) {
-			newAgent.setAccountCode(agent.getAccountCode());
-			newAgent.setAccountType(agent.getAccountType());
-			newAgent.setCollectionAmount(agent.getCollectionAmount());
-			newAgent.setCustomerId(agent.getCustomerId());
-			newAgent.setLedgerbalance(agent.getLedgerbalance());
-			newAgent.setName(agent.getName());
-			System.out.println("customerId-----" + newAgent.getCustomerId());
-			System.out.println("accountCode-----" + newAgent.getAccountCode());
-			System.out.println("accountType-----" + newAgent.getAccountType());
-			System.out.println("name-----" + newAgent.getName());
-			System.out.println("ledgerbalance-----" + newAgent.getLedgerbalance());
-			System.out.println("CollectionAmount-----" + newAgent.getCollectionAmount());
-			
+	public String saveAgentCollection(AgentCollectionModel agentCollection) {
+		AgentCollectionEntity newAgent = new AgentCollectionEntity();
+		newAgent.setAccountCode(agentCollection.getAccountCode());
+		newAgent.setAccountType(agentCollection.getAccountType());
+		newAgent.setCollectionAmount(agentCollection.getCollectionAmount());
+		newAgent.setCustomerId(agentCollection.getCustomerId());
+		newAgent.setLedgerbalance(agentCollection.getLedgerbalance());
+		newAgent.setName(agentCollection.getName());
+		newAgent.setLatitude( agentCollection.getLatitude());
+		newAgent.setLongitude(agentCollection.getLongitude());
+		String id = UUID.randomUUID().toString();
+		newAgent.setId(id);
+		System.out.println("id----------"+id);
+		System.out.println("customerId-----" + agentCollection.getCustomerId());
+		System.out.println("accountCode-----" + agentCollection.getAccountCode());
+		System.out.println("accountType-----" + agentCollection.getAccountType());
+		System.out.println("name-----" + agentCollection.getName());
+		System.out.println("ledgerbalance-----" + agentCollection.getLedgerbalance());
+		System.out.println("CollectionAmount-----" + agentCollection.getCollectionAmount());
+		System.out.println("latitute-----" + agentCollection.getLatitude());
+		System.out.println("latitute-----" + agentCollection.getLongitude());
 
+		try {
 			agentCollectionRepo.save(newAgent);
+			return "Saved Successfully";
+		} catch (Exception e) {
+			return "Error saving  data: " + e.getMessage();
 		}
-		return "success";
 	}
 
 //	@Override

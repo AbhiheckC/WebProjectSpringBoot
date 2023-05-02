@@ -17,7 +17,21 @@
 			<div class="col-sm-12 col-md-12">
 				<form th:action="@{/viewAgentList}" method="post" class="singleInputButtonForm">
 					<h3 class="text-center heading" id="hehe">View Agent Form</h3>
+					<div class="switchDiv">
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="name-id-toggle" id="id-toggle"
+								value="id" checked>
+							<label class="form-check-label" for="id-toggle">Customer ID</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="name-id-toggle" id="name-toggle"
+								value="name" >
+							<label class="form-check-label" for="name-toggle">Customer Name</label>
+						</div>
+					</div>
 					<input type="text" id="customerId" name="customerId" placeholder="Customer Id"
+						class=".ui-box .top-leftStart-backward" required />
+					<input type="text" id="name" name="name" placeholder="Customer Name"
 						class=".ui-box .top-leftStart-backward" required />
 					<input type="submit" class="submitBtn" value="Submit" />
 				</form>
@@ -29,22 +43,21 @@
 				<h6><b>Customer ID: </b><span th:text="${agentList[0].customerId}"></span></h6>
 				<h6><b>Name: </b><span th:text="${agentList[0].name}"></span></h6>
 				<div class="text-center">
-					<form method="post" th:action="@{/saveCollection}" th:object="${agentCollectionList}">
-						<!--th:object="${agentList}" -->
-						<div class="table-responsive" id="table">
-							<table class="table table-editable">
-								<thead class="thead">
-									<tr class="table-success">
-										<!-- <th>Customer Id</th>-->
-										<th>Account Code</th>
-										<th>Account Type</th>
-										<!-- <th>Name</th>-->
-										<th>Ledger Balance</th>
-										<th>Collection Amount</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="agent : ${agentList}">
+					<div class="table-responsive" id="table">
+						<table class="table table-editable">
+							<thead class="thead">
+								<tr class="table-success">
+									<th>Account Code</th>
+									<th>Account Type</th>
+									<th>Ledger Balance</th>
+									<th>Collection Amount</th>
+									<th>Save Collection</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="agent : ${agentList}">
+									<form method="post" th:action="@{/saveCollection}"
+										th:object="${agentCollectionList}" id="collectionForm">
 										<input type="hidden" name="customerId" th:value="${agent.customerId}" />
 										<td th:text="${agent.accountCode}"></td>
 										<input type="hidden" name="accountCode" th:value="${agent.accountCode}" />
@@ -55,37 +68,31 @@
 										<input type="hidden" name="ledgerbalance" th:value="${agent.ledgerbalance}" />
 										<td><input type="number" id="collectionAmount" name="collectionAmount"
 												min="0" /></td>
-										<!-- th:value="${agent.ledgerbalance}"	 -->
-										<!-- <td><a th:href="@{/editUser/{id}(id=${user.userId})}">Edit</a></td> -->
-
-										<!--<td class="d-none">
-											<input type="text" id="customerId" name="customerId" th:value="${agent.customerId}"/>
+										<input type="hidden" id="latitude" name="latitude" />
+										<input type="hidden" id="longitude" name="longitude" />
+										<td><input type="submit" id="saveBtn" class="btn btn-warning" value="Save" />
 										</td>
-										<td>
-											<input type="text" th:value="${agent.accountCode}" id="accountCode" name="accountCode" readonly/>
-										</td>
-										<td th:text="${agent.accountType}" id="accountType" name="accountType" th:field="*{accountType}"></td>
-										<td class="d-none" th:text="${agent.name}" id="name" name="name" th:field="*{name}"></td>
-										<td th:text="${agent.ledgerbalance}" id="ledgerbalance" name="ledgerbalance" th:field="*{ledgerbalance}"></td>
-										<td><input type="number" id="collectionAmount" name="collectionAmount" min="0"/></td>-->
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<input type="hidden" id="latitude" name="latitude" />
-						<input type="hidden" id="longitude" name="longitude" />
-						<input type="submit" class="float-center btn btn-success mb-4"
-							value="save" id="saveCollection"/><!--onclick="alert('Saved Successfully')" -->
-					</form>
+									</form>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script th:replace="includes/script :: script"></script>
-	<script th:if="${isDataMissing != null}">
+
+	<script th:if="${isDataMissing != null}" th:inline="javascript">
 		alert("No data available!");
 	</script>
+	<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+		//alert(th:text = "${isCollectionSaved}");
+		alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+	</script>
 	<script src="script/location.js"></script>
+	<script src="script/idNameSwitchBtn.js"></script>
+
 
 	<!--<footer th:replace="includes/footer :: footer"></footer>-->
 </body>

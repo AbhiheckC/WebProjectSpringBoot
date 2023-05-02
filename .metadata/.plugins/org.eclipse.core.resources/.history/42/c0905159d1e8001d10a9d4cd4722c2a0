@@ -1,0 +1,17 @@
+$(function() {
+  // Hide the ID input by default
+  $('#name').hide();
+
+  // Listen for changes to the display toggle switch
+  $('#display-toggle').change(function() {
+    if ($(this).is(':checked')) {
+      // If the switch is on, show the display name input and hide the ID input
+      $('#display-name-group').show();
+      $('#id-group').hide();
+    } else {
+      // If the switch is off, show the ID input and hide the display name input
+      $('#id-group').show();
+      $('#display-name-group').hide();
+    }
+  });
+});
