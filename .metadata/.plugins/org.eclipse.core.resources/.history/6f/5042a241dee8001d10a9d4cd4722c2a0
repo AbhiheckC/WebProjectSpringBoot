@@ -1,0 +1,142 @@
+package com.idsspl.webproject.serviceImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.idsspl.webproject.entity.AgentCollectionEntity;
+import com.idsspl.webproject.entity.AgentEntity;
+import com.idsspl.webproject.model.AgentCollectionModel;
+import com.idsspl.webproject.model.AgentModel;
+import com.idsspl.webproject.repo.AgentCollectionRepo;
+import com.idsspl.webproject.repo.AgentRepo;
+import com.idsspl.webproject.service.AgentService;
+
+@Service
+public class AgentServiceImpl implements AgentService {
+	@Autowired
+	private AgentRepo agentRepo;
+
+	@Autowired
+	private AgentCollectionRepo agentCollectionRepo;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Override
+	public String sayHello() {
+		String response = restTemplate.getForObject("http://localhost:3000/king", String.class);
+		return response;
+//		RestTemplate restTemplate = new RestTemplate();
+//		String apiUrl = "http://localhost:8080/getUserName";
+//		String username = "admin";
+//		String password = "pnath@123";
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setBasicAuth(username, password);
+//		HttpEntity<String> request = new HttpEntity<>(headers);
+//		String response = restTemplate.exchange(apiUrl, HttpMethod.GET, request, String.class).getBody();
+//		return response;
+	}
+
+	@Override
+	public List<AgentModel> getAgentsList(AgentModel agent) {
+
+		List<AgentEntity> agentEntityList = agentRepo.findByCustomerIdOrNameContainingIgnoreCase(agent.getCustomerId(), agent.getName());
+		List<AgentModel> agentModelList = new ArrayList<>();
+
+		agentEntityList.stream().forEach(agentEntity -> {
+			AgentModel agentModel = new AgentModel();
+			agentModel.setAccountCode(agentEntity.getAccountCode());
+			agentModel.setCustomerId(agentEntity.getCustomerId());
+			agentModel.setLedgerbalance(agentEntity.getLedgerbalance());
+			agentModel.setName(agentEntity.getName());
+			agentModel.setAccountType(agentEntity.getAccountType());
+			agentModelList.add(agentModel);
+
+		});
+
+		return agentModelList;
+	}
+//
+//	public List<AgentEntity> findByCustomerIdOrName(String customerId,String name) {
+//	    Session session;
+//		try {
+//			session = SessionFactory.getCurrentSession();
+//		} catch (HibernateException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	    CriteriaBuilder cb = session.getCriteriaBuilder();
+//	    CriteriaQuery<AgentEntity> query = cb.createQuery(AgentEntity.class);
+//	    Root<AgentEntity> root = query.from(AgentEntity.class);
+//
+//	    Predicate customerIdPredicate = cb.equal(root.get("customerId"), customerId);
+//	    Predicate namePredicate = cb.like(root.get("name"), "%" + name + "%");
+//	    Predicate predicate = cb.or(customerIdPredicate, namePredicate);
+//
+//	    query.where(predicate);
+//	    return session.createQuery(query).getResultList();
+//	}
+
+	@Override
+	public String saveAgentCollection(AgentCollectionModel agentCollection) {
+		AgentCollectionEntity newAgent = new AgentCollectionEntity();
+		newAgent.setAccountCode(agentCollection.getAccountCode());
+		newAgent.setAccountType(agentCollection.getAccountType());
+		newAgent.setCollectionAmount(agentCollection.getCollectionAmount());
+		newAgent.setCustomerId(agentCollection.getCustomerId());
+		newAgent.setLedgerbalance(agentCollection.getLedgerbalance());
+		newAgent.setName(agentCollection.getName());
+		newAgent.setLatitude( agentCollection.getLatitude());
+		newAgent.setLongitude(agentCollection.getLongitude());
+		String id = UUID.randomUUID().toString();
+		newAgent.setId(id);
+		System.out.println("id----------"+id);
+		System.out.println("customerId-----" + agentCollection.getCustomerId());
+		System.out.println("accountCode-----" + agentCollection.getAccountCode());
+		System.out.println("accountType-----" + agentCollection.getAccountType());
+		System.out.println("name-----" + agentCollection.getName());
+		System.out.println("ledgerbalance-----" + agentCollection.getLedgerbalance());
+		System.out.println("CollectionAmount-----" + agentCollection.getCollectionAmount());
+		System.out.println("latitute-----" + agentCollection.getLatitude());
+		System.out.println("latitute-----" + agentCollection.getLongitude());
+
+		try {
+			agentCollectionRepo.save(newAgent);
+			return "Saved Successfully";
+		} catch (Exception e) {
+			return "Error saving  data: " + e.getMessage();
+		}
+	}
+
+//	@Override
+//	public List<AgentCollectionModel> saveAgentCollection(AgentCollectionModel agentCollection) {
+//
+//		List<AgentCollectionModel> agentModelList = new ArrayList<>();
+//
+//		agentEntityList.stream().forEach(agentEntity -> {
+//			AgentModel agentModel = new AgentModel();
+//			agentModel.setAccountCode(agentEntity.getAccountCode());
+//			agentModel.setCustomerId(agentEntity.getCustomerId());
+//			agentModel.setLedgerbalance(agentEntity.getLedgerbalance());
+//			agentModel.setName(agentEntity.getName());
+//			agentModel.setAccountType(agentEntity.getAccountType());
+//			agentModelList.add(agentModel);
+//
+//		});
+//
+//		return agentModelList;
+//	}
+}

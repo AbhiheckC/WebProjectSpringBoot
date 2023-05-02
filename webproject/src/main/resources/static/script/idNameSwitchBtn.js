@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$(function() {
 		// Hide the ID input by default
-		$('#name').hide();
+		//$('#name').hide();
 
 		// Listen for changes to the name/id toggle radio buttons
 		$('input[name="name-id-toggle"]').change(function() {

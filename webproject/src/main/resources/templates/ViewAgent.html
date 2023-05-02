@@ -15,24 +15,14 @@
 				<a href="/home" class="btn btn-info text-white float-end">Go Back</a>
 			</div>
 			<div class="col-sm-12 col-md-12">
-				<form th:action="@{/viewAgentList}" method="post" class="singleInputButtonForm">
 					<h3 class="text-center heading" id="hehe">View Agent Form</h3>
-					<div class="switchDiv">
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="name-id-toggle" id="id-toggle"
-								value="id" checked>
-							<label class="form-check-label" for="id-toggle">Customer ID</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="name-id-toggle" id="name-toggle"
-								value="name" >
-							<label class="form-check-label" for="name-toggle">Customer Name</label>
-						</div>
-					</div>
+					
+				<form th:action="@{/viewAgentList}" method="post" class="singleInputButtonForm">
 					<input type="text" id="customerId" name="customerId" placeholder="Customer Id"
-						class=".ui-box .top-leftStart-backward" required />
+						class=".ui-box .top-leftStart-backward"  />
+					<span>OR</span>
 					<input type="text" id="name" name="name" placeholder="Customer Name"
-						class=".ui-box .top-leftStart-backward" required />
+						class=".ui-box .top-leftStart-backward"  />
 					<input type="submit" class="submitBtn" value="Submit" />
 				</form>
 			</div>

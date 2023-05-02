@@ -3,6 +3,8 @@ package com.idsspl.webproject.repo;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.idsspl.webproject.entity.AgentEntity;
@@ -14,5 +16,11 @@ public interface AgentRepo extends JpaRepository<AgentEntity, String>{
 	
 //	public Optional<AgentEntity> findById(String account_code);
 //	
-	public List<AgentEntity> findByCustomerId(String customerId);
+	
+//	public List<AgentEntity> findByCustomerIdOrName(String customerId,String name);
+	
+	@Query("SELECT a FROM AgentEntity a WHERE a.customerId LIKE %:customerId% AND a.name LIKE %:name%")
+	public List<AgentEntity> findByCustomerIdOrName(@Param("customerId") String customerId,@Param("name") String name);
+	
+//	public List<AgentEntity> findByCustomerIdOrNameContainingIgnoreCase(String customerId,String name);
 }

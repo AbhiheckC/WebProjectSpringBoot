@@ -3,7 +3,15 @@ package com.idsspl.webproject.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -44,8 +52,9 @@ public class AgentServiceImpl implements AgentService {
 
 	@Override
 	public List<AgentModel> getAgentsList(AgentModel agent) {
-
-		List<AgentEntity> agentEntityList = agentRepo.findByCustomerId(agent.getCustomerId());
+		System.out.println("customerID----"+agent.getCustomerId()+"   name----"+agent.getName());
+//		List<AgentEntity> agentEntityList = agentRepo.findByCustomerIdOrNameContainingIgnoreCase(agent.getCustomerId(), agent.getName());
+		List<AgentEntity> agentEntityList = agentRepo.findByCustomerIdOrName(agent.getCustomerId(), agent.getName());
 		List<AgentModel> agentModelList = new ArrayList<>();
 
 		agentEntityList.stream().forEach(agentEntity -> {
@@ -61,6 +70,26 @@ public class AgentServiceImpl implements AgentService {
 
 		return agentModelList;
 	}
+//
+//	public List<AgentEntity> findByCustomerIdOrName(String customerId,String name) {
+//	    Session session;
+//		try {
+//			session = SessionFactory.getCurrentSession();
+//		} catch (HibernateException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	    CriteriaBuilder cb = session.getCriteriaBuilder();
+//	    CriteriaQuery<AgentEntity> query = cb.createQuery(AgentEntity.class);
+//	    Root<AgentEntity> root = query.from(AgentEntity.class);
+//
+//	    Predicate customerIdPredicate = cb.equal(root.get("customerId"), customerId);
+//	    Predicate namePredicate = cb.like(root.get("name"), "%" + name + "%");
+//	    Predicate predicate = cb.or(customerIdPredicate, namePredicate);
+//
+//	    query.where(predicate);
+//	    return session.createQuery(query).getResultList();
+//	}
 
 	@Override
 	public String saveAgentCollection(AgentCollectionModel agentCollection) {
