@@ -1,5 +1,7 @@
 package com.idsspl.webproject.model;
 
+import javax.persistence.Column;
+
 public class AgentModel {
 	
 	private String accountCode;
@@ -11,6 +13,18 @@ public class AgentModel {
 	private String customerId;
 	
 	private String accountType;
+	
+	private String localLanguageName;
+	
+	private String agentName;
+	
+	private String mobile;
+	
+	private String installmentAmount;
+	
+	private String reviewDate;
+
+    private Long receiptNo;
 
 	public String getAccountCode() {
 		return accountCode;
@@ -50,6 +64,54 @@ public class AgentModel {
 
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
+	}
+
+	public String getLocalLanguageName() {
+		return localLanguageName;
+	}
+
+	public void setLocalLanguageName(String localLanguageName) {
+		this.localLanguageName = localLanguageName;
+	}
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getInstallmentAmount() {
+		return installmentAmount;
+	}
+
+	public String getReviewDate() {
+		return reviewDate;
+	}
+
+	public void setInstallmentAmount(String installmentAmount) {
+		this.installmentAmount = installmentAmount;
+	}
+
+	public void setReviewDate(String reviewDate) {
+		this.reviewDate = reviewDate;
+	}
+
+	public Long getReceiptNo() {
+		return receiptNo;
+	}
+
+	public void setReceiptNo(Long receiptNo) {
+		this.receiptNo = receiptNo;
 	}
 
 	

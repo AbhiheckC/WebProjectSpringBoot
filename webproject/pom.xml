@@ -11,6 +11,7 @@
 	<groupId>com.idsspl</groupId>
 	<artifactId>webproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>webproject</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -32,10 +33,6 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>-->
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
@@ -87,23 +84,24 @@
 		  <artifactId>spring-security-web</artifactId>
 		</dependency>
 		
-		<!-- <dependency>
+	 <dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-tomcat</artifactId>
 	    <version>3.0.5</version>
-	</dependency>-->
+	</dependency>
 	
 
 	</dependencies>
 
-<session-config>
+<!--<session-config>
     <session-timeout>1</session-timeout>
     <cookie-config>
         <http-only>true</http-only>
         <secure>true</secure>
     </cookie-config>
-</session-config>
+</session-config>-->
 	<build>
+		<finalName>webproject</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

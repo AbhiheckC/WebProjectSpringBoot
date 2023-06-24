@@ -32,15 +32,15 @@ public class CustomerServiceImpl implements CustomerService {
 			customerModel.setAddress(customerEntity.getAddress());
 			customerModel.setMobileNo(customerEntity.getMobileNo());
 			customerModel.setDateofbirth(customerEntity.getDateofbirth());
-			try {
-				byte[] imageData = customerEntity.getSignature().getBytes(1, (int) customerEntity.getSignature().length());
-				String base64Image = Base64.getEncoder().encodeToString(imageData);
-				System.out.println("image"+base64Image);
-				customerModel.setSignature(base64Image);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				byte[] imageData = customerEntity.getSignature().getBytes(1, (int) customerEntity.getSignature().length());
+//				String base64Image = Base64.getEncoder().encodeToString(imageData);
+//				System.out.println("image"+base64Image);
+//				customerModel.setSignature(base64Image);
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			System.out.println("NAME------" + customerEntity.getName());
 			customerModelList.add(customerModel);
 		});

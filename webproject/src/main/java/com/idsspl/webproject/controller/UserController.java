@@ -1,7 +1,9 @@
 package com.idsspl.webproject.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,16 +26,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.idsspl.webproject.entity.AgentEntity;
 import com.idsspl.webproject.model.AgentCollectionModel;
+import com.idsspl.webproject.model.AgentLocationModel;
 import com.idsspl.webproject.model.AgentModel;
+import com.idsspl.webproject.model.CollectionInfoModel;
+import com.idsspl.webproject.model.CustomerMobileModifyModel;
 import com.idsspl.webproject.model.CustomerModel;
+import com.idsspl.webproject.model.MemberModel;
+import com.idsspl.webproject.model.PrintAgentCollectionModel;
 import com.idsspl.webproject.model.UserModel;
 import com.idsspl.webproject.repo.AgentRepo;
 import com.idsspl.webproject.repo.UserRepo;
 import com.idsspl.webproject.service.AgentService;
 import com.idsspl.webproject.service.CustomerService;
+import com.idsspl.webproject.service.MemberService;
 import com.idsspl.webproject.serviceImpl.UserServiceImpl;
 
 @Controller
@@ -43,6 +54,9 @@ public class UserController {
 
 	@Autowired
 	private CustomerService customerService;
+
+	@Autowired
+	private MemberService memberService;
 
 	// TO GET THE USERNAME OF THE USER LOGIN TO DISPLAY AND USE IN ALL THE ROUTES
 	@ModelAttribute("userName")
@@ -55,9 +69,26 @@ public class UserController {
 	}
 
 	// GET LOGIN PAGE
+//	@GetMapping(path = "/login")
+//	public String GetLoginForm(Model model) {
+//		model.addAttribute("loginError", true);
+//		return "Login";
+//	}
+
 	@GetMapping(path = "/login")
-	public String GetLoginForm(Model model) {
-		model.addAttribute("loginError", true);
+	public String GetLoginForm(Model model, @RequestParam(name = "expired", required = false) String expired,
+			@RequestParam(name = "timeout", required = false) String timeout,
+			@RequestParam(name = "error", required = false) String error) {
+		if (expired != null) {
+			model.addAttribute("loginError", true);
+			model.addAttribute("errorMessage", "Your session has expired. Please log in again.");
+		} else if (timeout != null) {
+			model.addAttribute("loginError", true);
+			model.addAttribute("errorMessage", "Your session has timed out. Please log in again.");
+		} else if (error != null) {
+			model.addAttribute("loginError", true);
+			model.addAttribute("errorMessage", "Invalid Username or Password!");
+		}
 		return "Login";
 	}
 
@@ -101,9 +132,11 @@ public class UserController {
 
 	// TO GET AGENT LIST ON VIEW AGENT PAGE
 	@PostMapping(path = "/viewAgentList")
-	public String PostViewAgentPage(AgentModel agent, Model model) {
+	public String PostViewAgentPage(AgentModel agent, Model model, Authentication authentication) {
 		List<AgentModel> agents;
-		agents = agentService.getAgentsList(agent);
+		String userName = authentication.getName();
+
+		agents = agentService.getAgentsList(agent, userName);
 		System.out.println("agent======" + agents);
 		if (agents == null || agents.isEmpty()) {
 			String isDataMissing = "No data Found!";
@@ -117,15 +150,59 @@ public class UserController {
 
 	@PostMapping(path = "/saveCollection")
 	public String updateAgent(@ModelAttribute("agentCollectionList") AgentCollectionModel agentCollectionList,
-			BindingResult bindingResult, Model model) {
+			BindingResult bindingResult, Model model, Authentication authentication) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/home";
 		}
-		String result = agentService.saveAgentCollection(agentCollectionList);
+		String userName = authentication.getName();
+		String result = agentService.saveAgentCollection(agentCollectionList, userName);
 		model.addAttribute("isCollectionSaved", result);
 		System.out.println("result===============" + result);
 		return "ViewAgent";
 	}
+
+	// TO GET VIEW AGENT PAGE
+	@GetMapping(path = "/viewMember")
+	public String GetViewMemberPage(Model model) {
+		return "ViewMember";
+	}
+
+	@PostMapping(path = "/viewMemberList")
+	public String PostViewMemberPage(MemberModel member, Model model, Authentication authentication) {
+		List<MemberModel> members;
+		members = memberService.getMemberList(member);
+		System.out.println("member======" + members);
+		if (members == null || members.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (members != null || !members.isEmpty()) {
+			System.out.println("--------------" + members.get(0));
+			model.addAttribute("memberList", members);
+		}
+		return "ViewMember";
+	}
+
+//	@PostMapping(path = "/saveCollection")
+//	public ResponseEntity<Map<String, String>> updateAgent(@ModelAttribute("agentCollectionList") AgentCollectionModel agentCollectionList,
+//			BindingResult bindingResult, Model model, Authentication authentication) {
+////		if (bindingResult.hasErrors()) {
+////			return "redirect:/home";
+////		}
+//		String userName = authentication.getName();
+//		String result = agentService.saveAgentCollection(agentCollectionList, userName);
+//		model.addAttribute("isCollectionSaved", result);
+//		System.out.println("result===============" + result);
+//		Map<String, String> responseMap = new HashMap();
+//	    if (result.equals("Saved Successfully")) {
+//	        responseMap.put("status", "success");
+//	        responseMap.put("message", "Data saved successfully.");
+//	    } else {
+//	        responseMap.put("status", "error");
+//	        responseMap.put("message", "Error saving data: " + result);
+//	    }
+//
+//	    return ResponseEntity.ok(responseMap);
+//	}
 
 	// TO GET VIEW AGENT PAGE
 	@GetMapping(path = "/viewCustomer")
@@ -144,6 +221,125 @@ public class UserController {
 			model.addAttribute("customerList", customers);
 		}
 		return "ViewCustomer";
+	}
+
+	// TO GET VIEW AGENT PAGE
+	@GetMapping(path = "/printCollection")
+	public String GetPrintCollectionPage(Model model) {
+		return "PrintCollection";
+	}
+
+	@PostMapping(path = "/printCollectionList")
+	public String PostPrintCollectionPage(PrintAgentCollectionModel collection, Model model,
+			Authentication authentication) {
+		List<PrintAgentCollectionModel> collections;
+		collections = agentService.getCollectionList(collection);
+		System.out.println("collections======" + collections);
+		if (collections == null || collections.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (collections != null || !collections.isEmpty()) {
+			System.out.println("--------------" + collections.get(0));
+			model.addAttribute("collectionList", collections);
+		}
+		return "PrintCollection";
+	}
+
+	// TO GET VIEW COLLECTION INFORMATION PAGE
+	@GetMapping(path = "/viewCollectionInfo")
+	public String GetCollectionInfoPage(Model model) {
+		return "CollectionInfo";
+	}
+
+	@PostMapping(path = "/getCollectionInfo")
+	public String PostCollectionInfoPage(CollectionInfoModel collection, Model model, Authentication authentication) {
+		List<CollectionInfoModel> collections;
+		String userName = authentication.getName();
+		collections = agentService.getCollectionInfoList(collection, userName);
+		System.out.println("collections======" + collections);
+		if (collections == null || collections.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (collections != null || !collections.isEmpty()) {
+			System.out.println("--------------" + collections.get(0));
+			model.addAttribute("collectionList", collections);
+		}
+		return "CollectionInfo";
+	}
+
+	@PostMapping(path = "/makeCollection0")
+	public String PostMakeCollection0(@RequestParam(value = "checkbox", required = false) Long selectedItems,
+			@ModelAttribute("collectionInfoList") CollectionInfoModel collection, Model model,
+			Authentication authentication) {
+		String result = "";
+		if (selectedItems != null) {
+			System.out.println("selected Items-----" + selectedItems);
+			result = agentService.makeCollectionAmt0(collection);
+			model.addAttribute("isCollectionSaved", result);
+		}
+		return "CollectionInfo";
+	}
+
+	// TO GET AGENT LIST ON VIEW CUSTOMER MOBILE MODIFY PAGE
+	@GetMapping(path = "/viewCustomerMobileModify")
+	public String GetCustomerMobileModifyPage(Model model) {
+		return "CustomerMobileModify";
+	}
+
+	// TO GET CUSTOMER MOBILE MODIFY LIST PAGE
+	@PostMapping(path = "/viewCustomerMobileModifyList")
+	public String PostViewCustomerMobileModifyPage(AgentModel agent, Model model) {
+		List<AgentModel> agents;
+		agents = agentService.getUpdateMobileCustomerList(agent);
+		System.out.println("customer======" + agents);
+		if (agents == null || agents.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (agents != null || !agents.isEmpty()) {
+			System.out.println("--------------" + agents.get(0));
+			model.addAttribute("agentList", agents);
+		}
+		return "CustomerMobileModify";
+	}
+
+	// TO MODIFY CUSTOMER MOBILE DETAILS
+	@PostMapping(path = "/modifyCustomerMobile")
+	public String PostModifyCustomerMobile(@ModelAttribute("collectionMobileList") CustomerMobileModifyModel customer,
+			Model model, Authentication authentication) {
+		String result = "";
+		result = agentService.updateCustomerMobileNo(customer);
+		model.addAttribute("isMobileUpdate", result);
+		return "CustomerMobileModify";
+	}
+
+	// TO GET VIEW AGENT LOCATION PAGE
+	@GetMapping(path = "/viewAgentLocation")
+	public String GetAgentLocationPage(Model model, Authentication authentication,RedirectAttributes redirAttr) {
+		String userName = authentication.getName();
+		String isMainUser = agentService.getMainUser(userName);
+		
+		if(isMainUser.equals("N")) {
+//			model.addAttribute("isMainUser", "it's not accessible");
+			redirAttr.addFlashAttribute("isMainUser", "it's not accessible");
+			return "redirect:/home";
+		}
+		return "AgentLocation";
+	}
+
+	// TO GET CUSTOMER MOBILE MODIFY LIST PAGE
+	@PostMapping(path = "/getAgentLocation")
+	public String PostAgentLocationPage(AgentLocationModel agentLoc, Model model) {
+		List<AgentLocationModel> agentLocations;
+		agentLocations = agentService.getAgentLocation(agentLoc);
+		System.out.println("agentLocations======" + agentLocations);
+		if (agentLocations == null || agentLocations.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (agentLocations != null || !agentLocations.isEmpty()) {
+			System.out.println("--------------" + agentLocations.get(0));
+			model.addAttribute("agentLocations", agentLocations);
+		}
+		return "AgentLocation";
 	}
 
 //	@PostMapping(path = "/saveCollection")
@@ -169,44 +365,6 @@ public class UserController {
 //			System.out.println("ColletionAmount-----" + agent.getCollectionAmount());
 //		}
 //		return "redirect:/viewAgent";
-//	}
-
-//	@PostMapping(path = "/saveCollection")
-////	@RequestMapping(value = "/saveCollection", method = RequestMethod.POST)
-//	public String updateAgent(@RequestParam String customerId, @RequestParam String accountCode, 
-//            @RequestParam String accountType, @RequestParam String name, 
-//            @RequestParam Double ledgerbalance, @RequestParam Double collectionAmount) {
-//
-//		System.out.println(accountCode);
-////        for (AgentCollectionModel agent : agentList) {
-////        	
-////        	System.out.println(agent.getAccountCode()+"           "+agent.getCollectionAmount());
-////        }
-////        
-//		return "redirect:/viewAgent";
-//	}
-
-//	// TO GET AGENT LIST ON VIEW AGENT PAGE
-//	@PostMapping(path = "/updateAgent")
-//	public String updateAgent(@ModelAttribute("agent") AgentModel agentList) {
-//		System.out.println("sdfdsfdfds---------" + agentList);
-////	    for (AgentModel agent : agentList) {
-////	    	System.out.println("heheheheheh-----"+agent.getAccountCode());
-//////	        Long id = agent.getCustomerId();
-//////	        Agent existingAgent = agentRepository.findById(id).orElse(null);
-//////	        if (existingAgent != null) {
-//////	            existingAgent.setLedgerbalance(agent.getLedgerbalance());
-//////	            agentRepository.save(existingAgent);
-//////	        }
-////	    }
-//		return "redirect:/viewAgent";
-//	}
-
-//	@PostMapping(path ="/updateAgent")
-//	public String updateAgent(AgentModel agentList) {
-//		System.out.println("hehehehehehehe---"+agentList);
-//		System.out.println("jejejeje----"+agentList.getAccountCode());
-//	    return "redirect:/viewAgent";
 //	}
 
 	@GetMapping(path = "/hello")

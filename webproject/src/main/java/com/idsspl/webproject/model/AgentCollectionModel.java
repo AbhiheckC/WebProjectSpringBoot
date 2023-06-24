@@ -1,7 +1,7 @@
 package com.idsspl.webproject.model;
 
 public class AgentCollectionModel {
-	
+
 	private String id;
 
 	private String customerId;
@@ -19,6 +19,16 @@ public class AgentCollectionModel {
 	private String latitude;
 
 	private String longitude;
+
+	private String agentName;
+
+	private String agentId;
+	
+	private String collectionDate;
+	
+	private Long receiptNo;
+	
+	private String paymentMethod;
 
 	public String getId() {
 		return id;
@@ -90,6 +100,46 @@ public class AgentCollectionModel {
 
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
+	}
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
+	}
+
+	public String getCollectionDate() {
+		return collectionDate;
+	}
+
+	public void setCollectionDate(String collectionDate) {
+		this.collectionDate = collectionDate;
+	}
+
+	public Long getReceiptNo() {
+		return receiptNo;
+	}
+
+	public void setReceiptNo(Long receiptNo) {
+		this.receiptNo = receiptNo;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
 }

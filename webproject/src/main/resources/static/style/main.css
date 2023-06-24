@@ -86,6 +86,17 @@ input[type="text"]:focus {
 	border: 2px solid white;
 }
 
+.blackBtn {
+	padding: 0.4rem;
+	background-color: #000;
+	border: none;
+	color: #fff;
+	font-size: 1rem;
+	outline: none;
+	width:50%;
+	border: 2px solid white;
+}
+
 .submitBtn:focus {
 	border: 2px solid #000;
 }
@@ -106,6 +117,24 @@ input[type="text"]:focus {
 	outline: none;
 	font-weight: 600;
 }
+
+.multiInputForm {
+	display: grid;
+	border: none;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	width: 50%;
+	margin: auto;
+}
+
+.multiInputForm input[type="text"],input[type="date"] {
+	background-color: rgb(209, 211, 213);
+	border: 2px solid white;
+	padding: 1rem 1.8rem;
+	outline: none;
+	font-weight: 600;
+}
+
 
 footer{
 	margin-top:3rem;

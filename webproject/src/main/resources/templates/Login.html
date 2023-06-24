@@ -31,12 +31,9 @@
 	</div>
 	<script src="bootstrap/bootstrap.min.js"></script>
 	<script src="bootstrap/bootstrap.bundle.min.js"></script>
-	<script th:if="${param.error}" th:inline="javascript">
-  		var errorMessage = [[${session['SPRING_SECURITY_LAST_EXCEPTION'].message}]];
-  		if (errorMessage) {
-    		alert(errorMessage);
-  		}
-    </script>
+	<script th:if="${errorMessage != null}" th:inline="javascript">
+		alert([[${#strings.escapeJavaScript(errorMessage)}]]);
+	</script>
 </body>
 
 </html>

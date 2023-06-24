@@ -23,6 +23,24 @@ public class AgentEntity {
 	
 	@Column(name = "account_type")
 	private String accountType;
+	
+	@Column(name = "local_language_name")
+	private String localLanguageName;
+	
+	@Column(name = "agent_name")
+	private String agentName;
+	
+	@Column(name = "mobile")
+	private String mobile;
+	
+	@Column(name = "installment_amount")
+	private String installmentAmount;
+	
+	@Column(name = "review_date")
+	private String reviewDate;
+	
+//	@Column(name = "receipt_no")
+//    private Long receiptNo;
 
 	public String getAccountCode() {
 		return accountCode;
@@ -63,7 +81,55 @@ public class AgentEntity {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-	
+
+	public String getLocalLanguageName() {
+		return localLanguageName;
+	}
+
+	public void setLocalLanguageName(String localLanguageName) {
+		this.localLanguageName = localLanguageName;
+	}
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getInstallmentAmount() {
+		return installmentAmount;
+	}
+
+	public String getReviewDate() {
+		return reviewDate;
+	}
+
+	public void setInstallmentAmount(String installmentAmount) {
+		this.installmentAmount = installmentAmount;
+	}
+
+	public void setReviewDate(String reviewDate) {
+		this.reviewDate = reviewDate;
+	}
+
+//	public Long getReceiptNo() {
+//		return receiptNo;
+//	}
+//
+//	public void setReceiptNo(Long receiptNo) {
+//		this.receiptNo = receiptNo;
+//	}
+//	
 
 
 }

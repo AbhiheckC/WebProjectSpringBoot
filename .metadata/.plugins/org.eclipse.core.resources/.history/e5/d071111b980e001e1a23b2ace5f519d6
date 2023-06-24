@@ -1,0 +1,58 @@
+/*document.getElementById("saveBtn").addEventListener("click", function(event) {
+  event.preventDefault(); // prevent the default form submission
+
+  // get the user's current location
+  navigator.geolocation.getCurrentPosition(function(position) {
+	// assign the latitude and longitude values to the hidden input fields
+	document.getElementById("latitude").value = position.coords.latitude;
+	document.getElementById("longitude").value = position.coords.longitude;
+
+	// submit the form
+	document.getElementById("collectionForm").submit();
+  }, function(error) {
+	// handle errors
+	console.log(error.message);
+  });
+});
+console.log("map")*/
+
+document.getElementById("saveBtn").addEventListener("click", function(event) {
+	// get the user's current location
+	navigator.geolocation.getCurrentPosition(function(position) {
+		// assign the latitude and longitude values to the hidden input fields
+		document.getElementById("latitude").value = position.coords.latitude;
+		document.getElementById("longitude").value = position.coords.longitude;
+		const latitudeElements = document.querySelectorAll('#receiptNo');
+		const longitudeElements = document.querySelectorAll('#receiptNo');
+
+		const latitude =position.coords.latitude;
+		inputElements.forEach((input) => {
+			input.value = value;
+		});
+		
+		const longitude =position.coords.longitude;
+		input1.value = value;
+		inputElements.forEach((input) => {
+			input.value = value;
+		});
+
+
+		// submit the form
+		document.getElementById("collectionForm").submit();
+	}, function(error) {
+		// handle errors
+		console.log(error.message);
+	});
+});
+console.log("map")
+
+//document.getElementById("hehe").textContent="lat--"+position.coords.latitude+"lap--"+position.coords.longitude;
+//function getData(){
+	//return false;
+//}
+
+
+//document.getElementById("hehe").textContent="lat--"+position.coords.latitude+"lap--"+position.coords.longitude;
+//function getData(){
+	//return false;
+//}

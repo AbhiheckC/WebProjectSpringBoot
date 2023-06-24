@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "CUSTOMER_AGENT_COLLECTION", schema = "CUSTOMER")
+//@Table(name = "CUSTOMER_AGENT_COLLECTION_VIEW", schema = "CUSTOMER")
 public class AgentCollectionEntity {
  
     @Id
@@ -20,6 +21,7 @@ public class AgentCollectionEntity {
     private String accountCode;
     
     @Column(name = "account_type")
+//    @Column(name = "HINDHI_DESCRIPTION")
     private String accountType;
     
     @Column(name = "name")
@@ -36,7 +38,22 @@ public class AgentCollectionEntity {
     
     @Column(name = "longitude")
     private String longitude; 
-
+    
+    @Column(name = "agent_name")
+    private String agentName;
+    
+    @Column(name = "agent_id")
+    private String agentId;
+    
+    @Column(name = "collection_date")
+    private String collectionDate;
+    
+    @Column(name = "receipt_no")
+    private Long receiptNo;
+    
+    @Column(name = "payment_method")
+    private String paymentMethod;
+    
 	public String getId() {
 		return id;
 	}
@@ -107,6 +124,46 @@ public class AgentCollectionEntity {
 
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
+	}
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
+	}
+
+	public String getCollectionDate() {
+		return collectionDate;
+	}
+
+	public void setCollectionDate(String collectionDate) {
+		this.collectionDate = collectionDate;
+	}
+
+	public Long getReceiptNo() {
+		return receiptNo;
+	}
+
+	public void setReceiptNo(Long receiptNo) {
+		this.receiptNo = receiptNo;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
  
     

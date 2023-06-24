@@ -23,9 +23,18 @@ public class UserEntity {
 	@Column(name = "passwd")
 	@ColumnTransformer(read = "acl.toolkit.decrypt(passwd)")//,write = "encrypt('AES', '00', ?)"
 	private String password;
+	
+	@Column(name = "agent_id")
+	private String agentId;
+	
+	@Column(name = "receipt_no")
+	private Long receiptNo;
 
 	@Column(name = "role")
 	private String role;
+	
+	@Column(name = "is_main_app_user")
+	private String isMainAppUser;
 
 	public Integer getActive() {
 		return active;
@@ -57,6 +66,30 @@ public class UserEntity {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
+	}
+
+	public Long getReceiptNo() {
+		return receiptNo;
+	}
+
+	public void setReceiptNo(Long receiptNo) {
+		this.receiptNo = receiptNo;
+	}
+
+	public String getIsMainAppUser() {
+		return isMainAppUser;
+	}
+
+	public void setIsMainAppUser(String isMainAppUser) {
+		this.isMainAppUser = isMainAppUser;
 	}
 
 
