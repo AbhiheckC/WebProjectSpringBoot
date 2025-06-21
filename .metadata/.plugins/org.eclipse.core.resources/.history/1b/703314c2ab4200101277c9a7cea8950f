@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Denomination Entry</title>
+</head>
+<body>
+	<h2>Denomination Entry</h2>
+	<form method="post" action="/saveDenomination" onsubmit="return confirm('Submit denomination?')">
+		<input type="hidden" name="customerId" th:value="${customerId}" />
+		<input type="hidden" name="accountCode" th:value="${accountCode}" />
+
+		<label>₹500: <input type="number" name="note500" value="0" min="0"></label><br>
+		<label>₹200: <input type="number" name="note200" value="0" min="0"></label><br>
+		<label>₹100: <input type="number" name="note100" value="0" min="0"></label><br>
+		<label>Total Received Amount: <input type="number" name="amountReceived" required></label><br>
+
+		<button type="submit">Save</button>
+	</form>
+</body>
+</html>

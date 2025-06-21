@@ -1,0 +1,17 @@
+package com.idsspl.webproject.model;
+
+public class DenominationRequest {
+	private List<NoteEntry> denominations;
+	private int amountReceived;
+	private int totalAmount;
+	private int changeReturn;
+
+	// Getters and setters
+	public static class NoteEntry {
+		private int value;
+		private int count;
+
+		// Getters and setters
+	}
+}
+

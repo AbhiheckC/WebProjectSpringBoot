@@ -1,0 +1,80 @@
+package com.idsspl.webproject.entity;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CUSTOMER_DENOMINATION_NEW", schema = "CUSTOMER")
+public class Denomination {
+	@Id
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name= "id")
+	private Long id;
+	
+	@Column(name= "agent_id")
+    private String agentId;
+	@Column(name= "agent_name")
+    private String agentName;
+	@Column(name= "account_code")
+    private String accountCode;
+	@Column(name= "customer_id")
+	private String customerId;
+	@Column(name= "receipt_no")
+    private Long receiptNo;
+	
+	@Column(name= "r2000")
+    private Long r2000;
+	@Column(name= "r500")
+    private Long r500;
+	@Column(name= "r200")
+    private Long r200;
+	@Column(name= "r100")
+    private Long r100;
+	@Column(name= "r50")
+    private Long r50;
+	@Column(name= "r20")
+    private Long r20;
+	@Column(name= "r10")
+    private Long r10;
+	
+
+	@Column(name= "amountreceived")
+	private int amountReceived;
+	@Column(name= "totalamount")
+	private int totalAmount;
+	@Column(name= "changereturn")
+	private int changeReturn;
+	
+	@Column(name= "c2000")
+    private Long c2000;
+	@Column(name= "c500")
+    private Long c500;
+	@Column(name= "c200")
+    private Long c200;
+	@Column(name= "c100")
+    private Long c100;
+	@Column(name= "c50")
+    private Long c50;
+	@Column(name= "c20")
+    private Long c20;
+	@Column(name= "c10")
+    private Long c10;
+	
+	
+	@Column(name= "createdat")
+	private LocalDateTime createdAt;
+	
+	
+	
+	
+	
+	
+
+	// Getters and setters
+}

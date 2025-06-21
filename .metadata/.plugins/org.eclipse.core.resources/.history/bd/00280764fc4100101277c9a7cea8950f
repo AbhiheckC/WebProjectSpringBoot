@@ -1,0 +1,36 @@
+package com.idsspl.webproject.model;
+
+import java.util.List;
+
+import javax.persistence.Column;
+
+public class DenominationRequest {
+	
+    private String agentId;
+    private String agentName;
+    private String accountCode;
+	private String customerId;
+    private Long receiptNo;
+	
+    private Long r2000;
+    private Long r500;
+    private Long r200;
+    private Long r100;
+    private Long r50;
+    private Long r20;
+    private Long r10;
+	
+
+	private int amountReceived;
+	private int totalAmount;
+	private int changeReturn;
+	
+    private Long c2000;
+    private Long c500;
+    private Long c200;
+    private Long c100;
+    private Long c50;
+    private Long c20;
+    private Long c10;
+}
+

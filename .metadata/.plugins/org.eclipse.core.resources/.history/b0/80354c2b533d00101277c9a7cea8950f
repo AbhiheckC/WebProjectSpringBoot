@@ -1,0 +1,51 @@
+package com.idsspl.webproject.model;
+
+import java.util.List;
+
+public class DenominationRequest {
+	private List<NoteEntry> denominations;
+
+	public List<NoteEntry> getDenominations() {
+		return denominations;
+	}
+
+	public int getAmountReceived() {
+		return amountReceived;
+	}
+
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+	public int getChangeReturn() {
+		return changeReturn;
+	}
+
+	public void setDenominations(List<NoteEntry> denominations) {
+		this.denominations = denominations;
+	}
+
+	public void setAmountReceived(int amountReceived) {
+		this.amountReceived = amountReceived;
+	}
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public void setChangeReturn(int changeReturn) {
+		this.changeReturn = changeReturn;
+	}
+
+	private int amountReceived;
+	private int totalAmount;
+	private int changeReturn;
+
+	// Getters and setters
+	public static class NoteEntry {
+		private int value;
+		private int count;
+
+		// Getters and setters
+	}
+}

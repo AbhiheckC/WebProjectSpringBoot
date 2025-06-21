@@ -1,6 +1,9 @@
 package com.idsspl.webproject.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,20 +34,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.idsspl.webproject.entity.AgentEntity;
+import com.idsspl.webproject.entity.Denomination;
+import com.idsspl.webproject.entity.DenominationSummaryEntity;
+import com.idsspl.webproject.entity.DenominationViewEntity;
+import com.idsspl.webproject.model.AccountModel;
 import com.idsspl.webproject.model.AgentCollectionModel;
 import com.idsspl.webproject.model.AgentLocationModel;
 import com.idsspl.webproject.model.AgentModel;
 import com.idsspl.webproject.model.CollectionInfoModel;
 import com.idsspl.webproject.model.CustomerMobileModifyModel;
 import com.idsspl.webproject.model.CustomerModel;
+import com.idsspl.webproject.model.DenominationRequest;
 import com.idsspl.webproject.model.MemberModel;
+import com.idsspl.webproject.model.PrintAccountStatementModel;
 import com.idsspl.webproject.model.PrintAgentCollectionModel;
 import com.idsspl.webproject.model.UserModel;
 import com.idsspl.webproject.repo.AgentRepo;
 import com.idsspl.webproject.repo.UserRepo;
+import com.idsspl.webproject.service.AccountService;
 import com.idsspl.webproject.service.AgentService;
-import com.idsspl.webproject.service.CustomerService;
 import com.idsspl.webproject.service.MemberService;
+import com.idsspl.webproject.serviceImpl.DenominationServiceImpl;
 import com.idsspl.webproject.serviceImpl.UserServiceImpl;
 
 @Controller
@@ -51,13 +62,17 @@ public class UserController {
 
 	@Autowired
 	private AgentService agentService;
-
-	@Autowired
-	private CustomerService customerService;
-
+	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private AccountService accountService;
 
+	@Autowired
+    private DenominationServiceImpl denominationService;
+
+	
 	// TO GET THE USERNAME OF THE USER LOGIN TO DISPLAY AND USE IN ALL THE ROUTES
 	@ModelAttribute("userName")
 	public String addUserNameToModel(Model model) {
@@ -161,6 +176,40 @@ public class UserController {
 		return "ViewAgent";
 	}
 
+//	@PostMapping(path = "/addGuarantor")
+//	public String AddGuarantorPage(@ModelAttribute AddGuarantorListDto customerGuarantorList,
+//			BindingResult bindingResult, Model model, Authentication authentication) {
+//		if (bindingResult.hasErrors()) {
+//			return "redirect:/home";
+//		}
+//		
+////		for (AgentCollectionModel agentCollectionModel : form.getAgentCollectionList()) {
+////			System.out.println("===== customer id = " + agentCollectionModel.getCustomerId());
+////			System.out.println("accountCode = " + agentCollectionModel.getAccountCode());
+////			System.out.println("collection amt = " + agentCollectionModel.getCollectionAmount());
+////			System.out.println("date = " + agentCollectionModel.getReviewDate());
+////			System.out.println("balance = " + agentCollectionModel.getLedgerbalance());
+////		}
+//		for (CustomerGuarantorModel ele : customerGuarantorList.getAddGuarantorList()) {
+//			System.out.println("customerGuarantorList accountCode----"+ele.getAccountCode());
+//			System.out.println("customerGuarantorList serialNumber----"+ele.getSerialNumber());
+//			System.out.println("customerGuarantorList customerId----"+ele.getCustomerId());
+//			System.out.println("customerGuarantorList name----"+ele.getName());
+//			System.out.println("customerGuarantorList address----"+ele.getAddress());
+//			System.out.println("customerGuarantorList dateofbirth----"+ele.getDateofbirth());
+//			System.out.println("customerGuarantorList phonenumber----"+ele.getPhonenumber());
+//			System.out.println("customerGuarantorList mobilenumber----"+ele.getMobilenumber());
+//			System.out.println("customerGuarantorList stateCode----"+ele.getStateCode());
+//			System.out.println("customerGuarantorList cityCode----"+ele.getCityCode());
+//			System.out.println("customerGuarantorList countryCode----"+ele.getCountryCode());
+//			System.out.println("customerGuarantorList zip----"+ele.getZip());
+//		}
+////		String result = customerService.saveCustomerGuarantor(customerGuarantorList);
+////		model.addAttribute("isCollectionSaved", result);
+////		System.out.println("result===============" + result);
+//		return "AddGuarantor";
+//	}
+
 	// TO GET VIEW AGENT PAGE
 	@GetMapping(path = "/viewMember")
 	public String GetViewMemberPage(Model model) {
@@ -205,23 +254,23 @@ public class UserController {
 //	}
 
 	// TO GET VIEW AGENT PAGE
-	@GetMapping(path = "/viewCustomer")
-	public String GetViewCustomerPage(Model model) {
-		return "ViewCustomer";
-	}
-
-	@PostMapping(path = "/viewCustomerInfo")
-	public String GetViewCustomerInfo(CustomerModel customer, Model model) {
-		List<CustomerModel> customers;
-		customers = customerService.getCustomerList(customer);
-		if (customers == null || customers.isEmpty()) {
-			String isDataMissing = "No data Found!";
-			model.addAttribute("isDataMissing", isDataMissing);
-		} else if (customers != null || !customers.isEmpty()) {
-			model.addAttribute("customerList", customers);
-		}
-		return "ViewCustomer";
-	}
+//	@GetMapping(path = "/viewCustomer")
+//	public String GetViewCustomerPage(Model model) {
+//		return "ViewCustomer";
+//	}
+//
+//	@PostMapping(path = "/viewCustomerInfo")
+//	public String GetViewCustomerInfo(CustomerModel customer, Model model) {
+//		List<CustomerModel> customers;
+//		customers = customerService.getCustomerList(customer);
+//		if (customers == null || customers.isEmpty()) {
+//			String isDataMissing = "No data Found!";
+//			model.addAttribute("isDataMissing", isDataMissing);
+//		} else if (customers != null || !customers.isEmpty()) {
+//			model.addAttribute("customerList", customers);
+//		}
+//		return "ViewCustomer";
+//	}
 
 	// TO GET VIEW AGENT PAGE
 	@GetMapping(path = "/printCollection")
@@ -245,6 +294,31 @@ public class UserController {
 		return "PrintCollection";
 	}
 
+	
+	// TO GET VIEW STATEMENT PAGE
+		@GetMapping(path = "/viewAccountStatement")
+		public String GetAccountStatementPage(Model model) {
+			return "viewAccountStatement";
+		}
+		
+		@PostMapping(path = "/printAccountStatement")
+		public String PostPrintAccountStmtPage(PrintAccountStatementModel collection, Model model,
+				Authentication authentication) {
+			List<PrintAccountStatementModel> collections;
+			collections = agentService.getCollectionList(collection);
+			System.out.println("collections======" + collections);
+			if (collections == null || collections.isEmpty()) {
+				String isDataMissing = "No data Found!";
+				model.addAttribute("isDataMissing", isDataMissing);
+			} else if (collections != null || !collections.isEmpty()) {
+				System.out.println("--------------" + collections.get(0));
+				model.addAttribute("AccountcollectionList", collections);
+			}
+			return "viewAccountStatement";
+		}
+	
+	
+	
 	// TO GET VIEW COLLECTION INFORMATION PAGE
 	@GetMapping(path = "/viewCollectionInfo")
 	public String GetCollectionInfoPage(Model model) {
@@ -314,11 +388,11 @@ public class UserController {
 
 	// TO GET VIEW AGENT LOCATION PAGE
 	@GetMapping(path = "/viewAgentLocation")
-	public String GetAgentLocationPage(Model model, Authentication authentication,RedirectAttributes redirAttr) {
+	public String GetAgentLocationPage(Model model, Authentication authentication, RedirectAttributes redirAttr) {
 		String userName = authentication.getName();
 		String isMainUser = agentService.getMainUser(userName);
-		
-		if(isMainUser.equals("N")) {
+
+		if (isMainUser.equals("N")) {
 //			model.addAttribute("isMainUser", "it's not accessible");
 			redirAttr.addFlashAttribute("isMainUser", "it's not accessible");
 			return "redirect:/home";
@@ -367,6 +441,105 @@ public class UserController {
 //		return "redirect:/viewAgent";
 //	}
 
+
+	@PostMapping("/saveDenomination")
+	@ResponseBody
+	public ResponseEntity<?> saveDenomination(@RequestBody DenominationRequest request, Authentication authentication) {
+		try {
+			String userName = authentication.getName();
+	        denominationService.save(request,userName);
+	        return ResponseEntity.ok(Collections.singletonMap("message", "Denomination saved successfully"));
+	    } catch (Exception e) {
+	        e.printStackTrace(); // ⬅️ Print the real exception to console/log
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body(Collections.singletonMap("message", "Failed to save denomination"));
+	    }
+	}
+
+	
+	
+	// TO GET DENOMINATION TOTAL PAGE
+	@GetMapping(path = "/viewDenominationCollection")
+	public String GetDenominationInfoPage(Model model) {
+		return "DenominationInfo";
+	}
+
+	@PostMapping(path = "/getDenominationInfo")
+	public String PostDenominationInfoPage( DenominationRequest request,Model model, Authentication authentication) {
+		List<DenominationRequest> denominations;
+//		List<DenominationViewEntity> denominationview;
+		String type = "collection";
+		String userName = authentication.getName();
+		denominations = denominationService.getDenominationInfoList(request, userName,type);
+		System.out.println("denominations======" + denominations);
+		if (denominations == null || denominations.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (denominations != null || !denominations.isEmpty()) {
+			System.out.println("--------------" + denominations.get(0));
+			model.addAttribute("denominationList", denominations);
+			model.addAttribute("selectedType", type);
+		}
+		
+//		denominationview = denominationService.getDenominationViewList(userName);
+//		model.addAttribute("denominationViewList", denominationview);
+		return "DenominationInfo";
+	}
+	
+	@PostMapping(path = "/getReturnDenominationInfo")
+	public String ReturnDenominationInfoPage(DenominationRequest request, Model model, Authentication authentication) {
+		List<DenominationRequest> denominations;
+		String type = "return";
+		String userName = authentication.getName();
+		denominations = denominationService.getDenominationInfoList(request, userName,type);
+		System.out.println("denominations======" + denominations);
+		if (denominations == null || denominations.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (denominations != null || !denominations.isEmpty()) {
+			System.out.println("--------------" + denominations.get(0));
+			model.addAttribute("denominationList", denominations);
+			model.addAttribute("selectedType", type);
+		}
+		return "DenominationInfo";
+	}
+	
+	
+	
+//	@GetMapping(path = "/viewDenominationSummary")
+//	public String GetDenominationSUmmaryPage(Model model) {
+//		return "DenominationSummary";
+//	}
+	
+	// TO GET DENOMINATION SUMMARY PAGE
+		@GetMapping(path = "/viewDenominationSummary")
+		public String GetDenominationSummaryPage(Model model, Authentication authentication) {
+			
+			List<DenominationSummaryEntity> denominations;
+//			List<DenominationViewEntity> denominationview;
+		
+			SimpleDateFormat ft
+            = new SimpleDateFormat("dd-MMM-yy");
+
+        String str = ft.format(new Date());
+
+        // Printing the formatted date
+        System.out.println("Formatted Date : " + str.toUpperCase());
+			
+			String userName = authentication.getName();
+			denominations = denominationService.getDenominationSummaryList(userName,str.toUpperCase());
+			System.out.println("denominations======" + denominations);
+			if (denominations == null || denominations.isEmpty()) {
+				String isDataMissing = "No data Found!";
+				model.addAttribute("isDataMissing", isDataMissing);
+			} else if (denominations != null || !denominations.isEmpty()) {
+				System.out.println("--------------" + denominations.get(0));
+				model.addAttribute("denominationSummaryList", denominations);
+			}
+			return "DenominationSummary";
+		}
+	
+	
 	@GetMapping(path = "/hello")
 	public String sayHello(Model model) {
 		String username = agentService.sayHello();

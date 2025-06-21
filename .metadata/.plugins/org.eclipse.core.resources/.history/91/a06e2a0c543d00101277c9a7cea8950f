@@ -1,0 +1,9 @@
+package com.idsspl.webproject.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.idsspl.webproject.entity.Denomination;
+
+public interface DenominationRepository extends JpaRepository<Denomination, Long> {
+}
+

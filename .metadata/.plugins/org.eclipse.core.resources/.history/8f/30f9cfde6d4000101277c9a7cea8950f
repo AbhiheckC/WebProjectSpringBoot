@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!--<title>कलेक्शन</title> -->
+	<title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+			</div>
+			<div class="col-sm-12 col-md-12">
+				<h3 class="text-center heading" id="hehe">डेनोमिनेशन की जानकारी</h3>
+
+				<form th:action="@{/getDenominationInfo}" method="post" class="singleInputButtonForm">
+					<input type="submit" class="submitBtn" value="Submit" />
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 col-md-12 mt-4" th:if="${denominationList != null}">
+				<h3 class="heading text-center">कलेक्शन सूची</h3>
+				<!--<div class="text-center mb-3">
+					<label><strong>पेमेंट प्रकार:</strong></label>
+					<div></div>
+					<div class="radio-group">
+						<input type="radio" id="filterAll" name="paymentFilter" value="All" checked />
+						<label for="filterAll">All</label>
+
+						<input type="radio" id="filterOnline" name="paymentFilter" value="Online" />
+						<label for="filterOnline">Online</label>
+
+						<input type="radio" id="filterOffline" name="paymentFilter" value="Offline" />
+						<label for="filterOffline">Offline</label>
+					</div>-->
+				</div>
+
+			
+			<div class="text-center">
+				<div class="table-responsive" id="table">
+					<table class="table table-editable">
+						<thead class="thead">
+							<tr class="table-success">
+								<!--<th></th>-->
+								<th>एजेंट नाम</th>
+								<th>रसीद क्रमांक</th>
+								<th>कलेक्शन राशि</th>
+								<th>कुल राशि</th>
+								<th>वापस राशि</th>
+								<!--<th>पेमेंट</th>-->
+								<!--<th></th>-->
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="denomination : ${denominationList}">
+								<!--<form th:action="@{/makeCollection0}" method="post"
+										th:object="${collectionInfoList}">-->
+								<!--<td>
+											<input class="form-check-input" type="checkbox" id="checkbox"
+												name="checkbox" th:value="${collection.customerId}">
+										</td>-->
+								<td th:text="${denomination.agentName}"></td>
+							<!--	<td th:utext="${collection.collectionDate}"></td>-->
+							<!--	<td th:utext="${collection.localLanguageName}"></td>-->
+								<td th:text="${denomination.receiptNo}"></td>
+								<td th:text="${denomination.amountReceived}"></td>
+								<td th:text="${denomination.totalAmount}" id="totalAmt"></td>
+								<td th:text="${denomination.changeReturn}"></td>
+								<!--<input type="hidden" name="customerId" th:value="${collection.customerId}" />
+								<input type="hidden" name="collectionDate" th:value="${collection.collectionDate}" />
+								<input type="hidden" name="localLanguageName"
+									th:value="${collection.localLanguageName}" />
+								<input type="hidden" name="receiptNo" th:value="${collection.receiptNo}" />
+								<input type="hidden" name="collectionAmount"
+									th:value="${collection.collectionAmount}" />-->
+								<!--<td><input type="submit" class="btn btn-success" value="Cancel" /></td>-->
+								<!--</form>-->
+							</tr>
+							<!--<tr class="table-dark">-->
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<!--<td></td>-->
+							<!--<td>TOTAL</td>
+									<td id="totalCollectionAmount"></td>
+									<td></td>-->
+							<tr class="table-dark" id="totalRow">
+								<td colspan="4"></td>
+								<td><strong>TOTAL</strong></td>
+								<td id="totalCollectionAmount"></td>
+							</tr>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script th:replace="includes/script :: script"></script>
+	<script th:if="${isDataMissing != null}" th:inline="javascript">
+		alert("No data available!");
+	</script>
+	<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+		//alert(th:text = "${isCollectionSaved}");
+		alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+	</script>
+
+
+	<!--<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const radios = document.getElementsByName('paymentFilter');
+			const tbody = document.querySelector('table tbody');
+			const totalRow = document.getElementById('totalRow');
+			const totalCell = document.getElementById('totalCollectionAmount');
+
+			function updateTable(selectedValue) {
+				const rows = tbody.querySelectorAll('tr');
+				let total = 0;
+
+				rows.forEach(row => {
+					// Skip the total row from logic
+					if (row.id === 'totalRow') return;
+
+					const paymentCell = row.querySelector('td:nth-child(5)');
+					const amountCell = row.querySelector('td:nth-child(6)');
+
+					const method = paymentCell?.textContent.trim();
+					const amount = parseFloat(amountCell?.textContent.trim()) || 0;
+
+					const shouldShow = selectedValue === 'All' || method === selectedValue;
+					row.style.display = shouldShow ? '' : 'none';
+
+					if (shouldShow) {
+						total += amount;
+					}
+				});
+
+				// Update and re-append the total row to keep it at the end
+				totalCell.textContent = total.toFixed(2);
+				tbody.appendChild(totalRow); // move it to the end
+			}
+
+			// Attach event listeners
+			radios.forEach(radio => {
+				radio.addEventListener('change', () => {
+					updateTable(radio.value);
+				});
+			});
+
+			// Initial load
+			updateTable('All');
+		});
+	</script>-->
+
+
+	<!--<script>
+		window.addEventListener('DOMContentLoaded', function () {
+			const collectionAmountCells = document.querySelectorAll('#collectionAMT');
+			let totalCollectionAmount = 0;
+			collectionAmountCells.forEach(function (cell) {
+				totalCollectionAmount += parseFloat(cell.textContent);
+			});
+			const totalCollectionAmountElement = document.getElementById('totalCollectionAmount');
+			totalCollectionAmountElement.textContent = totalCollectionAmount;
+		});
+	</script>-->
+	<!--<footer th:replace="includes/footer :: footer"></footer>-->
+</body>
+
+</html>

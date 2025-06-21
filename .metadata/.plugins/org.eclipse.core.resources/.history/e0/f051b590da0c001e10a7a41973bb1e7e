@@ -1,5 +1,0 @@
-package com.idsspl.webproject.repo;
-
-public interface AgentLocationRepo {
-
-}

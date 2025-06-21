@@ -1,14 +1,12 @@
 package com.idsspl.webproject.entity;
 
-import java.sql.Blob;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "CUSTOMER_DETAILS_NEW", schema = "CUSTOMER")
+@Entity   
+@Table(name = "CUSTOMER_7JUN23", schema = "CUSTOMER")
 public class CustomerEntity {
 	@Column(name = "customer_id")
 	@Id
@@ -17,27 +15,14 @@ public class CustomerEntity {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "address")
-	private String address; 
-	
-	@Column(name ="mobile_no")
-	private String mobileNo;
+	@Column(name ="phonemobile")
+	private String phonemobile;
 	
 	@Column(name = "dateofbirth")
 	private String dateofbirth;
-	
-	@Column(name = "signature")
-	private Blob signature;
-//	
-//	@Column(name = "signature")
-//	private byte[] signature;
 
 	public String getCustomerId() {
 		return customerId;
-	}
-
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
 	}
 
 	public String getName() {
@@ -48,54 +33,32 @@ public class CustomerEntity {
 		this.name = name;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getMobileNo() {
-		return mobileNo;
-	}
-
-	public void setMobileNo(String mobileNo) {
-		this.mobileNo = mobileNo;
+	public String getPhonemobile() {
+		return phonemobile;
 	}
 
 	public String getDateofbirth() {
 		return dateofbirth;
 	}
 
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+
+	public void setPhonemobile(String phonemobile) {
+		this.phonemobile = phonemobile;
+	}
+
 	public void setDateofbirth(String dateofbirth) {
 		this.dateofbirth = dateofbirth;
 	}
-
-//	public byte[] getSignature() {
-//		return signature;
-//	}
-//
-//	public void setSignature(byte[] signature) {
-//		this.signature = signature;
-//	}
-
-	public Blob getSignature() {
-		return signature;
-	}
-
-	public void setSignature(Blob signature) {
-		this.signature = signature;
-	}
 	
+//	@Column(name = "signature")
+//	private Blob signature;
+//	
+//	@Column(name = "signature")
+//	private byte[] signature;
 	
-	
-
-	
-	
-	
-	
-
 	
 	
 	

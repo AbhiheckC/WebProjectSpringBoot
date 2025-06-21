@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.springframework.security.web.authentication.logout.LogoutSuccessHandler"/>
-    <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
-    <fullyQualifiedTypeName name="javax.persistence.GenerationType"/>
-    <fullyQualifiedTypeName name="java.util.UUID"/>
-    <fullyQualifiedTypeName name="org.hibernate.Session"/>
-    <fullyQualifiedTypeName name="org.hibernate.SessionFactory"/>
-    <fullyQualifiedTypeName name="javax.persistence.criteria.CriteriaBuilder"/>
-    <fullyQualifiedTypeName name="javax.persistence.criteria.CriteriaQuery"/>
-    <fullyQualifiedTypeName name="javax.persistence.criteria.Root"/>
-    <fullyQualifiedTypeName name="java.util.function.Predicate"/>
-    <fullyQualifiedTypeName name="org.springframework.security.config.http.SessionCreationPolicy"/>
-    <fullyQualifiedTypeName name="org.springframework.security.web.session.HttpSessionEventPublisher"/>
-    <fullyQualifiedTypeName name="org.springframework.boot.web.servlet.ServletListenerRegistrationBean"/>
-    <fullyQualifiedTypeName name="org.springframework.security.core.session.SessionRegistry"/>
-    <fullyQualifiedTypeName name="org.springframework.security.core.session.SessionRegistryImpl"/>
-    <fullyQualifiedTypeName name="javax.servlet.http.HttpSessionListener"/>
-    <fullyQualifiedTypeName name="javax.servlet.http.HttpSessionEvent"/>
-    <fullyQualifiedTypeName name="org.springframework.security.web.session.SessionInformationExpiredStrategy"/>
-    <fullyQualifiedTypeName name="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint"/>
-    <fullyQualifiedTypeName name="java.lang.StringBuilder"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.entity.UserEntity"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.repo.UserRepo"/>
     <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
@@ -36,12 +16,10 @@
     <fullyQualifiedTypeName name="com.idsspl.webproject.repo.MemberRepo"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.entity.MemberEntity"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.service.MemberService"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.model.PrintAgentCollectionModel"/>
     <fullyQualifiedTypeName name="org.springframework.data.repository.query.Param"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.entity.PrintAgentCollectionEntity"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.repo.PrintAgentCollectionRepo"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Modifying"/>
@@ -60,4 +38,26 @@
     <fullyQualifiedTypeName name="com.idsspl.webproject.entity.AgentLocationEntity"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.repo.AgentLocationRepo"/>
     <fullyQualifiedTypeName name="com.idsspl.webproject.model.AgentLocationModel"/>
+    <fullyQualifiedTypeName name="javax.persistence.Table"/>
+    <fullyQualifiedTypeName name="javax.persistence.Entity"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.dto.AddGuarantorListDto"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.model.CustomerGuarantorModel"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.entity.CustomerGuarantorEntity"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.repo.CustomerGuarantorRepo"/>
+    <fullyQualifiedTypeName name="javax.persistence.Id"/>
+    <fullyQualifiedTypeName name="javax.persistence.Column"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.model.AccountModel"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.repo.AccountRepo"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.entity.AccountEntity"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.service.AccountService"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.repo.PrintAccountStatementRepo"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.model.PrintAccountStatementModel"/>
+    <fullyQualifiedTypeName name="com.idsspl.webproject.entity.AccountStatementEntity"/>
+    <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
 </qualifiedTypeNameHistroy>

@@ -17,7 +17,7 @@
 						<p class="lead">Lorem ipsum dolor sit amet at enim hac integer volutpat maecenas pulvinar. </p>
 					</div>
 				</div>-->
-			<div class="row">
+			<div class="row"> <!--justify-content-md-center-->
 				<div class="col-sm-6 col-md-6 col-lg-4 mb-4">
 					<a href="/myapp/viewMember">
 						<div class="card text-white card-has-bg click-col"
@@ -127,48 +127,80 @@
 									<h4 class="card-title text-center">ग्राहक मोबाइल अपडेट</h4>
 
 								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				
+				<div class="col-sm-6 col-md-6 col-lg-4 mb-4">
+					<a href="/myapp/viewAccountStatement">
+						<div class="card text-white card-has-bg click-col"
+							style="background-image:url('images/bank-statement.jpg');">
+							<img class="card-img d-none" src="images/bank-statement.jpg" alt="image">
+							<div class="card-img-overlay d-flex flex-column">
+								<div class="card-body">
+
+									<h4 class="card-title text-center">खाता विवरण</h4>
+
+								</div>
 
 							</div>
 						</div>
 					</a>
 				</div>
+				
+				<div class="col-sm-6 col-md-6 col-lg-4 mb-4">
+					<a href="/myapp/viewDenominationCollection">
+						<div class="card text-white card-has-bg click-col"
+							style="background-image:url('images/collection.jpg');">
+							<img class="card-img d-none" src="images/collection.jpg" alt="image">
+							<div class="card-img-overlay d-flex flex-column">
+								<div class="card-body">
+									<h4 class="card-title text-center">डेनोमिनेशन की जानकारी</h4>
 
-				<!-- 
-					<div class="col-sm-6 col-md-6 col-lg-4 mb-4">
-						<a href="/viewAgent">
-						<div class="card text-white card-has-bg click-col"
-							style="background-image:url('images/cus.jpg');">
-							<img class="card-img d-none" src="images/cus.jpg"
-								alt="image">
-							<div class="card-img-overlay d-flex flex-column">
-								<div class="card-body">
-								
-									<h4 class="card-title text-center ">Header</h4>
-									
 								</div>
-								
+
 							</div>
 						</div>
-						</a>
-					</div>
-					<div class="col-sm-6 col-md-6 col-lg-4 mb-4">
-						<a href="/viewAgent">
+					</a>
+				</div>
+				<div class="col-sm-6 col-md-6 col-lg-4 mb-4">
+					<a href="/myapp/viewDenominationSummary">
 						<div class="card text-white card-has-bg click-col"
-							style="background-image:url('images/moneddy.jpg');">
-							<img class="card-img d-none" src="images/moneydd.jpg"
-								alt="image">
+							style="background-image:url('images/collection.jpg');">
+							<img class="card-img d-none" src="images/collection.jpg" alt="image">
 							<div class="card-img-overlay d-flex flex-column">
 								<div class="card-body">
-								
-									<h4 class="card-title text-center ">Header</h4>
-									
+									<h4 class="card-title text-center">डेनोमिनेशन</h4>
+
 								</div>
-								
+
 							</div>
 						</div>
-						</a>
-					</div> -->
+					</a>
+				</div>
+				
 			</div>
+			
+			<!--<div class="row justify-content-md-center">
+				<div class="col-sm-6 col-md-6 col-lg-4 mb-4">
+					<a href="/myapp/viewCustomerMobileModify">
+						<div class="card text-white card-has-bg click-col"
+							style="background-image:url('images/customer.jpg');">
+							<img class="card-img d-none" src="images/customer.jpg" alt="image">
+							<div class="card-img-overlay d-flex flex-column">
+								<div class="card-body">
+
+									<h4 class="card-title text-center">गारंटर</h4>
+
+								</div>
+
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>-->
 		</div>
 	</section>
 	<script th:if="${isMainUser != null}" th:inline="javascript">

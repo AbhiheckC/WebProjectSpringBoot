@@ -20,7 +20,7 @@
 				<form th:action="@{/viewAgentList}" method="post" class="singleInputButtonForm">
 					<input type="text" id="customerId" name="customerId" placeholder="ग्राहक क्रमांक"
 						class=".ui-box .top-leftStart-backward" required />
-					<input type="submit" class="submitBtn" value="Submit" id="locationBtn" />
+					<input type="submit" class="submitBtn" value="Submit" />
 				</form>
 
 			</div>
@@ -67,7 +67,7 @@
 									<th>अंतिम तारीख</th>
 									<th>किश्त राशि</th>
 									<th>शेष राशि</th>
-									<th>ऑनलाइन पेमेंट</th>
+									<th>पेमेंट</th>
 									<th>कलेक्शन मात्रा</th>
 									<th>सेव</th>
 								</tr>
@@ -81,15 +81,19 @@
 										<td th:text="${agent.reviewDate}"></td>
 										<td th:text="${agent.installmentAmount}"></td>
 										<td th:text="${agent.ledgerbalance}"></td>
-										<td>
-											<div class="form-check form-switch onlineSwitchDiv">
 
-												<input class="form-check-input onlineCheckbox" type="checkbox"
-													id="online">
-											</div>
+										<td>
+											<label><input type="radio" name="paymentMethod" value="Offline">
+												Offline</label>
+											&nbsp;&nbsp;
+											<label><input type="radio" name="paymentMethod" value="Online">
+												Online</label>
 										</td>
+										<input type="hidden" id="selectedPaymentMethod" name="selectedPaymentMethod" />
+
 										<input type="hidden" name="customerId" th:value="${agent.customerId}" />
-										<input type="hidden" name="accountCode" th:value="${agent.accountCode}" />
+										<input type="hidden" id="accountCode" name="accountCode"
+											th:value="${agent.accountCode}" />
 										<input type="hidden" name="accountType" th:value="${agent.accountType}" />
 										<input type="hidden" name="name" th:value="${agent.name}" />
 										<input type="hidden" name="ledgerbalance" th:value="${agent.ledgerbalance}" />
@@ -99,11 +103,11 @@
 										<input type="hidden" id="longitude" name="longitude" />
 										<input type="hidden" id="receiptNo" name="receiptNo" />
 										<input type="hidden" id="sendSMSInput" readonly />
-										<td style="display: none;"><input type="hidden" id="onlinePaymentInput" name="paymentMethod"
-												readonly /></td>
 										<!-- <input type="hidden" id="collectionResponse" name="collectionResponse"
 											th:value="${isCollectionSaved}" />-->
-										<td><input type="submit" id="saveBtn" class="btn" value="Save" />
+										<td>
+											<!--<input type="submit" id="saveBtn" class="btn" value="Save" />-->
+											<input type="submit" id="saveBtn" class="btn" value="Save" disabled />
 										</td>
 									</form>
 								</tr>
@@ -115,10 +119,92 @@
 									<td></td>
 									<td></td>
 									<td><input type="text" id="total" name="total" disabled /></td>
-									<td><button onclick="totalAmount()" class="btn btn-success">कुल रूपए</button></td>
+									<td><button onclick="totalAmount()" class="btn btn-success"
+											th:attr="data-customer-id=${agentList[0].customerId}">कुल रूपए</button></td>
 								</tr>
 							</tbody>
 						</table>
+
+						<!-- Denomination Modal -->
+						<div id="denominationModal" class="modal" style="display: none;">
+							<div class="modal-content">
+								<h2 class="modal-title">Denomination Entry</h2>
+								<form id="denominationForm">
+									<input type="hidden" id="denominationCustomerId" name="customerId" />
+									<input type="hidden" id="asondate" name="asondate"
+										th:value="${#dates.format(#dates.createNow(), 'dd-MMM-yy')}" />
+									<div class="denomination-grid">
+										<label>₹2000: <input type="number" id="r2000" value="0" min="0"></label>
+										<label>₹500: <input type="number" id="r500" value="0" min="0"></label>
+										<label>₹200: <input type="number" id="r200" value="0" min="0"></label>
+										<label>₹100: <input type="number" id="r100" value="0" min="0"></label>
+										<label>₹50: <input type="number" id="r50" value="0" min="0"></label>
+										<label>₹20: <input type="number" id="r20" value="0" min="0"></label>
+										<label>₹10: <input type="number" id="r10" value="0" min="0"></label>
+										<label>₹5: <input type="number" id="r5" value="0" min="0"></label>
+										<label>₹2: <input type="number" id="r2" value="0" min="0"></label>
+										<label>₹1: <input type="number" id="r1" value="0" min="0"></label>
+									</div>
+
+									<!--<div class="amount-summary">
+										<p><strong>Total Notes Amount:</strong> ₹<span id="totalDenomination">0</span>
+										</p>
+										<label>Offline Amount Received:
+											<input type="number" id="amountReceived" min="1" readonly>
+										</label>
+										<label>Online Amount:
+   										 <input type="number" id="onlineAmt" name="onlineAmt" readonly>
+										</label>
+										<p><strong>Change to Return:</strong> ₹<span id="changeReturn">0</span></p>
+									</div>-->
+									<div class="amount-summary">
+										<p style="font-weight: bold; color: #2a8c2a;">
+											<strong>Total Notes Amount:</strong> ₹<span id="totalDenomination">0</span>
+										</p>
+
+										<label style="font-weight: bold; color: #1d3557;">
+											Offline Amount Received:
+											<input type="number" id="amountReceived" min="1" readonly
+												style="font-weight: bold;" />
+										</label>
+										<br />
+										<label style="font-weight: bold; color: #e76f51;">
+											Online Amount Received:
+											<input type="number" id="onlineAmt" name="onlineAmt" readonly
+												style="font-weight: bold;" />
+										</label>
+
+										<p style="font-weight: bold; color: #e63946;">
+											<strong>Change to Return:</strong> ₹<span id="changeReturn">0</span>
+										</p>
+									</div>
+
+
+
+									<div class="denomination-grid">
+										<label>₹2000: <input type="number" id="c2000" value="0" min="0"></label>
+										<label>₹500: <input type="number" id="c500" value="0" min="0"></label>
+										<label>₹200: <input type="number" id="c200" value="0" min="0"></label>
+										<label>₹100: <input type="number" id="c100" value="0" min="0"></label>
+										<label>₹50: <input type="number" id="c50" value="0" min="0"></label>
+										<label>₹20: <input type="number" id="c20" value="0" min="0"></label>
+										<label>₹10: <input type="number" id="c10" value="0" min="0"></label>
+										<label>₹5: <input type="number" id="c5" value="0" min="0"></label>
+										<label>₹2: <input type="number" id="c2" value="0" min="0"></label>
+										<label>₹1: <input type="number" id="c1" value="0" min="0"></label>
+									</div>
+
+									<div class="modal-actions">
+										<button type="button" id="confirmDenomination">✅ Confirm</button>
+										<button type="button" class="cancel-button" id="cancelDenomination">❌
+											Cancel</button>
+									</div>
+
+								</form>
+							</div>
+						</div>
+
+
 						<!--<ul class="nav justify-content-center row">
 							<li class="nav-item">
 								<button onclick="totalAmount()" class="btn btn-success">कुल रूपए</button>

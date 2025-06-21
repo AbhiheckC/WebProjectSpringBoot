@@ -1,30 +1,19 @@
 package com.idsspl.webproject.model;
 
-import java.sql.Blob;
-
-
 public class CustomerModel {
 
 	private String customerId;
 
 	private String name;
-
-	private String address; 
-
-	private String mobileNo;
-
+	
+	private String phonemobile;
+	
 	private String dateofbirth;
-
-//	private Blob signature;
-//	private byte[] signature;
-	private String signature;
+	
+//	private String signature;
 
 	public String getCustomerId() {
 		return customerId;
-	}
-
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
 	}
 
 	public String getName() {
@@ -35,53 +24,26 @@ public class CustomerModel {
 		this.name = name;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getMobileNo() {
-		return mobileNo;
-	}
-
-	public void setMobileNo(String mobileNo) {
-		this.mobileNo = mobileNo;
+	public String getPhonemobile() {
+		return phonemobile;
 	}
 
 	public String getDateofbirth() {
 		return dateofbirth;
 	}
 
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+
+	public void setPhonemobile(String phonemobile) {
+		this.phonemobile = phonemobile;
+	}
+
 	public void setDateofbirth(String dateofbirth) {
 		this.dateofbirth = dateofbirth;
 	}
 
-	public String getSignature() {
-		return signature;
-	}
-
-	public void setSignature(String signature) {
-		this.signature = signature;
-	}
-
-//	public byte[] getSignature() {
-//		return signature;
-//	}
-//
-//	public void setSignature(byte[] signature) {
-//		this.signature = signature;
-//	}
-
-//	public Blob getSignature() {
-//		return signature;
-//	}
-//
-//	public void setSignature(Blob signature) {
-//		this.signature = signature;
-//	}
 
 	
 }

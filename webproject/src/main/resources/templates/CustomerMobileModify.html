@@ -42,12 +42,16 @@
 							</thead>
 							<tbody>
 								<tr>
-									<form method="post" th:action="@{/modifyCustomerMobile}" th:object="${collectionMobileList}">
+									<form method="post" th:action="@{/modifyCustomerMobile}"
+										th:object="${collectionMobileList}">
 										<td th:text="${agentList[0].customerId}"></td>
 										<td th:utext="${agentList[0].localLanguageName}"></td>
 										<input type="hidden" name="customerId" th:value="${agentList[0].customerId}" />
 										<td>
-											<input type="text" id="mobile" name="mobile" th:value="${agentList[0].mobile}" pattern="^\d{10}"  required/>
+											<input type="text" id="mobile" name="mobile"
+												th:value="${agentList[0].mobile}" maxlength="10" minlength="10"
+												oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+												required />
 										</td>
 										<td>
 											<input type="submit" id="saveBtn" class="btn" value="Update" />

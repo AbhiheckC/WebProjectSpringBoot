@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>गारंटर पेज</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/addGuarantorStyle.css" rel="stylesheet" />
+</head>
+
+<body class="backgroundColor">
+	<div class="blueContainer">
+		<header th:replace="includes/header :: header"></header>
+		<div class="container">
+			<div class="row text-center">
+				<div class="col-sm-12 col-md-12">
+					<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+				</div>
+
+				<div class="col-sm-12 col-md-12">
+					<h3 class="text-center heading" id="hehe">गारंटर फॉर्म</h3>
+					<form id="guarantorForm" th:action="@{/addGuarantor}" method="post"
+						th:object="${customerGuarantorList}">
+						<div class="multiInputForm">
+							<div class="row mb-4">
+								<div class="col-md-3">
+									<input type="text" class="form-control" id="serialNumber" name="serialNumber"
+										placeholder="Sr. No" required>
+								</div>
+								<div class="col-md-3">
+									<input type="button" onclick="fetchCustomerIds()" class="btn btn-primary" value="Open Modal"></input>
+									<input type="text" class="form-control" id="accountCode" name="accountCode"
+										placeholder="Account Code" required>
+								</div>
+								<div class="col-md-3">
+									<!--<input type="text" class="form-control" id="customerId" name="customerId"
+										placeholder="Customer Id" required>-->
+									<select id="customerId" name="customerId" class="form-control col-md-3" required>
+									</select>
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" id="name" name="name" placeholder="Name"
+										required>
+								</div>
+								<!--<div class="col-md-4">
+								<input type="text" class="form-control" id="name" placeholder="Name">
+								<input type="date" class="form-control mt-3" id="dateofbirth" placeholder="YYYY-MM-DD" value="Date of Birth">
+							</div>
+							<div class="col-md-6">
+								<textarea class="form-control textarea" id="address" placeholder="Address"
+									rows="4"></textarea>
+							</div>-->
+							</div>
+							<div class="row mb-4">
+								<div class="col-md-12">
+									<textarea class="form-control textarea" id="address" name="address"
+										placeholder="Address" rows="2" required></textarea>
+								</div>
+							</div>
+							<div class="row mb-4">
+								<div class="col-md-4">
+									<input type="text" class="form-control" id="dateofbirth" name="dateofbirth"
+										placeholder="Date of Birth" maxlength="10" oninput="isDate(this)" required>
+								</div>
+								<div class="col-md-4">
+									<input type="text" pattern="^\d{10}$" class="form-control" id="phonenumber"
+										name="phonenumber" placeholder="Phone Number" maxlength="10" minlength="10"
+										required>
+								</div>
+								<div class="col-md-4">
+									<input type="text" pattern="^\d{10}$" class="form-control" id="mobilenumber"
+										name="mobilenumber" placeholder="Mobile Number" maxlength="10" minlength="10"
+										required>
+								</div>
+							</div>
+							<div class="row mb-4">
+								<div class="col-md-3">
+									<select id="stateCode" name="stateCode" class="form-control col-md-3" required>
+									</select>
+								</div>
+								<div class="col-md-3">
+									<select id="cityCode" name="cityCode" class="form-control col-md-3" required>
+										<option selected>Select city...</option>
+									</select>
+								</div>
+
+								<div class="col-md-3">
+									<select id="countryCode" name="countryCode" class="form-control col-md-3" required>
+										<option>Select Country...</option>
+										<option value="India" selected>India</option>
+									</select>
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" id="zip" name="zip" placeholder="Zip"
+										oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+										required>
+								</div>
+							</div>
+							<div class="row w-50 mt-4 m-auto">
+								<button type="submit" class="submitBtn text-center" id="submitBtn">Sign in</button>
+							</div>
+					</form>
+				</div>
+
+				<div class="modal" id="customerIdModal">
+					<div class="modal-dialog">
+						<div class="modal-content">
+
+							<!-- Modal Header -->
+							<div class="modal-header">
+								<h4 class="modal-title">Customer IDs</h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<!-- Modal body -->
+							<div class="modal-body">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Customer ID</th>
+										</tr>
+									</thead>
+									<tbody id="customerIdTableBody">
+										<!-- Data will be dynamically added here -->
+									</tbody>
+								</table>
+							</div>
+							<!-- Modal footer -->
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		function fetchCustomerIds() {
+			$.ajax({
+				type: "GET",
+				url: "/myapp/getCustomerId",
+				success: function (data) {
+					console.log("dkljkljk---",data)
+					let tableBody = $("#customerIdTableBody");
+					tableBody.empty();
+					$.each(data, function (index, customer) {
+						let row = $("<tr></tr>");
+						let cell = $("<td></td>").text(customer.customerId);
+						row.append(cell);
+						tableBody.append(row);
+					});
+					$('#customerIdModal').modal('show');
+				},
+				error: function (error) {
+					console.log('Error:', error);
+				}
+			});
+		}
+	</script>
+	<!--<script type="text/javascript" th:src="@{/script/getCustomerId.js}"></script>-->
+	<script type="text/javascript" th:src="@{/script/getState&City.js}"></script>
+	<script type="text/javascript" th:src="@{/script/dateValidation.js}"></script>
+	<script th:replace="includes/script :: script"></script>
+	<script th:if="${isDataMissing != null}" th:inline="javascript">
+		alert("No data available!");
+	</script>
+	<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+		//alert(th:text = "${isCollectionSaved}");
+		alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+	</script>
+
+	<!--<footer th:replace="includes/footer :: footer"></footer>-->
+</body>
+
+</html>

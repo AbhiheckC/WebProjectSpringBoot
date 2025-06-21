@@ -7,7 +7,7 @@ import com.idsspl.webproject.model.AgentLocationModel;
 import com.idsspl.webproject.model.AgentModel;
 import com.idsspl.webproject.model.CollectionInfoModel;
 import com.idsspl.webproject.model.CustomerMobileModifyModel;
-import com.idsspl.webproject.model.MemberModel;
+import com.idsspl.webproject.model.PrintAccountStatementModel;
 import com.idsspl.webproject.model.PrintAgentCollectionModel;
 
 
@@ -33,4 +33,7 @@ public interface AgentService {
 	public List<AgentLocationModel> getAgentLocation(AgentLocationModel agentLoc);
 	
 	public String getMainUser(String userName);
+	
+	public List<PrintAccountStatementModel> getCollectionList(PrintAccountStatementModel collection);
+
 }

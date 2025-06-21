@@ -1,0 +1,72 @@
+package com.idsspl.webproject.entity;
+
+import java.sql.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CUSTOMER_DENOMINATION_VIEW", schema = "CUSTOMER")
+public class DenominationViewEntity {
+
+	@Id
+	@Column(name= "sr_no")
+	private Long srno;
+	
+	@Column(name= "agent_name")
+	private String agentName;
+	
+	@Column(name= "collection_date")
+	private Date collectionDate;
+	
+	@Column(name= "note_value")
+	private Long noteValue;
+	
+	@Column(name= "no_of_notes")
+	private Long noOfNotes;
+	
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public Date getCollectionDate() {
+		return collectionDate;
+	}
+
+	public Long getNoteValue() {
+		return noteValue;
+	}
+
+	public Long getNoOfNotes() {
+		return noOfNotes;
+	}
+
+	public Long getTotalAmt() {
+		return totalAmt;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public void setCollectionDate(Date collectionDate) {
+		this.collectionDate = collectionDate;
+	}
+
+	public void setNoteValue(Long noteValue) {
+		this.noteValue = noteValue;
+	}
+
+	public void setNoOfNotes(Long noOfNotes) {
+		this.noOfNotes = noOfNotes;
+	}
+
+	public void setTotalAmt(Long totalAmt) {
+		this.totalAmt = totalAmt;
+	}
+
+	@Column(name= "total_amt")
+	private Long totalAmt;
+}

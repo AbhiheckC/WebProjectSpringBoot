@@ -1,0 +1,29 @@
+package com.idsspl.webproject.entity;
+
+import java.sql.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CUSTOMER_DENOMINATION_VIEW", schema = "CUSTOMER")
+public class DenominationViewEntity {
+
+	@Id
+	@Column(name= "agent_name")
+	private String agentName;
+	
+	@Column(name= "collection_date")
+	private Date collectionDate;
+	
+	@Column(name= "note_value")
+	private Long noteValue;
+	
+	@Column(name= "no_of_notes")
+	private Long noOfNotes;
+	
+	@Column(name= "total_amt")
+	private Long totalAmt;
+}

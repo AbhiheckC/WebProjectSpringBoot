@@ -19,5 +19,8 @@ public interface CollectionInfoRepo extends JpaRepository<CollectionInfoEntity, 
 	@Query("SELECT a FROM CollectionInfoEntity a WHERE a.agentId = :agentId and a.agentName = :agentName")
 	public List<CollectionInfoEntity> findInfoByAgentIdAndAgentName(@Param("agentId") String agentId,@Param("agentName") String agentName);
 	
+	@Query("SELECT a FROM CollectionInfoEntity a WHERE a.agentId = :agentId and a.agentName = :agentName and a.collectionDate =:collectionDate ")
+	public List<CollectionInfoEntity> findInfoByAgentIdAndAgentName(@Param("agentId") String agentId,@Param("agentName") String agentName,@Param("collectionDate") String collectionDate);
+	
 	
 }

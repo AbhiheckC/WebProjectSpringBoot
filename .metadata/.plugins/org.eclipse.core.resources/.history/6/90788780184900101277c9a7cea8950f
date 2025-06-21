@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!--<title>कलेक्शन</title> -->
+	<title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+	<style>
+		/*denomination summary*/
+   body {
+      font-family: "Arial", sans-serif;
+      margin: 20px;
+      color: #000;
+    }
+    .receipt-container {
+      border: 2px solid #000;
+      padding: 20px;
+      width: 700px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: center;
+    }
+    .note-header {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+    .details-row {
+      margin-bottom: 10px;
+    }
+    .details-row label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .summary {
+      margin-top: 15px;
+    }
+    .signature {
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+/*******/
+		
+	</style>
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+			</div>
+		</div>
+	
+
+  
+		<div class="receipt-container" th:each="denom : ${denominationSummaryList}">
+			<div id="printContent">
+				<div id="tableContent">
+					<h2>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</h2>
+
+					<div class="details-row">
+						<label>दिनांक:</label> <span id="denominationDate"
+							th:text="${denom.denominationDate}">13/06/2025</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>एजेंट का नाम:</label> <span id="agentName" th:text="${denom.agentName}">राधिका
+							शर्मा</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>रसीद नं:</label> <span id="receiptNo" th:text="${denom.receiptNo}">1245</span>
+					</div>
+
+    <table>
+        <thead>
+            <tr class="note-header">
+                <th>नोट</th>
+                <th>संख्या</th>
+                <th>रकम</th>
+            </trclass="note-header">
+        </thead>
+        <tbody>
+			<tr><td>2000x</td><td th:text="${denom.r2000}">2</td><td th:text="${denom.r2000 * 2000}">1000</td></tr>
+            <tr><td>500x</td><td th:text="${denom.r500}">2</td><td th:text="${denom.r500 * 500}">1000</td></tr>
+            <tr><td>200x</td><td th:text="${denom.r200}">1</td><td th:text="${denom.r200 * 200}">200</td></tr>
+            <tr><td>100x</td><td th:text="${denom.r100}">4</td><td th:text="${denom.r100 * 100}">400</td></tr>
+            <tr><td>50x</td><td th:text="${denom.r50}">2</td><td th:text="${denom.r50 * 50}">100</td></tr>
+            <tr><td>10x</td><td th:text="${denom.r10}">5</td><td th:text="${denom.r10 * 10}">50</td></tr>
+            <tr><td>5x</td><td th:text="${denom.r5}">0</td><td th:text="${denom.r5 * 5}">0</td></tr>
+            <tr><td>2x</td><td th:text="${denom.r2}">0</td><td th:text="${denom.r2 * 2}">0</td></tr>
+            <tr><td>1x</td><td th:text="${denom.r1}">0</td><td th:text="${denom.r1 * 1}">0</td></tr>
+            <tr>
+                <td colspan="2"><strong>₹ डेनोमिनेशन प्राप्त राशि</strong></td>
+                <!----><td th:text="${denom.totalAmount}">5000</td>
+                <!--<td th:text="${denom.r2000 * 2000 +denom.r500 * 500 +denom.r200 * 200 +denom.r100 * 100+ denom.r50 * 50 +denom.r20 * 20+denom.r10 * 10+denom.r5 * 5 +denom.r2 * 2+denom.r1 * 1}">5000</td>-->
+            </tr>
+        </tbody>
+    </table>
+					<!--<table>
+						<thead>
+							<tr class="note-header">
+								<th>नोट</th>
+								<th>₹2000</th>
+								<th>₹500</th>
+								<th>₹200</th>
+								<th>₹100</th>
+								<th>₹50</th>
+								<th>₹20</th>
+								<th>₹10</th>
+								<th>₹5</th>
+								<th>₹2</th>
+								<th>₹1</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>संख्या</td>
+								<td id="r2000" th:text="${denom.r2000}">1</td>
+								<td id="r500" th:text="${denom.r500}">2</td>
+								<td id="r200" th:text="${denom.r200}">1</td>
+								<td id="r100" th:text="${denom.r100}">4</td>
+								<td id="r50" th:text="${denom.r50}">2</td>
+								<td id="r20" th:text="${denom.r20}">3</td>
+								<td id="r10" th:text="${denom.r10}">5</td>
+								<td id="r5" th:text="${denom.r5}">0</td>
+								<td id="r2" th:text="${denom.r2}">0</td>
+								<td id="r1" th:text="${denom.r1}">0</td>
+							</tr>
+						</tbody>
+					</table>-->
+
+					<div class="summary">
+						<p><strong>बैंक मे जमा(Offline+Online):</strong> ₹<span id="OnlineofflineAmt"
+								th:text="${denom.offlineAmt+denom.onlineAmt}">4500</span></p>
+						<p><strong>ऑनलाइन प्राप्त राशि:</strong> ₹<span id="onlineAmt" th:text="${denom.onlineAmt}">500</span>
+						</p>
+						<p><strong>ऑफलाइन (नगद) प्राप्त राशि:</strong> ₹<span id="offlineAmt"
+								th:text="${denom.offlineAmt}">4500</span></p>
+						<p><strong>वापसी राशि (Change Return):</strong> ₹<span id="changeReturn"
+								th:text="${denom.changeReturn}">0</span></p>
+										
+						<p><strong>कुल राशि (Offline + Change):</strong> ₹<span id="totalAmount"
+								th:text="${denom.totalAmount}">5000</span></p>
+						
+					</div>
+
+					<!--<div class="signature">
+						<span>केश प्राप्तकर्ता के हस्ताक्षर</span>
+						<span>एजेंट के हस्ताक्षर</span>
+					</div>-->
+				</div>
+			</div>
+			
+		</div>
+		<!--<button id="printButton" class="btn btn-success" onclick="printJS({ printable: 'tableContent', type: 'html', 
+					style: `
+			        @page {
+			          size: mobile;
+			          margin: 0;
+			        }
+			        @media print and (max-width: 480px) {
+			          body {
+			            margin: 0;
+			          }
+			        }
+			        th, td { border: 1px solid black; padding: 2px; }
+			        body{text-align:center}
+			      `, header: '' })">Print</button>-->
+		<!--</div>-->
+		<script th:replace="includes/script :: script"></script>
+		<script th:if="${isDataMissing != null}" th:inline="javascript">
+			alert("No data available!");
+		</script>
+		<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+			//alert(th:text = "${isCollectionSaved}");
+			alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+		</script>
+
+
+
+		<!--<script>
+    document.getElementById("denominationForm").addEventListener("submit", function (event) {
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
+        if (selectedType === "collection") {
+            this.action = "/myapp/getDenominationInfo"; // Existing API
+        } else if (selectedType === "return") {
+            this.action = "/myapp/getReturnDenominationInfo"; // Another API (change this as needed)
+        }
+    });
+</script>-->
+
+
+
+</body>
+
+</html>

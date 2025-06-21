@@ -1,0 +1,365 @@
+function handleResponse(response) {
+	var messageContainer = document.getElementById('messageContainer');
+	if (response.status === 'success') {
+		messageContainer.innerHTML = '<p class="success-message">' + response.message + '</p>';
+	} else {
+		messageContainer.innerHTML = '<p class="error-message">' + response.message + '</p>';
+	}
+	messageContainer.style.display = 'block'; // Show the message container
+}
+
+
+///// TO GIVE RECEIPT NUMBER TO ALL OF THE INPUTS IN TABLE ROW THAT ARE HIDDEN FROM THE INPUT ABOVE THE TABLE
+const input1 = document.getElementById('receiptNoInput');
+const input1value = input1.value;
+localStorage.setItem('inputValue1', input1value);
+const inputElements = document.querySelectorAll('#receiptNo');
+
+function updateInputValues(value) {
+	input1.value = value;
+	inputElements.forEach((input) => {
+		input.value = value;
+	});
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	const storedValue = localStorage.getItem('inputValue1');
+	if (storedValue) {
+		updateInputValues(storedValue);
+		localStorage.removeItem('inputValue1');
+	}
+});
+
+//input1.addEventListener('input', () => {
+//	updateInputValues(input1.value);
+//});
+
+///// HIDE THE BUTTON IF THE SAVE BUTTON IS CLICKED
+// Get all buttons with the specified class
+const buttons = document.querySelectorAll('#saveBtn');
+
+// Add event listeners to each button
+buttons.forEach(button => {
+	button.addEventListener('click', function() {
+		// this.style.background = "#FF0000";
+		/*this.style.display = 'none';*/
+	});
+});
+
+
+
+///// TO MAKE THE TOTAL OF THE COLLECION AMOUNT FROM THE TABLE INPUT
+const collectionamount = document.querySelectorAll('#collectionAmount');
+//document.getElementById('total').style.display = "none"
+var total;
+function totalAmount() {
+	total = 0
+	collectionamount.forEach((input) => {
+		if (input.value == "") {
+			input.value = 0;
+		}
+		var no = parseInt(input.value);
+		console.log("fhsdklfjsdlkfjflk;", no)
+		total += no;
+	});
+	console.log("total =====total;", total)
+	document.getElementById('total').style.display = "block"
+	//document.getElementById('total').textContent = total;
+	document.getElementById('total').value = total;
+}
+
+
+///// TO GET THE VALUE FROM SEND SMS CHECKBOX SWITCH TO INPUT TEXT IN FORM
+document.addEventListener('DOMContentLoaded', function() {
+	var switchElement = document.getElementById('switch');
+	const sendSMSInput = document.querySelectorAll('#sendSMSInput');
+	for (var i = 0; i < sendSMSInput.length; i++) {
+		sendSMSInput[i].value = 'N';
+	}
+	switchElement.addEventListener('change', function() {
+		var isChecked = switchElement.checked;
+		var selectedValue = isChecked ? 'Y' : 'N';
+		for (var i = 0; i < sendSMSInput.length; i++) {
+			sendSMSInput[i].value = selectedValue;
+		}
+		//sendSMSInput.value = selectedValue;
+	});
+});
+
+
+
+///// TO GET THE VALUE FROM ONLINE PAYMENT CHECKBOX SWITCH TO INPUT TEXT IN FORM
+/*document.addEventListener('DOMContentLoaded', function() {
+	var switchElement = document.getElementById('online');
+	const onlinePaymentInput = document.getElementById('onlinePaymentInput');
+	for (var i = 0; i < onlinePaymentInput.length; i++) {
+		onlinePaymentInput[i].value = 'Offline';
+	}
+	switchElement.addEventListener('change', function() {
+		var isChecked = switchElement.checked;
+		var selectedValue = isChecked ? 'Online' : 'Offline';
+		for (var i = 0; i < onlinePaymentInput.length; i++) {
+			onlinePaymentInput[i].value = selectedValue;
+		}
+		//sendSMSInput.value = selectedValue;
+	});
+});*/
+
+
+
+// Get all the checkboxes
+var onlinecheckboxes = document.querySelectorAll('#online');
+
+const onlinePaymentInput = document.querySelectorAll('#onlinePaymentInput');
+for (var i = 0; i < onlinePaymentInput.length; i++) {
+	onlinePaymentInput[i].value = 'Offline';
+}
+// Add event listener to each checkbox
+onlinecheckboxes.forEach(function(checkbox) {
+	checkbox.addEventListener('change', function() {
+		// Get the parent row of the checkbox
+		var row = this.closest('tr');
+
+		// Get the corresponding onlinePaymentInput field in the row
+		var onlinePaymentInput = row.querySelector('#onlinePaymentInput');
+
+		// Update the value based on checkbox checked state
+		if (this.checked) {
+			onlinePaymentInput.value = 'Online';
+		} else {
+			onlinePaymentInput.value = 'Offline';
+		}
+	});
+});
+
+
+//for online and offline amount collection
+document.addEventListener('DOMContentLoaded', function () {
+    const onlineCheckboxes = document.querySelectorAll('.online-switch');
+
+    onlineCheckboxes.forEach(function (checkbox) {
+        const row = checkbox.closest('tr');
+        const hiddenInput = row.querySelector('.online-payment-input');
+        const labelSpan = row.querySelector('.payment-label');
+
+        // Set default values
+        hiddenInput.value = 'Offline';
+        labelSpan.textContent = 'Offline';
+
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked) {
+                hiddenInput.value = 'Online';
+                labelSpan.textContent = 'Online';
+            } else {
+                hiddenInput.value = 'Offline';
+                labelSpan.textContent = 'Offline';
+            }
+        });
+    });
+});
+
+
+/***************************************************/
+
+document.addEventListener('DOMContentLoaded', function () {
+	const modal = document.getElementById('denominationModal');
+	const openButtons = document.querySelectorAll('.openDenominationModal');
+	const cancelBtn = document.getElementById('cancelDenomination');
+	const confirmBtn = document.getElementById('confirmDenomination');
+
+	let currentForm = null;
+
+	openButtons.forEach(button => {
+		button.addEventListener('click', function () {
+			currentForm = this.closest('form');  // get the parent form
+			modal.style.display = 'block';
+		});
+	});
+
+	cancelBtn.addEventListener('click', function () {
+		modal.style.display = 'none';
+	});
+
+	confirmBtn.addEventListener('click', function () {
+		// Perform any final validation here if needed
+		modal.style.display = 'none';
+
+		// Submit the actual form
+		if (currentForm) currentForm.submit();
+	});
+
+	// Denomination calculation
+	const notes = document.querySelectorAll('.note');
+	const totalDenomination = document.getElementById('totalDenomination');
+	const amountReceived = document.getElementById('amountReceived');
+	const changeReturn = document.getElementById('changeReturn');
+
+	notes.forEach(note => {
+		note.addEventListener('input', calculateDenomination);
+	});
+
+	amountReceived.addEventListener('input', calculateChange);
+
+	function calculateDenomination() {
+		let total = 0;
+		notes.forEach(note => {
+			const count = parseInt(note.value) || 0;
+			const value = parseInt(note.dataset.value);
+			total += count * value;
+		});
+		totalDenomination.textContent = total;
+		calculateChange(); // update change return
+	}
+
+	function calculateChange() {
+		const received = parseInt(amountReceived.value) || 0;
+		const denomination = parseInt(totalDenomination.textContent) || 0;
+		const change = denomination-received;
+		changeReturn.textContent = change > 0 ? change : 0;
+	}
+});
+
+
+/*******************************************************************************/
+
+document.querySelectorAll('.openDenominationModal').forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent form from submitting
+
+        // Store current form being used
+        const currentForm = this.closest('form');
+        document.currentCollectionForm = currentForm;
+
+        // Show the modal
+        document.getElementById('denominationModal').style.display = 'block';
+    });
+});
+
+document.getElementById('confirmDenomination').addEventListener('click', function () {
+    const notes = document.querySelectorAll('.note');
+    let denominationData = [];
+    let totalNotesAmount = 0;
+
+    notes.forEach(note => {
+        const count = parseInt(note.value) || 0;
+        const value = parseInt(note.getAttribute('data-value'));
+        if (count > 0) {
+            denominationData.push({ value: value, count: count });
+            totalNotesAmount += value * count;
+        }
+    });
+
+    const amountReceived = parseInt(document.getElementById('amountReceived').value) || 0;
+    const changeReturn = amountReceived - totalNotesAmount;
+
+    // Create JSON object for the denomination
+    const denominationPayload = {
+        denominations: denominationData,
+        amountReceived: amountReceived,
+        totalAmount: totalNotesAmount,
+        changeReturn: changeReturn
+    };
+
+    // Put this JSON string into the hidden input
+    const form = document.currentCollectionForm;
+    form.querySelector('#denominationJson').value = JSON.stringify(denominationPayload);
+
+    // Submit the form now
+    form.submit();
+
+    // Hide the modal
+    document.getElementById('denominationModal').style.display = 'none';
+});
+
+document.getElementById('cancelDenomination').addEventListener('click', function () {
+    document.getElementById('denominationModal').style.display = 'none';
+});
+
+
+/****************************/
+
+document.getElementById("confirmDenomination").addEventListener("click", function () {
+	const notes = document.querySelectorAll(".note");
+	const denominationData = [];
+
+	notes.forEach(note => {
+		const count = parseInt(note.value) || 0;
+		const value = parseInt(note.getAttribute("data-value"));
+		if (count > 0) {
+			denominationData.push({ value, count });
+		}
+	});
+
+	const amountReceived = parseInt(document.getElementById("amountReceived").value) || 0;
+	const totalAmount = parseInt(document.getElementById("totalDenomination").textContent) || 0;
+	const changeReturn = parseInt(document.getElementById("changeReturn").textContent) || 0;
+
+	const data = {
+		denominations: denominationData,
+		amountReceived,
+		totalAmount,
+		changeReturn
+	};
+console.log("denomination data", data)
+	fetch('/myapp/saveDenomination', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+	.then(response => response.json())
+	.then(result => {
+		alert(result.message || 'Denomination saved successfully!');
+		document.getElementById("denominationModal").style.display = "none";
+	})
+	.catch(error => {
+		console.error('Error:', error);
+		alert('Failed to save denomination.');
+	});
+});
+
+
+
+
+
+
+/**/
+
+document.addEventListener('DOMContentLoaded', function() {
+	const accountCode = document.querySelectorAll('#accountCode');
+
+	//console.log("fhsdklfjsdlkfjflk;", accountCode)
+
+	accountCode.forEach((input) => {
+
+		const substring = input.value.substring(4, 7);
+
+		if (substring === "901" || substring === "902" || substring === "401" || substring === "402") {
+			//var collectionAmountInput = document.getElementById('collectionAmount');
+			// collectionAmountInput.disabled = true;
+			console.log("disable code", input.value.substring(4, 7))
+			const collectionAmountInput = input.closest('tr').querySelector('#collectionAmount');
+			const collsavebtn = input.closest('tr').querySelector('#saveBtn');
+			// Disable the collectionAmount input if it exists
+			if (collectionAmountInput) {
+				collectionAmountInput.disabled = true;
+				collsavebtn.disabled = true;
+			}
+		}
+
+		//console.log("fhsdklfjsdlkfjflk;", input.value)
+
+	});
+
+
+	// Select the collectionAmount input element
+	// var collectionAmountInput = document.getElementById('collectionAmount');
+
+	// Ensure the accountCode is a string and check if it contains "901"
+	//    collectionAmountInput.disabled = true;
+
+});
+
+
+

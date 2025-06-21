@@ -1,0 +1,227 @@
+package com.idsspl.webproject.model;
+
+import java.util.List;
+
+import javax.persistence.Column;
+
+public class DenominationRequest {
+	
+    private String agentId;
+    private String agentName;
+    private String accountCode;
+	private String customerId;
+	private String customerName;
+    private Long receiptNo;
+    private String asondate;
+	
+    private Long r2000;
+    private Long r500;
+    private Long r200;
+    private Long r100;
+    private Long r50;
+    private Long r20;
+    private Long r10;
+    private Long r5;
+    private Long r2;
+    private Long r1;
+	
+
+	private int amountReceived;
+	private int totalAmount;
+	private int changeReturn;
+	
+    private Long c2000;
+    private Long c500;
+    private Long c200;
+    private Long c100;
+    private Long c50;
+    private Long c20;
+    private Long c10;
+    private Long c5;
+    private Long c2;
+    private Long c1;
+	public String getAgentId() {
+		return agentId;
+	}
+	public String getAgentName() {
+		return agentName;
+	}
+	public String getAccountCode() {
+		return accountCode;
+	}
+	public String getCustomerId() {
+		return customerId;
+	}
+	public Long getReceiptNo() {
+		return receiptNo;
+	}
+	public Long getR2000() {
+		return r2000;
+	}
+	public Long getR500() {
+		return r500;
+	}
+	public Long getR200() {
+		return r200;
+	}
+	public Long getR100() {
+		return r100;
+	}
+	public Long getR50() {
+		return r50;
+	}
+	public Long getR20() {
+		return r20;
+	}
+	public Long getR10() {
+		return r10;
+	}
+	public int getAmountReceived() {
+		return amountReceived;
+	}
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+	public int getChangeReturn() {
+		return changeReturn;
+	}
+	public Long getC2000() {
+		return c2000;
+	}
+	public Long getC500() {
+		return c500;
+	}
+	public Long getC200() {
+		return c200;
+	}
+	public Long getC100() {
+		return c100;
+	}
+	public Long getC50() {
+		return c50;
+	}
+	public Long getC20() {
+		return c20;
+	}
+	public Long getC10() {
+		return c10;
+	}
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
+	}
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+	public void setAccountCode(String accountCode) {
+		this.accountCode = accountCode;
+	}
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+	public void setReceiptNo(Long receiptNo) {
+		this.receiptNo = receiptNo;
+	}
+	public void setR2000(Long r2000) {
+		this.r2000 = r2000;
+	}
+	public void setR500(Long r500) {
+		this.r500 = r500;
+	}
+	public void setR200(Long r200) {
+		this.r200 = r200;
+	}
+	public void setR100(Long r100) {
+		this.r100 = r100;
+	}
+	public void setR50(Long r50) {
+		this.r50 = r50;
+	}
+	public void setR20(Long r20) {
+		this.r20 = r20;
+	}
+	public void setR10(Long r10) {
+		this.r10 = r10;
+	}
+	public void setAmountReceived(int amountReceived) {
+		this.amountReceived = amountReceived;
+	}
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	public void setChangeReturn(int changeReturn) {
+		this.changeReturn = changeReturn;
+	}
+	public void setC2000(Long c2000) {
+		this.c2000 = c2000;
+	}
+	public void setC500(Long c500) {
+		this.c500 = c500;
+	}
+	public void setC200(Long c200) {
+		this.c200 = c200;
+	}
+	public void setC100(Long c100) {
+		this.c100 = c100;
+	}
+	public void setC50(Long c50) {
+		this.c50 = c50;
+	}
+	public void setC20(Long c20) {
+		this.c20 = c20;
+	}
+	public void setC10(Long c10) {
+		this.c10 = c10;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getAsondate() {
+		return asondate;
+	}
+	public void setAsondate(String asondate) {
+		this.asondate = asondate;
+	}
+	public Long getR5() {
+		return r5;
+	}
+	public Long getR2() {
+		return r2;
+	}
+	public Long getR1() {
+		return r1;
+	}
+	public Long getC5() {
+		return c5;
+	}
+	public Long getC2() {
+		return c2;
+	}
+	public Long getC1() {
+		return c1;
+	}
+	public void setR5(Long r5) {
+		this.r5 = r5;
+	}
+	public void setR2(Long r2) {
+		this.r2 = r2;
+	}
+	public void setR1(Long r1) {
+		this.r1 = r1;
+	}
+	public void setC5(Long c5) {
+		this.c5 = c5;
+	}
+	public void setC2(Long c2) {
+		this.c2 = c2;
+	}
+	public void setC1(Long c1) {
+		this.c1 = c1;
+	}
+    
+    
+    
+}
+

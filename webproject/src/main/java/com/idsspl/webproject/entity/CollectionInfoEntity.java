@@ -22,6 +22,7 @@ public class CollectionInfoEntity {
     @Column(name = "collection_date")
     private String collectionDate;
     
+    
     @Id
     @Column(name = "receipt_no")
     private Long receiptNo;
@@ -99,6 +100,7 @@ public class CollectionInfoEntity {
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
- 
+
+	
     
 }

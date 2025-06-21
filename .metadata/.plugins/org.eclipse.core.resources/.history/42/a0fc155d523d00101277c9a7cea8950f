@@ -1,0 +1,26 @@
+package com.idsspl.webproject.entity;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CUSTOMER_DENOMINATION", schema = "CUSTOMER")
+public class Denomination {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+
+	private int noteValue;
+	private int noteCount;
+	private int amountReceived;
+	private int totalAmount;
+	private int changeReturn;
+	private LocalDateTime createdAt;
+
+	// Getters and setters
+}

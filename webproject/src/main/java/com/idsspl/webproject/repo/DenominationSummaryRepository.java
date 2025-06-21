@@ -1,0 +1,21 @@
+package com.idsspl.webproject.repo;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.idsspl.webproject.entity.DenominationSummaryEntity;
+
+
+	
+	@Repository
+	public interface DenominationSummaryRepository extends JpaRepository<DenominationSummaryEntity, Long> {
+		
+		@Query("SELECT a FROM DenominationSummaryEntity a WHERE a.agentName = :agentName and  a.denominationDate = :denominationdate")
+		public List<DenominationSummaryEntity> findInfoByAgentName(@Param("agentName") String agentName, @Param("denominationdate") String denominationdate);
+		
+		
+	}

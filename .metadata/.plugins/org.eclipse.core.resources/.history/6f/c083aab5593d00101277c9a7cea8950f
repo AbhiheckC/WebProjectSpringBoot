@@ -1,0 +1,34 @@
+package com.idsspl.webproject.serviceImpl;
+
+import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.idsspl.webproject.entity.Denomination;
+import com.idsspl.webproject.model.DenominationRequest;
+import com.idsspl.webproject.repo.DenominationRepository;
+
+@Service
+
+public class DenominationServiceImpl {
+
+	@Autowired
+	private DenominationRepository denominationRepository;
+
+	public void save(DenominationRequest request) {
+		for (DenominationRequest.NoteEntry note : request.getDenominations()) {
+			Denomination entity = new Denomination();
+			System.out.println("===note.getValue()==="+note.getValue());
+			entity.setNoteValue(note.getValue());
+			entity.setNoteCount(note.getCount());
+			entity.setAmountReceived(request.getAmountReceived());
+			entity.setTotalAmount(request.getTotalAmount());
+			entity.setChangeReturn(request.getChangeReturn());
+			entity.setCreatedAt(LocalDateTime.now());
+
+			denominationRepository.save(entity);
+		}
+	}
+	
+}

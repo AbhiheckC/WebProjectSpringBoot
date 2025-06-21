@@ -1,0 +1,66 @@
+package com.idsspl.webproject.model;
+
+import java.util.List;
+
+public class DenominationRequest {
+	private List<NoteEntry> denominations;
+	private int amountReceived;
+	private int totalAmount;
+	private int changeReturn;
+
+	// Getters and setters for outer class fields
+	public List<NoteEntry> getDenominations() {
+		return denominations;
+	}
+
+	public void setDenominations(List<NoteEntry> denominations) {
+		this.denominations = denominations;
+	}
+
+	public int getAmountReceived() {
+		return amountReceived;
+	}
+
+	public void setAmountReceived(int amountReceived) {
+		this.amountReceived = amountReceived;
+	}
+
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public int getChangeReturn() {
+		return changeReturn;
+	}
+
+	public void setChangeReturn(int changeReturn) {
+		this.changeReturn = changeReturn;
+	}
+
+	// ✅ Add this: static inner class with getters/setters
+	public static class NoteEntry {
+		private int value;
+		private int count;
+
+		public int getValue() {
+			return value;
+		}
+
+		public void setValue(int value) {
+			this.value = value;
+		}
+
+		public int getCount() {
+			return count;
+		}
+
+		public void setCount(int count) {
+			this.count = count;
+		}
+	}
+}
+

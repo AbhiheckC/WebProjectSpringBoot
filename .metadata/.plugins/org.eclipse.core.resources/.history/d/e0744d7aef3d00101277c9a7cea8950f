@@ -1,0 +1,75 @@
+package com.idsspl.webproject.entity;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CUSTOMER_DENOMINATION", schema = "CUSTOMER")
+public class Denomination {
+	@Id
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name= "id")
+	private Long id;
+	@Column(name= "notevalue")
+	private int noteValue;
+	@Column(name= "notecount")
+	private int noteCount;
+	@Column(name= "amountreceived")
+	private int amountReceived;
+	@Column(name= "totalamount")
+	private int totalAmount;
+	@Column(name= "changereturn")
+	private int changeReturn;
+	@Column(name= "createdat")
+	private LocalDateTime createdAt;
+	public Long getId() {
+		return id;
+	}
+	public int getNoteValue() {
+		return noteValue;
+	}
+	public int getNoteCount() {
+		return noteCount;
+	}
+	public int getAmountReceived() {
+		return amountReceived;
+	}
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+	public int getChangeReturn() {
+		return changeReturn;
+	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public void setNoteValue(int noteValue) {
+		this.noteValue = noteValue;
+	}
+	public void setNoteCount(int noteCount) {
+		this.noteCount = noteCount;
+	}
+	public void setAmountReceived(int amountReceived) {
+		this.amountReceived = amountReceived;
+	}
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	public void setChangeReturn(int changeReturn) {
+		this.changeReturn = changeReturn;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	// Getters and setters
+}

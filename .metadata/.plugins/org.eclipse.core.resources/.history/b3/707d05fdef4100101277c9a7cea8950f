@@ -1,0 +1,114 @@
+package com.idsspl.webproject.model;
+
+import java.util.List;
+
+public class DenominationRequest {
+	private List<NoteEntry> denominations;
+	private int amountReceived;
+	private int totalAmount;
+	private int changeReturn;
+
+	private String customerId;
+    private String accountCode;
+    private String agentId;
+    private String agentName;
+    private String receiptNo;
+    
+    public String getCustomerId() {
+		return customerId;
+	}
+
+	public String getAccountCode() {
+		return accountCode;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public String getReceiptNo() {
+		return receiptNo;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+
+	public void setAccountCode(String accountCode) {
+		this.accountCode = accountCode;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public void setReceiptNo(String receiptNo) {
+		this.receiptNo = receiptNo;
+	}
+
+	
+	
+	// Getters and setters for outer class fields
+	public List<NoteEntry> getDenominations() {
+		return denominations;
+	}
+
+	public void setDenominations(List<NoteEntry> denominations) {
+		this.denominations = denominations;
+	}
+
+	public int getAmountReceived() {
+		return amountReceived;
+	}
+
+	public void setAmountReceived(int amountReceived) {
+		this.amountReceived = amountReceived;
+	}
+
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public int getChangeReturn() {
+		return changeReturn;
+	}
+
+	public void setChangeReturn(int changeReturn) {
+		this.changeReturn = changeReturn;
+	}
+
+	// ✅ Add this: static inner class with getters/setters
+	public static class NoteEntry {
+		private int value;
+		private int count;
+
+		public int getValue() {
+			return value;
+		}
+
+		public void setValue(int value) {
+			this.value = value;
+		}
+
+		public int getCount() {
+			return count;
+		}
+
+		public void setCount(int count) {
+			this.count = count;
+		}
+	}
+}
+

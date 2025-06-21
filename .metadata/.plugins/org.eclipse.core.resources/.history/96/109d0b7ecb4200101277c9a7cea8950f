@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!--<title>कलेक्शन</title> -->
+	<title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+			</div>
+			<div class="col-sm-12 col-md-12">
+				<h3 class="text-center heading" id="hehe">डेनोमिनेशन की जानकारी</h3>
+
+				<!--<form th:action="@{/getDenominationInfo}" method="post" class="singleInputButtonForm">
+					<input type="submit" class="submitBtn" value="Submit" />
+				</form>-->
+				<form id="denominationForm" method="post" class="singleInputButtonForm">
+    <div class="mb-2">
+        <label><input type="radio" name="type" value="collection"  th:checked="${selectedType == null or selectedType == 'collection'}"> कलेक्शन राशि</label>
+        &nbsp;&nbsp;
+        <label><input type="radio" name="type" value="return"  th:checked="${selectedType == 'return'}"> वापस राशि</label>
+    </div>
+    <input type="submit" class="submitBtn" value="Submit" />
+</form>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 col-md-12 mt-4" th:if="${denominationList != null}">
+				<!--<h3 class="heading text-center">कलेक्शन सूची</h3>-->
+				<!--<div class="text-center mb-3">
+					<label><strong>पेमेंट प्रकार:</strong></label>
+					<div></div>
+					<div class="radio-group">
+						<input type="radio" id="filterAll" name="paymentFilter" value="All" checked />
+						<label for="filterAll">All</label>
+
+						<input type="radio" id="filterOnline" name="paymentFilter" value="Online" />
+						<label for="filterOnline">Online</label>
+
+						<input type="radio" id="filterOffline" name="paymentFilter" value="Offline" />
+						<label for="filterOffline">Offline</label>
+					</div>-->
+				<!--</div>-->
+
+
+				<div class="text-center">
+					<div class="table-responsive" id="table">
+						<table class="table table-editable">
+							<thead class="thead">
+								<tr class="table-success">
+									<!--<th></th>-->
+									<!--<th>एजेंट नाम</th>-->
+									<th>रसीद क्रमांक</th>
+									<th>ग्राहक क्रमांक</th>
+									<th>₹ 2000</th>
+									<th>₹ 500</th>
+									<th>₹ 200</th>
+									<th>₹ 100</th>
+									<th>₹ 50</th>
+									<th>₹ 20</th>
+									<th>₹ 10</th>
+									<th th:if="${selectedType != 'return'}">कुल राशि</th>
+									<th th:if="${selectedType != 'return'}">कलेक्शन राशि</th>
+									<th>वापस राशि</th>
+									<!--<th>पेमेंट</th>-->
+									<!--<th></th>-->
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="denomination : ${denominationList}">
+									<!--<form th:action="@{/makeCollection0}" method="post"
+										th:object="${collectionInfoList}">-->
+									<!--<td>
+											<input class="form-check-input" type="checkbox" id="checkbox"
+												name="checkbox" th:value="${collection.customerId}">
+										</td>-->
+									<!--<td th:text="${denomination.agentName}"></td>-->
+
+									<td th:text="${denomination.receiptNo}"></td>
+									<td th:text="${denomination.customerId}"></td>
+									<td th:text="${denomination.r2000}"></td>
+									<td th:text="${denomination.r500}"></td>
+									<td th:text="${denomination.r200}"></td>
+									<td th:text="${denomination.r100}"></td>
+									<td th:text="${denomination.r50}"></td>
+									<td th:text="${denomination.r20}"></td>
+									<td th:text="${denomination.r10}"></td>
+									<!--<td>
+									
+										<li th:each="note : ${denomination.denominations}"
+											th:text="'₹' + ${note.value} + ' × ' + ${note.count}"></li>
+								</td>-->
+									<td th:if="${selectedType != 'return'}" th:text="${denomination.totalAmount}" id="totalAmt"></td>
+									<td th:if="${selectedType != 'return'}" th:text="${denomination.amountReceived}"></td>
+									<td th:text="${denomination.changeReturn}"></td>
+									<!--<input type="hidden" name="customerId" th:value="${collection.customerId}" />
+								<input type="hidden" name="collectionDate" th:value="${collection.collectionDate}" />
+								<input type="hidden" name="localLanguageName"
+									th:value="${collection.localLanguageName}" />
+								<input type="hidden" name="receiptNo" th:value="${collection.receiptNo}" />
+								<input type="hidden" name="collectionAmount"
+									th:value="${collection.collectionAmount}" />-->
+									<!--<td><input type="submit" class="btn btn-success" value="Cancel" /></td>-->
+									<!--</form>-->
+								</tr>
+								<!--<tr class="table-dark">-->
+								<!--	<td></td>
+								<td>TOTAL</td>
+									<td id="totalCollectionAmount"></td>
+									<td></td>
+							
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>-->
+
+								<!--	<tr class="table-dark" id="totalRow">
+								<td colspan="4"></td>
+								<td><strong>TOTAL</strong></td>
+								<td id="totalCollectionAmount"></td>
+							</tr>-->
+								<!--</tr>-->
+							</tbody>
+							<tfoot>
+								<tr class="table-dark">
+									<td></td>
+									<td><strong>कुल</strong></td>
+									<td id="totalR2000"></td>
+									<td id="totalR500"></td>
+									<td id="totalR200"></td>
+									<td id="totalR100"></td>
+									<td id="totalR50"></td>
+									<td id="totalR20"></td>
+									<td id="totalR10"></td>
+									<td id="grandTotalAmount"></td>
+									<td id="grandAmountReceived"></td>
+									<td id="grandChangeReturn"></td>
+								</tr>
+							</tfoot>
+						</table>
+						<!--				<div class="container mt-4">
+    <h4 class="mb-3 text-center">कुल डेनोमिनेशन</h4>
+     <div class="row g-3" >
+		  <div class="col-md-4">
+            <label class="form-label">₹ नोट मूल्य</label>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">नोट संख्या</label>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">एकूण राशि</label>
+        </div>
+     </div>
+    <div class="row g-3" th:each="denominationview : ${denominationViewList}">
+        <div class="col-md-4">
+            <input type="text" class="form-control" th:value="${denominationview.noteValue}" readonly>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" th:value="${denominationview.noOfNotes}" readonly>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" th:value="${denominationview.totalAmt}" readonly>
+        </div>
+    </div>
+</div>-->
+
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+	<!--</div>-->
+	<script th:replace="includes/script :: script"></script>
+	<script th:if="${isDataMissing != null}" th:inline="javascript">
+		alert("No data available!");
+	</script>
+	<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+		//alert(th:text = "${isCollectionSaved}");
+		alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+	</script>
+
+	<!-- Total calculation script -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			let rows = document.querySelectorAll("table tbody tr");
+
+			let totalR2000 = 0;
+			let totalR500 = 0;
+			let totalR200 = 0;
+			let totalR100 = 0;
+			let totalR50 = 0;
+			let totalR20 = 0;
+			let totalR10 = 0;
+			let totalAmount = 0;
+			let amountReceived = 0;
+			let changeReturn = 0;
+
+			rows.forEach((row) => {
+				let cells = row.querySelectorAll("td");
+				if (cells.length >= 12) {
+					totalR2000 += parseInt(cells[2].innerText) || 0;
+					totalR500 += parseInt(cells[3].innerText) || 0;
+					totalR200 += parseInt(cells[4].innerText) || 0;
+					totalR100 += parseInt(cells[5].innerText) || 0;
+					totalR50 += parseInt(cells[6].innerText) || 0;
+					totalR20 += parseInt(cells[7].innerText) || 0;
+					totalR10 += parseInt(cells[8].innerText) || 0;
+					totalAmount += parseFloat(cells[9].innerText) || 0;
+					amountReceived += parseFloat(cells[10].innerText) || 0;
+					changeReturn += parseFloat(cells[11].innerText) || 0;
+				}
+			});
+
+			document.getElementById("totalR2000").innerText = totalR2000;
+			document.getElementById("totalR500").innerText = totalR500;
+			document.getElementById("totalR200").innerText = totalR200;
+			document.getElementById("totalR100").innerText = totalR100;
+			document.getElementById("totalR50").innerText = totalR50;
+			document.getElementById("totalR20").innerText = totalR20;
+			document.getElementById("totalR10").innerText = totalR10;
+			document.getElementById("grandTotalAmount").innerText = totalAmount.toFixed(2);
+			document.getElementById("grandAmountReceived").innerText = amountReceived.toFixed(2);
+			document.getElementById("grandChangeReturn").innerText = changeReturn.toFixed(2);
+		});
+	</script>
+
+
+<script>
+    document.getElementById("denominationForm").addEventListener("submit", function (event) {
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
+        if (selectedType === "collection") {
+            this.action = "/myapp/getDenominationInfo"; // Existing API
+        } else if (selectedType === "return") {
+            this.action = "/myapp/getReturnDenominationInfo"; // Another API (change this as needed)
+        }
+    });
+</script>
+
+
+<!--<script>
+    document.getElementById('denominationForm').addEventListener('submit', function (e) {
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
+        this.action = `/myapp/getDenominationInfo/${selectedType}`;
+    });
+</script>-->
+
+	<!--<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const radios = document.getElementsByName('paymentFilter');
+			const tbody = document.querySelector('table tbody');
+			const totalRow = document.getElementById('totalRow');
+			const totalCell = document.getElementById('totalCollectionAmount');
+
+			function updateTable(selectedValue) {
+				const rows = tbody.querySelectorAll('tr');
+				let total = 0;
+
+				rows.forEach(row => {
+					// Skip the total row from logic
+					if (row.id === 'totalRow') return;
+
+					const paymentCell = row.querySelector('td:nth-child(5)');
+					const amountCell = row.querySelector('td:nth-child(6)');
+
+					const method = paymentCell?.textContent.trim();
+					const amount = parseFloat(amountCell?.textContent.trim()) || 0;
+
+					const shouldShow = selectedValue === 'All' || method === selectedValue;
+					row.style.display = shouldShow ? '' : 'none';
+
+					if (shouldShow) {
+						total += amount;
+					}
+				});
+
+				// Update and re-append the total row to keep it at the end
+				totalCell.textContent = total.toFixed(2);
+				tbody.appendChild(totalRow); // move it to the end
+			}
+
+			// Attach event listeners
+			radios.forEach(radio => {
+				radio.addEventListener('change', () => {
+					updateTable(radio.value);
+				});
+			});
+
+			// Initial load
+			updateTable('All');
+		});
+	</script>-->
+
+
+	<!--<script>
+		window.addEventListener('DOMContentLoaded', function () {
+			const collectionAmountCells = document.querySelectorAll('#collectionAMT');
+			let totalCollectionAmount = 0;
+			collectionAmountCells.forEach(function (cell) {
+				totalCollectionAmount += parseFloat(cell.textContent);
+			});
+			const totalCollectionAmountElement = document.getElementById('totalCollectionAmount');
+			totalCollectionAmountElement.textContent = totalCollectionAmount;
+		});
+	</script>-->
+	<!--<footer th:replace="includes/footer :: footer"></footer>-->
+</body>
+
+</html>

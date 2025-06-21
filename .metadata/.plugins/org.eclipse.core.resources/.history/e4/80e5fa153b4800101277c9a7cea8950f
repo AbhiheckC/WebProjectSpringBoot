@@ -1,0 +1,56 @@
+package com.idsspl.webproject.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "AGENT_DAILY_DENOMINATION", schema = "CUSTOMER")
+public class DenominationSummaryEntity {
+
+	@Id
+	@Column(name = "sr_no")
+	private Long srNo;
+
+	@Column(name = "denominationdate")
+	private String denominationDate;
+
+	@Column(name = "agent_name")
+	private String agentName;
+
+	@Column(name = "receipt_no")
+	private Long receiptNo;
+
+	@Column(name = "r2000")
+	private Long r2000;
+	@Column(name = "r500")
+	private Long r500;
+	@Column(name = "r200")
+	private Long r200;
+	@Column(name = "r100")
+	private Long r100;
+	@Column(name = "r50")
+	private Long r50;
+	@Column(name = "r20")
+	private Long r20;
+	@Column(name = "r10")
+	private Long r10;
+	@Column(name = "r5")
+	private Long r5;
+	@Column(name = "r2")
+	private Long r2;
+	@Column(name = "r1")
+	private Long r1;
+
+	@Column(name = "offlineamt")
+	private Long offlineAmt;
+
+	@Column(name = "totalamount")
+	private Long totalAmount;
+	@Column(name = "changereturn")
+	private Long changeReturn;
+	@Column(name = "onlineamt")
+	private Long onlineAmt;
+
+}

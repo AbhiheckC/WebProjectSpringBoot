@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!--<title>कलेक्शन</title> -->
+	<title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+			</div>
+		</div>
+		<div class="receipt-container" th:each="denom : ${denominationSummaryList}">
+			<div id="printContent">
+				<div id="tableContent">
+					<h2>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</h2>
+
+					<div class="details-row">
+						<label>दिनांक:</label> <span id="denominationDate"
+							th:text="${denom.denominationDate}">13/06/2025</span>
+						&nbsp;&nbsp;&nbsp;
+						<label>एजेंट का नाम:</label> <span id="agentName" th:text="${denom.agentName}">राधिका
+							शर्मा</span>
+						&nbsp;&nbsp;&nbsp;
+						<label>रसीद नं:</label> <span id="receiptNo" th:text="${denom.receiptNo}">1245</span>
+					</div>
+
+					<table>
+						<thead>
+							<tr class="note-header">
+								<th>नोट</th>
+								<th>₹2000</th>
+								<th>₹500</th>
+								<th>₹200</th>
+								<th>₹100</th>
+								<th>₹50</th>
+								<th>₹20</th>
+								<th>₹10</th>
+								<th>₹5</th>
+								<th>₹2</th>
+								<th>₹1</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>संख्या</td>
+								<td id="r2000" th:text="${denom.r2000}">1</td>
+								<td id="r500" th:text="${denom.r500}">2</td>
+								<td id="r200" th:text="${denom.r200}">1</td>
+								<td id="r100" th:text="${denom.r100}">4</td>
+								<td id="r50" th:text="${denom.r50}">2</td>
+								<td id="r20" th:text="${denom.r20}">3</td>
+								<td id="r10" th:text="${denom.r10}">5</td>
+								<td id="r5" th:text="${denom.r5}">0</td>
+								<td id="r2" th:text="${denom.r2}">0</td>
+								<td id="r1" th:text="${denom.r1}">0</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="summary">
+						<p><strong>कुल राशि (Total Amount):</strong> ₹<span id="totalAmount"
+								th:text="${denom.totalAmount}">5000</span></p>
+						<p><strong>ऑफलाइन प्राप्त राशि:</strong> ₹<span id="offlineAmt"
+								th:text="${denom.offlineAmt}">4500</span></p>
+						<p><strong>ऑनलाइन राशि:</strong> ₹<span id="onlineAmt" th:text="${denom.onlineAmt}">500</span>
+						</p>
+						<p><strong>वापसी राशि (Change Return):</strong> ₹<span id="changeReturn"
+								th:text="${denom.changeReturn}">0</span></p>
+					</div>
+
+					<div class="signature">
+						<span>केश प्राप्तकर्ता के हस्ताक्षर</span>
+						<span>एजेंट के हस्ताक्षर</span>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<button id="printButton" class="btn btn-success" onclick="downloadPDF()">Download PDF</button>
+
+		<!--<button id="printButton" class="btn btn-success" onclick="printJS({ printable: 'tableContent', type: 'html', 
+					style: `
+			        @page {
+			          size: mobile;
+			          margin: 0;
+			        }
+			        @media print and (max-width: 480px) {
+			          body {
+			            margin: 0;
+			          }
+			        }
+			        th, td { border: 1px solid black; padding: 2px; }
+			        body{text-align:center}
+			      `, header: '' })">Print</button>-->
+		<!--</div>-->
+		<script th:replace="includes/script :: script"></script>
+		<script th:if="${isDataMissing != null}" th:inline="javascript">
+			alert("No data available!");
+		</script>
+		<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+			//alert(th:text = "${isCollectionSaved}");
+			alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+		</script>
+
+<script>
+function downloadPDF() {
+    const element = document.querySelector('.receipt-container');
+    const opt = {
+        margin:       0.5,
+        filename:     'denomination_receipt.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().from(element).set(opt).save();
+}
+</script>
+
+
+		<!--<script>
+    document.getElementById("denominationForm").addEventListener("submit", function (event) {
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
+        if (selectedType === "collection") {
+            this.action = "/myapp/getDenominationInfo"; // Existing API
+        } else if (selectedType === "return") {
+            this.action = "/myapp/getReturnDenominationInfo"; // Another API (change this as needed)
+        }
+    });
+</script>-->
+
+
+
+</body>
+
+</html>

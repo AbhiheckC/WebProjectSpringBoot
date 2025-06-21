@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!--<title>कलेक्शन</title> -->
+	<title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+	<style>
+    body {
+      font-family: "Arial", sans-serif;
+      margin: 20px;
+      color: #000;
+    }
+    .receipt-container {
+      border: 2px solid #000;
+      padding: 20px;
+      width: 700px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: center;
+    }
+    .note-header {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+    .details-row {
+      margin-bottom: 10px;
+    }
+    .details-row label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .summary {
+      margin-top: 15px;
+    }
+    .signature {
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	
+	<div class="receipt-container" th:each="denom : ${denominationSummaryList}">
+        <div class="header">स्वाभिमान महिला साख सहकारी संस्था मर्यादित, इंदौर</div>
+
+        <div class="section">
+            <p><strong>एजेंट का नाम:</strong> <span th:text="${denom.agentName}"></span></p>
+            <p><strong>रसीद क्रमांक:</strong> <span th:text="${denom.receiptNo}"></span></p>
+            <p><strong>दिनांक:</strong> <span th:text="${denom.denominationDate}"></span></p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>नोट</th>
+                    <th>₹2000</th>
+                    <th>₹500</th>
+                    <th>₹200</th>
+                    <th>₹100</th>
+                    <th>₹50</th>
+                    <th>₹20</th>
+                    <th>₹10</th>
+                    <th>₹5</th>
+                    <th>₹2</th>
+                    <th>₹1</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>संख्या</td>
+                    <td th:text="${denom.r2000}">0</td>
+                    <td th:text="${denom.r500}">0</td>
+                    <td th:text="${denom.r200}">0</td>
+                    <td th:text="${denom.r100}">0</td>
+                    <td th:text="${denom.r50}">0</td>
+                    <td th:text="${denom.r20}">0</td>
+                    <td th:text="${denom.r10}">0</td>
+                    <td th:text="${denom.r5}">0</td>
+                    <td th:text="${denom.r2}">0</td>
+                    <td th:text="${denom.r1}">0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section">
+            <p><strong>कुल राशि:</strong> ₹<span th:text="${denom.totalAmount}"></span></p>
+            <p><strong>ऑफलाइन प्राप्त राशि:</strong> ₹<span th:text="${denom.offlineAmt}"></span></p>
+            <p><strong>ऑनलाइन राशि:</strong> ₹<span th:text="${denom.onlineAmt}"></span></p>
+            <p><strong>वापसी शेष राशि:</strong> ₹<span th:text="${denom.changeReturn}"></span></p>
+        </div>
+
+        <div class="section">
+            <p><strong>कैश प्राप्तकर्ता के हस्ताक्षर:</strong> _______________________</p>
+        </div>
+    </div>
+	
+	
+	
+	<!--</div>-->
+	<script th:replace="includes/script :: script"></script>
+	<script th:if="${isDataMissing != null}" th:inline="javascript">
+		alert("No data available!");
+	</script>
+	<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+		//alert(th:text = "${isCollectionSaved}");
+		alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+	</script>
+
+
+
+<script>
+    document.getElementById("denominationForm").addEventListener("submit", function (event) {
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
+        if (selectedType === "collection") {
+            this.action = "/myapp/getDenominationInfo"; // Existing API
+        } else if (selectedType === "return") {
+            this.action = "/myapp/getReturnDenominationInfo"; // Another API (change this as needed)
+        }
+    });
+</script>
+
+
+
+</body>
+
+</html>
