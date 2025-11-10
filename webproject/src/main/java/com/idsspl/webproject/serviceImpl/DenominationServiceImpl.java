@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -18,13 +19,17 @@ import com.idsspl.webproject.entity.CustomerEntity;
 import com.idsspl.webproject.entity.Denomination;
 import com.idsspl.webproject.entity.DenominationSummaryEntity;
 import com.idsspl.webproject.entity.DenominationViewEntity;
+import com.idsspl.webproject.entity.OpeningDenominationEntity;
+import com.idsspl.webproject.entity.OpeningDenominationId;
 import com.idsspl.webproject.entity.UserEntity;
 import com.idsspl.webproject.model.CollectionInfoModel;
 import com.idsspl.webproject.model.DenominationRequest;
+import com.idsspl.webproject.repo.AgentCollectionRepo;
 import com.idsspl.webproject.repo.CustomerRepo;
 import com.idsspl.webproject.repo.DenominationRepository;
 import com.idsspl.webproject.repo.DenominationSummaryRepository;
 import com.idsspl.webproject.repo.DenominationViewRepository;
+import com.idsspl.webproject.repo.OpeningDenominationRepository;
 import com.idsspl.webproject.repo.UserRepo;
 
 @Service
@@ -46,6 +51,12 @@ public class DenominationServiceImpl {
 	@Autowired
 	private DenominationSummaryRepository denominationsummaryRepository;
 
+	@Autowired
+	private AgentCollectionRepo agentCollectionRepo;
+
+	@Autowired
+	private OpeningDenominationRepository openingDenominationRepository;
+	
 	public void save(DenominationRequest request, String userName) {
 
 		Denomination entity = new Denomination();
@@ -98,10 +109,88 @@ public class DenominationServiceImpl {
 		entity.setC1(request.getC1());
 		entity.setDenominationdate(request.getAsondate().toUpperCase());
 		entity.setOnlineAmt(request.getOnlineAmt());
+		entity.setIsMultipleDenomination("N");
+		entity.setMultipleDenominationno(0L);
 //			System.out.println("request.getAmountReceived()====="+request.getAmountReceived());
 //			System.out.println("request.getC100()====="+request.getC100());
 //			System.out.println("denomination entty====" + entity);
 		denominationRepository.save(entity);
+
+	}
+
+	// save multiple denomination
+
+	public void saveMultipleDenomination(DenominationRequest request, String userName) {
+
+		try {
+			Denomination entity = new Denomination();
+			///// TO GENERATE THE RANDOM UNIQUE ID
+			String CHARACTERS = "0123456789";
+			Random random = new Random();
+			StringBuilder sb = new StringBuilder(10);
+			for (int i = 0; i < 10; i++) {
+				int index = random.nextInt(CHARACTERS.length());
+				char randomChar = CHARACTERS.charAt(index);
+				sb.append(randomChar);
+			}
+			String id = sb.toString();
+			UserEntity userEntity = null;
+			userEntity = userRepo.findByUserName(userName);
+
+			entity.setId(Long.parseLong(id));
+
+			System.out.println("====" + request.getAsondate());
+
+			entity.setAmountReceived(request.getAmountReceived());
+			entity.setTotalAmount(request.getTotalAmount());
+			entity.setChangeReturn(request.getChangeReturn());
+			entity.setCustomerId(request.getCustomerId());
+			entity.setAgentId(userEntity.getAgentId());
+			entity.setAgentName(userName);
+			entity.setReceiptNo(request.getReceiptNo());
+			entity.setCreatedAt(LocalDateTime.now());
+
+			entity.setR2000(request.getR2000());
+			entity.setR500(request.getR500());
+			entity.setR200(request.getR200());
+			entity.setR100(request.getR100());
+			entity.setR50(request.getR50());
+			entity.setR20(request.getR20());
+			entity.setR10(request.getR10());
+			entity.setR5(request.getR5());
+			entity.setR2(request.getR2());
+			entity.setR1(request.getR1());
+
+			entity.setC2000(request.getC2000());
+			entity.setC500(request.getC500());
+			entity.setC200(request.getC200());
+			entity.setC100(request.getC100());
+			entity.setC50(request.getC50());
+			entity.setC20(request.getC20());
+			entity.setC10(request.getC10());
+			entity.setC5(request.getC5());
+			entity.setC2(request.getC2());
+			entity.setC1(request.getC1());
+			entity.setDenominationdate(request.getAsondate().toUpperCase());
+			entity.setOnlineAmt(request.getOnlineAmt());
+			entity.setIsMultipleDenomination("Y");
+
+			String multidenominationno = "0";
+			multidenominationno = id.substring(0, 5) + request.getTotalAmount();
+			Long longmultidenominationno = Long.parseLong(multidenominationno);
+			System.out.println("===longmultidenominationno==="+longmultidenominationno);
+			entity.setMultipleDenominationno(longmultidenominationno);
+//			System.out.println("request.getAmountReceived()====="+request.getAmountReceived());
+//			System.out.println("request.getC100()====="+request.getC100());
+//			System.out.println("denomination entty====" + entity);
+			denominationRepository.save(entity);
+
+			agentCollectionRepo.updateMultipleDenominationno(longmultidenominationno, userName, request.getAsondate());
+//			return "Successfully Updated";
+		} catch (Exception e) {
+			e.printStackTrace();
+//			return e.getMessage();
+		}
 
 	}
 
@@ -173,7 +262,8 @@ public class DenominationServiceImpl {
 			denominationModel.setTotalAmount(denominationEntity.getTotalAmount());
 			denominationModel.setChangeReturn(denominationEntity.getChangeReturn());
 			denominationModel.setOnlineAmt(denominationEntity.getOnlineAmt());
-
+			denominationModel.setIsMultipleDenomination(denominationEntity.getIsMultipleDenomination());
+			
 			Long offlineamt = denominationEntity.getAmountReceived();
 			Long onlineamount = denominationEntity.getOnlineAmt();
 
@@ -218,15 +308,27 @@ public class DenominationServiceImpl {
 
 		return DenominationModelList;
 	}
-	
-	
 
-	public List<DenominationSummaryEntity> getDenominationSummaryList( String userName,String denominationdate) {
+	public List<DenominationSummaryEntity> getDenominationSummaryList(String userName, String denominationdate) {
 //		List<DenominationSummaryEntity> denominationsummaryentity = null;
 //		System.out.println("getAsondate in denomination list----------" + request.getAsondate().toUpperCase());
-		List<DenominationSummaryEntity> denominationsummaryentity = denominationsummaryRepository.findInfoByAgentName(userName,denominationdate);
-		
+		List<DenominationSummaryEntity> denominationsummaryentity = denominationsummaryRepository
+				.findInfoByAgentName(userName, denominationdate);
+
 		return denominationsummaryentity;
 	}
 
+	/*
+	 * public List<OpeningDenominationEntity> getOpeningDenomination(String agentId,
+	 * String denominationDate) { // List<OpeningDenominationEntity>
+	 * openingdenomination
+	 * =openingDenominationRepository.finddenoInfoByAgentName(new
+	 * OpeningDenominationId(agentId, denominationDate)); // Return empty to avoid
+	 * nulls List<OpeningDenominationEntity> openingList =
+	 * openingDenominationRepository.findByAgentIdAndDenominationDate(agentId,
+	 * denominationDate);
+	 * 
+	 * return openingList; }
+	 */
+	
 }

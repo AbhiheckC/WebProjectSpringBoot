@@ -36,6 +36,29 @@ public class CollectionInfoEntity {
     @Column(name = "payment_method")
     private String paymentMethod;
 
+    @Column(name = "is_multiple_denomination")
+    private String isMultipleDenomination;
+
+    @Column(name= "multiple_denomination_no")
+	private Long multipleDenominationno;
+    
+    
+    
+	public Long getMultipleDenominationno() {
+		return multipleDenominationno;
+	}
+
+	public void setMultipleDenominationno(Long multipleDenominationno) {
+		this.multipleDenominationno = multipleDenominationno;
+	}
+
+	public String getIsMultipleDenomination() {
+		return isMultipleDenomination;
+	}
+
+	public void setIsMultipleDenomination(String isMultipleDenomination) {
+		this.isMultipleDenomination = isMultipleDenomination;
+	}
 
 	public String getCustomerId() {
 		return customerId;

@@ -29,6 +29,18 @@ public class PrintAgentCollectionModel {
 	private Long receiptNo;
 	
 	private String localLanguageName;
+	
+	private double collectionTotal;
+	
+	
+
+	public double getCollectionTotal() {
+		return collectionTotal;
+	}
+
+	public void setCollectionTotal(double collectionTotal) {
+		this.collectionTotal = collectionTotal;
+	}
 
 	public String getId() {
 		return id;

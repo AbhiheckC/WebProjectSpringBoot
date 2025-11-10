@@ -25,6 +25,17 @@ public class DenominationRequest {
     private Long r2;
     private Long r1;
 	
+    
+    private Long r2000op;
+    private Long r500op;
+    private Long r200op;
+    private Long r100op;
+    private Long r50op;
+    private Long r20op;
+    private Long r10op;
+    private Long r5op;
+    private Long r2op;
+    private Long r1op;
 
 	private Long amountReceived;
 	private Long totalAmount;
@@ -43,7 +54,104 @@ public class DenominationRequest {
     
     private Long onlineAmt;
     private Long onlineOfflineAmt;
+    private Long multipleDenominationno;
+    private String isMultipleDenomination;
+    private String denominationDate;
+    private String ftreceiptNo;
+    private Long offlineAmt;
     
+    
+    
+	public Long getOfflineAmt() {
+		return offlineAmt;
+	}
+	public void setOfflineAmt(Long offlineAmt) {
+		this.offlineAmt = offlineAmt;
+	}
+	public String getFtreceiptNo() {
+		return ftreceiptNo;
+	}
+	public void setFtreceiptNo(String ftreceiptNo) {
+		this.ftreceiptNo = ftreceiptNo;
+	}
+	public String getDenominationDate() {
+		return denominationDate;
+	}
+	public void setDenominationDate(String denominationDate) {
+		this.denominationDate = denominationDate;
+	}
+	public Long getR2000op() {
+		return r2000op;
+	}
+	public Long getR500op() {
+		return r500op;
+	}
+	public Long getR200op() {
+		return r200op;
+	}
+	public Long getR100op() {
+		return r100op;
+	}
+	public Long getR50op() {
+		return r50op;
+	}
+	public Long getR20op() {
+		return r20op;
+	}
+	public Long getR10op() {
+		return r10op;
+	}
+	public Long getR5op() {
+		return r5op;
+	}
+	public Long getR2op() {
+		return r2op;
+	}
+	public Long getR1op() {
+		return r1op;
+	}
+	public void setR2000op(Long r2000op) {
+		this.r2000op = r2000op;
+	}
+	public void setR500op(Long r500op) {
+		this.r500op = r500op;
+	}
+	public void setR200op(Long r200op) {
+		this.r200op = r200op;
+	}
+	public void setR100op(Long r100op) {
+		this.r100op = r100op;
+	}
+	public void setR50op(Long r50op) {
+		this.r50op = r50op;
+	}
+	public void setR20op(Long r20op) {
+		this.r20op = r20op;
+	}
+	public void setR10op(Long r10op) {
+		this.r10op = r10op;
+	}
+	public void setR5op(Long r5op) {
+		this.r5op = r5op;
+	}
+	public void setR2op(Long r2op) {
+		this.r2op = r2op;
+	}
+	public void setR1op(Long r1op) {
+		this.r1op = r1op;
+	}
+	public String getIsMultipleDenomination() {
+		return isMultipleDenomination;
+	}
+	public void setIsMultipleDenomination(String isMultipleDenomination) {
+		this.isMultipleDenomination = isMultipleDenomination;
+	}
+	public Long getMultipleDenominationno() {
+		return multipleDenominationno;
+	}
+	public void setMultipleDenominationno(Long multipleDenominationno) {
+		this.multipleDenominationno = multipleDenominationno;
+	}
 	public Long getOnlineOfflineAmt() {
 		return onlineOfflineAmt;
 	}

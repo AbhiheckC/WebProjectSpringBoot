@@ -88,9 +88,36 @@ public class Denomination {
 	@Column(name= "onlineamt")
 	private Long onlineAmt;
 	
+	@Column(name= "multiple_denomination_no")
+	private Long multipleDenominationno;
 	
+	@Column(name= "is_multiple_denomination")
+	private String isMultipleDenomination;
+	
+	
+	
+	public String getIsMultipleDenomination() {
+		return isMultipleDenomination;
+	}
+
+
+	public void setIsMultipleDenomination(String isMultipleDenomination) {
+		this.isMultipleDenomination = isMultipleDenomination;
+	}
+
+
 	public Long getId() {
 		return id;
+	}
+
+
+	public Long getMultipleDenominationno() {
+		return multipleDenominationno;
+	}
+
+
+	public void setMultipleDenominationno(Long multipleDenominationno) {
+		this.multipleDenominationno = multipleDenominationno;
 	}
 
 

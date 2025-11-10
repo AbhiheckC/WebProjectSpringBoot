@@ -54,6 +54,25 @@ public class AgentCollectionEntity {
     @Column(name = "payment_method")
     private String paymentMethod;
     
+    @Column(name = "multiple_denomination_no")
+    private Long multipleDenominationno;;
+    
+    @Column(name = "is_multiple_denomination")
+    private String isMultipleDenomination;
+    
+    @Column(name = "particular")
+    private String particular;
+    
+    
+    
+	public String getParticular() {
+		return particular;
+	}
+
+	public void setParticular(String particular) {
+		this.particular = particular;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -165,6 +184,24 @@ public class AgentCollectionEntity {
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
+
+	public Long getMultipleDenominationno() {
+		return multipleDenominationno;
+	}
+
+	public void setMultipleDenominationno(Long multipleDenominationno) {
+		this.multipleDenominationno = multipleDenominationno;
+	}
+
+	public String getIsMultipleDenomination() {
+		return isMultipleDenomination;
+	}
+
+	public void setIsMultipleDenomination(String isMultipleDenomination) {
+		this.isMultipleDenomination = isMultipleDenomination;
+	}
  
+	
+	
     
 }

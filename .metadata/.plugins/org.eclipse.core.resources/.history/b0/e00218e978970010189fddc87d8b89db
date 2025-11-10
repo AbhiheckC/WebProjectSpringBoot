@@ -1,0 +1,576 @@
+function handleResponse(response) {
+	var messageContainer = document.getElementById('messageContainer');
+	if (response.status === 'success') {
+		messageContainer.innerHTML = '<p class="success-message">' + response.message + '</p>';
+	} else {
+		messageContainer.innerHTML = '<p class="error-message">' + response.message + '</p>';
+	}
+	messageContainer.style.display = 'block'; // Show the message container
+}
+
+
+///// TO GIVE RECEIPT NUMBER TO ALL OF THE INPUTS IN TABLE ROW THAT ARE HIDDEN FROM THE INPUT ABOVE THE TABLE
+const input1 = document.getElementById('receiptNoInput');
+const input1value = input1.value;
+localStorage.setItem('inputValue1', input1value);
+const inputElements = document.querySelectorAll('#receiptNo');
+
+function updateInputValues(value) {
+	input1.value = value;
+	inputElements.forEach((input) => {
+		input.value = value;
+	});
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	const storedValue = localStorage.getItem('inputValue1');
+	if (storedValue) {
+		updateInputValues(storedValue);
+		localStorage.removeItem('inputValue1');
+	}
+});
+
+//input1.addEventListener('input', () => {
+//	updateInputValues(input1.value);
+//});
+
+///// HIDE THE BUTTON IF THE SAVE BUTTON IS CLICKED
+// Get all buttons with the specified class
+const buttons = document.querySelectorAll('#saveBtn');
+
+// Add event listeners to each button
+buttons.forEach(button => {
+	button.addEventListener('click', function() {
+		// this.style.background = "#FF0000";
+		this.style.display = 'none';
+	});
+});
+
+document.querySelectorAll('tr').forEach(row => {
+	const radios = row.querySelectorAll('input[name="paymentMethod"]');
+	const saveBtn = row.querySelector('#saveBtn');
+
+	radios.forEach(radio => {
+		radio.addEventListener('change', () => {
+			// Enable save button only if one radio is checked
+			const isChecked = Array.from(radios).some(r => r.checked);
+			saveBtn.disabled = !isChecked;
+		});
+	});
+});
+
+///// TO MAKE THE TOTAL OF THE COLLECION AMOUNT FROM THE TABLE INPUT
+const collectionamount = document.querySelectorAll('#collectionAmount');
+//document.getElementById('total').style.display = "none"
+var total;
+function totalAmount() {
+	total = 0
+	  let offlineTotal = 0;
+    let onlineTotal = 0;
+	collectionamount.forEach((input) => {
+		if (input.value == "") {
+			input.value = 0;
+		}
+		var no = parseInt(input.value);
+		console.log("fhsdklfjsdlkfjflk;", no)
+		total += no;
+	});
+	
+	 const offlineChecked = document.querySelector('input[type="radio"][value="Offline"]:checked');
+    const onlineChecked = document.querySelector('input[type="radio"][value="Online"]:checked');
+
+    if (!offlineChecked && !onlineChecked) {
+        alert("कृपया पहले पेमेंट मोड (ऑफलाइन या ऑनलाइन) चुनें।");
+        return;
+    }
+	const customerId = document.getElementById('denominationCustomerId').value;
+	
+	console.log("customerId===",customerId)
+	
+	console.log("total =====total;", total)
+	document.getElementById('total').style.display = "block"
+	//document.getElementById('total').textContent = total;
+	document.getElementById('total').value = total;
+	/*document.getElementById('amountReceived').value = total;*/
+	
+	
+	//if online then dont want to display modal
+	if(onlineChecked){
+		 alert("डेनोमिनेशन की केवल ऑफ़लाइन राशि के लिए अनुमति है");
+		return;
+	}
+	
+	
+const isMultiple = document.getElementById("isMultipleDenomination").value;
+	  //console.log("isMultiple====",isMultiple)
+	  if (isMultiple && isMultiple === "Y") {
+          alert("कृपया मल्टीपल डेनोमिनेशन से डेनोमिनेशन ऐड करे.");
+            return; // Do nothing
+        }
+	
+	 document.querySelectorAll('tr').forEach(row => {
+        const collectionInput = row.querySelector('input[name="collectionAmount"]');
+        const paymentRadio = row.querySelector('input[name="paymentMethod"]:checked');
+
+  
+        if (collectionInput && paymentRadio) {
+            const amount = parseFloat(collectionInput.value) || 0;
+       
+
+            if (paymentRadio.value === 'Offline') {
+                offlineTotal += amount;
+            } else if (paymentRadio.value === 'Online') {
+                onlineTotal += amount;
+            }
+        }
+     /*   console.log("onlineTotal =====onlineTotal;", onlineTotal)*/
+         document.getElementById("amountReceived").value = offlineTotal;
+    document.getElementById("onlineAmt").value = onlineTotal;
+    });
+	
+	 const modal = document.getElementById('denominationModal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+	
+}
+
+
+///// TO GET THE VALUE FROM SEND SMS CHECKBOX SWITCH TO INPUT TEXT IN FORM
+document.addEventListener('DOMContentLoaded', function() {
+	var switchElement = document.getElementById('switch');
+	const sendSMSInput = document.querySelectorAll('#sendSMSInput');
+	for (var i = 0; i < sendSMSInput.length; i++) {
+		sendSMSInput[i].value = 'N';
+	}
+	switchElement.addEventListener('change', function() {
+		var isChecked = switchElement.checked;
+		var selectedValue = isChecked ? 'Y' : 'N';
+		for (var i = 0; i < sendSMSInput.length; i++) {
+			sendSMSInput[i].value = selectedValue;
+		}
+		//sendSMSInput.value = selectedValue;
+	});
+});
+
+
+
+///// TO GET THE VALUE FROM ONLINE PAYMENT CHECKBOX SWITCH TO INPUT TEXT IN FORM
+/*document.addEventListener('DOMContentLoaded', function() {
+	var switchElement = document.getElementById('online');
+	const onlinePaymentInput = document.getElementById('onlinePaymentInput');
+	for (var i = 0; i < onlinePaymentInput.length; i++) {
+		onlinePaymentInput[i].value = 'Offline';
+	}
+	switchElement.addEventListener('change', function() {
+		var isChecked = switchElement.checked;
+		var selectedValue = isChecked ? 'Online' : 'Offline';
+		for (var i = 0; i < onlinePaymentInput.length; i++) {
+			onlinePaymentInput[i].value = selectedValue;
+		}
+		//sendSMSInput.value = selectedValue;
+	});
+});*/
+
+
+
+// Get all the checkboxes
+var onlinecheckboxes = document.querySelectorAll('#online');
+
+const onlinePaymentInput = document.querySelectorAll('#onlinePaymentInput');
+for (var i = 0; i < onlinePaymentInput.length; i++) {
+	onlinePaymentInput[i].value = 'Offline';
+}
+// Add event listener to each checkbox
+onlinecheckboxes.forEach(function(checkbox) {
+	checkbox.addEventListener('change', function() {
+		// Get the parent row of the checkbox
+		var row = this.closest('tr');
+
+		// Get the corresponding onlinePaymentInput field in the row
+		var onlinePaymentInput = row.querySelector('#onlinePaymentInput');
+
+		// Update the value based on checkbox checked state
+		if (this.checked) {
+			onlinePaymentInput.value = 'Online';
+		} else {
+			onlinePaymentInput.value = 'Offline';
+		}
+	});
+});
+
+
+//for online and offline amount collection
+document.addEventListener('DOMContentLoaded', function () {
+    const onlineCheckboxes = document.querySelectorAll('.online-switch');
+
+    onlineCheckboxes.forEach(function (checkbox) {
+        const row = checkbox.closest('tr');
+        const hiddenInput = row.querySelector('.online-payment-input');
+        const labelSpan = row.querySelector('.payment-label');
+
+        // Set default values
+        hiddenInput.value = 'Offline';
+        labelSpan.textContent = 'Offline';
+
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked) {
+                hiddenInput.value = 'Online';
+                labelSpan.textContent = 'Online';
+            } else {
+                hiddenInput.value = 'Offline';
+                labelSpan.textContent = 'Offline';
+            }
+        });
+    });
+});
+
+
+/***************************************************/
+
+document.addEventListener('DOMContentLoaded', function () {
+	const modal = document.getElementById('denominationModal');
+	const openButtons = document.querySelectorAll('.openDenominationModal');
+	const cancelBtn = document.getElementById('cancelDenomination');
+	
+console.log("Buttons found:", openButtons.length);
+	/*openButtons.forEach(button => {
+		button.addEventListener('click', function () {
+			currentForm = this.closest('form');
+			  const customerId = this.getAttribute("data-customer-id");
+console.log("customerId data----", customerId)
+        // Set the hidden input value inside the modal
+        document.getElementById("denominationCustomerId").value = customerId;
+			modal.style.display = 'block';
+		});
+	});*/
+
+const customerId = document.getElementById('customerIdSpan')?.textContent?.trim();
+    console.log("Customer ID from outside form:", customerId);
+
+    // Set it in the modal input
+    document.getElementById("denominationCustomerId").value = customerId;
+//modal.style.display = 'block';
+
+	cancelBtn.addEventListener('click', function () {
+		modal.style.display = 'none';
+	});
+
+	// Elements
+	const noteInputs = [
+		{ id: "r2000", value: 2000 },
+		{ id: "r500", value: 500 },
+		{ id: "r200", value: 200 },
+		{ id: "r100", value: 100 },
+		{ id: "r50", value: 50 },
+		{ id: "r20", value: 20 },
+		{ id: "r10", value: 10 },
+		{ id: "r5", value: 5 },
+		{ id: "r2", value: 2 },
+		{ id: "r1", value: 1 }
+	];
+
+	const amountReceivedInput = document.getElementById("amountReceived");
+	const totalDenominationEl = document.getElementById("totalDenomination");
+	const changeReturnEl = document.getElementById("changeReturn");
+
+	noteInputs.forEach(note => {
+		const input = document.getElementById(note.id);
+		input.addEventListener('input', calculateTotals);
+	});
+
+	amountReceivedInput.addEventListener('input', calculateTotals);
+
+	function calculateTotals() {
+		let total = 0;
+		noteInputs.forEach(note => {
+			const count = parseInt(document.getElementById(note.id).value) || 0;
+			total += count * note.value;
+		});
+		totalDenominationEl.textContent = total;
+
+		const received = parseInt(amountReceivedInput.value) || 0;
+		const change = total - received;
+		changeReturnEl.textContent = change > 0 ? change : 0;
+	}
+	
+	
+});
+
+
+/*******************************************************************************/
+
+
+/*******************************/
+/*document.querySelector('.openDenominationModal').addEventListener('click', function (event) {
+    // Prevent default action
+    event.preventDefault();
+
+    // Check all payment method values
+    const paymentModes = document.querySelectorAll('.online-payment-input');
+    let allOffline = true;
+
+    paymentModes.forEach(input => {
+        if (input.value !== 'Offline') {
+            allOffline = false;
+        }
+    });
+
+    if (allOffline) {
+        // Open the modal
+        document.getElementById('denominationModal').style.display = 'none';
+    } else {
+        alert("Denomination entry is only allowed for Offline payments.");
+        return;
+    }
+});*/
+
+
+/*******************SAVE DENOMINATION CONFIRM***************/
+document.addEventListener("DOMContentLoaded", function () {
+document.getElementById("confirmDenomination").addEventListener("click", function () {
+	
+	const amountReceivedInput = document.getElementById("amountReceived");
+		const amountReceived = parseInt(document.getElementById("amountReceived").value) || 0;
+
+
+	if (!amountReceived || amountReceived <= 0) {
+		alert("कृपया प्राप्त राशि दर्ज करें");
+		amountReceivedInput.focus();
+		return;
+	}
+	
+	const totalAmount = parseInt(document.getElementById("totalDenomination").textContent) || 0;
+	console.log("totalAmount data", totalAmount)
+	if (!totalAmount || totalAmount <= 0) {
+		alert("कृपया डेनोमिनेशन नोट दर्ज करें");
+		return;
+	}
+	
+	if (amountReceived > totalAmount) {
+		alert("कृपया डेनोमिनेशन नोट और डेनोमिनेशन राशि चेक करें");
+		return;
+	}
+	
+	/*const notes = document.querySelectorAll(".note");
+	const denominationData = [];
+
+	notes.forEach(note => {
+		const count = parseInt(note.value) || 0;
+		const value = parseInt(note.getAttribute("data-value"));
+		if (count > 0) {
+			denominationData.push({ value, count });
+		}
+	});*/
+
+	
+	const changeReturn = parseInt(document.getElementById("changeReturn").textContent) || 0;
+	const onlineAmt = parseInt(document.getElementById("onlineAmt").value) || 0;
+	
+	console.log("totalAmount data", onlineAmt)
+	
+const r2000 = parseInt(document.getElementById("r2000").value) || 0;
+const r500 = parseInt(document.getElementById("r500").value) || 0;
+const r200 = parseInt(document.getElementById("r200").value) || 0;
+const r100 = parseInt(document.getElementById("r100").value) || 0;
+const r50 = parseInt(document.getElementById("r50").value) || 0;
+const r20 = parseInt(document.getElementById("r20").value) || 0;
+const r10 = parseInt(document.getElementById("r10").value) || 0;
+const r5 = parseInt(document.getElementById("r5").value) || 0;
+const r2 = parseInt(document.getElementById("r2").value) || 0;
+const r1 = parseInt(document.getElementById("r1").value) || 0;
+
+
+const c2000 = parseInt(document.getElementById("c2000").value) || 0;
+const c500 = parseInt(document.getElementById("c500").value) || 0;
+const c200 = parseInt(document.getElementById("c200").value) || 0;
+const c100 = parseInt(document.getElementById("c100").value) || 0;
+const c50 = parseInt(document.getElementById("c50").value) || 0;
+const c20 = parseInt(document.getElementById("c20").value) || 0;
+const c10 = parseInt(document.getElementById("c10").value) || 0;
+const c5 = parseInt(document.getElementById("c5").value) || 0;
+const c2 = parseInt(document.getElementById("c2").value) || 0;
+const c1 = parseInt(document.getElementById("c1").value) || 0;
+
+const customerId = document.getElementById("denominationCustomerId").value;
+	const receiptNo =  document.getElementById("receiptNo").value;
+
+const asondate = document.getElementById("asondate").value;
+console.log("asondate data", asondate)
+const data = {
+		amountReceived,
+		totalAmount,
+		changeReturn,
+		customerId,
+		receiptNo,
+		r2000,
+		r500,
+		r200,
+		r100,
+		r50,
+		r20,
+		r10,
+		r5,
+		r2,
+		r1, 
+		c2000,
+		c500,
+		c200,
+		c100,
+		c50,
+		c20,
+		c10,
+		c5,
+		c2,
+		c1,
+		asondate,
+		onlineAmt
+	};
+
+
+	/*const data = {
+		denominations: denominationData,
+		amountReceived,
+		totalAmount,
+		changeReturn,
+		customerId,
+		receiptNo
+	};*/
+	
+console.log("denomination data", data)
+	fetch('/myapp/saveDenomination', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+	.then(response => response.json())
+	.then(result => {
+		alert(result.message || 'Denomination saved successfully!');
+		 document.getElementById('denominationForm').reset(); // Clears form
+    document.getElementById('totalDenomination').innerText = "0";
+    document.getElementById('changeReturn').innerText = "0";
+		document.getElementById("denominationModal").style.display = "none";
+	})
+	.catch(error => {
+		console.error('Error:', error);
+		alert('Failed to save denomination.');
+	});
+});
+});
+
+
+// Cancel button in modal
+document.addEventListener("DOMContentLoaded", function () {
+	document.getElementById('cancelDenomination').addEventListener('click', function () {
+		
+		 const total = parseInt(document.getElementById('totalDenomination').innerText);
+
+    if (total === 0) {
+        alert("कृपया डिनोमिनेशन दर्ज करें।"); // "Please enter denomination."
+        
+        const modal = document.getElementById('denominationModal');
+      if (modal) {
+        modal.style.display = 'block';
+      }
+        
+        return; // Stop closing the modal
+    }
+		
+		
+		document.getElementById('denominationForm').reset(); // Clears form
+    document.getElementById('totalDenomination').innerText = "0";
+    document.getElementById('changeReturn').innerText = "0";
+		document.getElementById('denominationModal').style.display = 'none';
+		window.collectionFormToSubmit = null;
+	});
+});
+/**/
+
+
+  //document.addEventListener('DOMContentLoaded', function () {
+     const collectionamount = document.querySelectorAll('#collectionAmount');
+//document.getElementById('total').style.display = "none"
+var total;
+
+	total = 0
+	collectionamount.forEach((input) => {
+		if (input.value == "") {
+			input.value = 0;
+		}
+		var no = parseInt(input.value);
+		console.log("total ", no)
+		total += no;
+	});
+	console.log("total =====total;===", total)
+	//document.getElementById('total').textContent = total;
+	document.getElementById('total').value = total;
+	
+	
+   // });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+	const accountCode = document.querySelectorAll('#accountCode');
+
+	//console.log("fhsdklfjsdlkfjflk;", accountCode)
+
+	accountCode.forEach((input) => {
+
+		const substring = input.value.substring(4, 7);
+
+		if (substring === "901" || substring === "902" || substring === "401" || substring === "402") {
+			//var collectionAmountInput = document.getElementById('collectionAmount');
+			// collectionAmountInput.disabled = true;
+			console.log("disable code", input.value.substring(4, 7))
+			const collectionAmountInput = input.closest('tr').querySelector('#collectionAmount');
+			const collsavebtn = input.closest('tr').querySelector('#saveBtn');
+			// Disable the collectionAmount input if it exists
+			if (collectionAmountInput) {
+				collectionAmountInput.disabled = true;
+				collsavebtn.disabled = true;
+			}
+		}
+
+		//console.log("fhsdklfjsdlkfjflk;", input.value)
+
+	});
+
+
+	// Select the collectionAmount input element
+	// var collectionAmountInput = document.getElementById('collectionAmount');
+
+	// Ensure the accountCode is a string and check if it contains "901"
+	//    collectionAmountInput.disabled = true;
+
+});
+
+/*window.addEventListener('DOMContentLoaded', () => {
+	updateMultiDenominationFlag();
+	});*/
+
+//function updateMultiDenominationFlag() {
+	document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById('multiDenominationCheckbox');
+    const hiddenInput = document.getElementById('isMultipleDenominationInput');
+    hiddenInput.value = checkbox.checked ? 'Y' : 'N';
+   
+      const isMultipleDenomination = document.querySelectorAll('#isMultipleDenomination');
+    for (var i = 0; i < isMultipleDenomination.length; i++) {
+		isMultipleDenomination[i].value = 'N';
+	}
+    
+    checkbox.addEventListener('change', function() {
+		var isChecked = checkbox.checked;
+		var selectedValue = isChecked ? 'Y' : 'N';
+		for (var i = 0; i < isMultipleDenomination.length; i++) {
+			isMultipleDenomination[i].value = selectedValue;
+		}
+		});
+    console.log("Multiple Denomination:", hiddenInput.value);
+    });
+//}
+
+
+

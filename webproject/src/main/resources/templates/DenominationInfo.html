@@ -23,15 +23,19 @@
 					<input type="submit" class="submitBtn" value="Submit" />
 				</form>-->
 				<form id="denominationForm" method="post" class="singleInputButtonForm">
-    <div class="mb-2">
-        <label><input type="radio" name="type" value="collection"  th:checked="${selectedType == null or selectedType == 'collection'}"> कलेक्शन राशि</label>
-        &nbsp;&nbsp;
-        <label><input type="radio" name="type" value="return"  th:checked="${selectedType == 'return'}"> वापस राशि</label>
-    </div>
-    <input type="hidden" id="asondate" name="asondate" th:value="${#dates.format(#dates.createNow(), 'dd-MMM-yy')}" />
-    <input type="submit" class="submitBtn" value="Submit" />
-</form>
-				
+					<div class="mb-2">
+						<label><input type="radio" name="type" value="collection"
+								th:checked="${selectedType == null or selectedType == 'collection'}"> कलेक्शन
+							राशि</label>
+						&nbsp;&nbsp;
+						<label><input type="radio" name="type" value="return" th:checked="${selectedType == 'return'}">
+							वापस राशि</label>
+					</div>
+					<input type="hidden" id="asondate" name="asondate"
+						th:value="${#dates.format(#dates.createNow(), 'dd-MMM-yy')}" />
+					<input type="submit" class="submitBtn" value="Submit" />
+				</form>
+
 			</div>
 		</div>
 		<div class="row">
@@ -61,6 +65,7 @@
 									<!--<th></th>-->
 									<!--<th>एजेंट नाम</th>-->
 									<th>रसीद क्रमांक</th>
+									<th>मल्टीपल डेनोमिनेशन</th>
 									<th>डेनोमिनेशन तारीख</th>
 									<th>ग्राहक क्रमांक</th>
 									<th>ग्राहक नाम</th>
@@ -74,7 +79,8 @@
 									<th>₹ 5</th>
 									<th>₹ 2</th>
 									<th>₹ 1</th>
-									<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">डेनोमिनेशन राशि</th>
+									<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">डेनोमिनेशन राशि
+									</th>
 									<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">जमा राशि</th>
 									<!--<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">ऑनलाइन राशि</th>-->
 									<!--<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">कुल राशि</th>-->
@@ -85,7 +91,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="denomination : ${denominationList}">
+								<tr th:each="denomination : ${denominationList}"
+									th:classappend="${denomination.isMultipleDenomination == 'Y'} ? 'highlight-row'">
 									<!--<form th:action="@{/makeCollection0}" method="post"
 										th:object="${collectionInfoList}">-->
 									<!--<td>
@@ -95,6 +102,7 @@
 									<!--<td th:text="${denomination.agentName}"></td>-->
 
 									<td th:text="${denomination.receiptNo}"></td>
+									<td th:text="${denomination.isMultipleDenomination}"></td>
 									<td th:text="${denomination.asondate}"></td>
 									<td th:text="${denomination.customerId}"></td>
 									<td th:text="${denomination.customerName}" class="small-left"></td>
@@ -113,8 +121,10 @@
 										<li th:each="note : ${denomination.denominations}"
 											th:text="'₹' + ${note.value} + ' × ' + ${note.count}"></li>
 								</td>-->
-									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.totalAmount}" id="totalAmt"></td>
-									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.amountReceived}"></td>
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''"
+										th:text="${denomination.totalAmount}" id="totalAmt"></td>
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''"
+										th:text="${denomination.amountReceived}"></td>
 									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.onlineAmt}"></td>-->
 									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.onlineOfflineAmt}"></td>-->
 									<td th:text="${denomination.changeReturn}"></td>
@@ -156,6 +166,7 @@
 									<td></td>
 									<td></td>
 									<td></td>
+									<td></td>
 									<td><strong>कुल</strong></td>
 									<td id="totalR2000"></td>
 									<td id="totalR500"></td>
@@ -167,8 +178,10 @@
 									<td id="totalR5"></td>
 									<td id="totalR2"></td>
 									<td id="totalR1"></td>
-									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandTotalAmount"></td>
-									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandAmountReceived"></td>
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''"
+										id="grandTotalAmount"></td>
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''"
+										id="grandAmountReceived"></td>
 									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandonlineAmt"></td>-->
 									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandonlineofflineAmt"></td>-->
 									<td id="grandChangeReturn"></td>
@@ -237,24 +250,24 @@
 			let totalAmount = 0;
 			let amountReceived = 0;
 			let changeReturn = 0;
-		
+
 
 			rows.forEach((row) => {
 				let cells = row.querySelectorAll("td");
 				if (cells.length >= 12) {
-					totalR2000 += parseInt(cells[4].innerText) || 0;
-					totalR500 += parseInt(cells[5].innerText) || 0;
-					totalR200 += parseInt(cells[6].innerText) || 0;
-					totalR100 += parseInt(cells[7].innerText) || 0;
-					totalR50 += parseInt(cells[8].innerText) || 0;
-					totalR20 += parseInt(cells[9].innerText) || 0;
-					totalR10 += parseInt(cells[10].innerText) || 0;
-					totalR5 += parseInt(cells[11].innerText) || 0;
-					totalR2 += parseInt(cells[12].innerText) || 0;
-					totalR1 += parseInt(cells[13].innerText) || 0;
-					totalAmount += parseFloat(cells[14].innerText) || 0;
-					amountReceived += parseFloat(cells[15].innerText) || 0;
-					changeReturn += parseFloat(cells[16].innerText) || 0;
+					totalR2000 += parseInt(cells[5].innerText) || 0;
+					totalR500 += parseInt(cells[6].innerText) || 0;
+					totalR200 += parseInt(cells[7].innerText) || 0;
+					totalR100 += parseInt(cells[8].innerText) || 0;
+					totalR50 += parseInt(cells[9].innerText) || 0;
+					totalR20 += parseInt(cells[10].innerText) || 0;
+					totalR10 += parseInt(cells[11].innerText) || 0;
+					totalR5 += parseInt(cells[12].innerText) || 0;
+					totalR2 += parseInt(cells[13].innerText) || 0;
+					totalR1 += parseInt(cells[14].innerText) || 0;
+					totalAmount += parseFloat(cells[15].innerText) || 0;
+					amountReceived += parseFloat(cells[16].innerText) || 0;
+					changeReturn += parseFloat(cells[17].innerText) || 0;
 				}
 			});
 
@@ -274,7 +287,7 @@
 		});
 	</script>
 
-<!--
+	<!--
 		let onlineAmt = 0;
 			let onlineofflineAmt = 0;
 	
@@ -285,19 +298,19 @@
 			document.getElementById("grandonlineofflineAmt").innerText = onlineofflineAmt.toFixed(2);
 	
 -->
-<script>
-    document.getElementById("denominationForm").addEventListener("submit", function (event) {
-        const selectedType = document.querySelector('input[name="type"]:checked').value;
-        if (selectedType === "collection") {
-            this.action = "/myapp/getDenominationInfo"; // Existing API
-        } else if (selectedType === "return") {
-            this.action = "/myapp/getReturnDenominationInfo"; // Another API (change this as needed)
-        }
-    });
-</script>
+	<script>
+		document.getElementById("denominationForm").addEventListener("submit", function (event) {
+			const selectedType = document.querySelector('input[name="type"]:checked').value;
+			if (selectedType === "collection") {
+				this.action = "/myapp/getDenominationInfo"; // Existing API
+			} else if (selectedType === "return") {
+				this.action = "/myapp/getReturnDenominationInfo"; // Another API (change this as needed)
+			}
+		});
+	</script>
 
 
-<!--<script>
+	<!--<script>
     document.getElementById('denominationForm').addEventListener('submit', function (e) {
         const selectedType = document.querySelector('input[name="type"]:checked').value;
         this.action = `/myapp/getDenominationInfo/${selectedType}`;

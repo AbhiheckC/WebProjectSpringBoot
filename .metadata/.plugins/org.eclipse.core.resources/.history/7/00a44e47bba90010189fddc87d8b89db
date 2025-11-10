@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!--<title>कलेक्शन</title> -->
+	<title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+			</div>
+			<div class="col-sm-12 col-md-12">
+				<h3 class="text-center heading" id="hehe">कलेक्शन फॉर्म</h3>
+
+				<p>Customer ID: <span th:text="${customerId}"></span></p>
+<p>Receipt No: <span th:text="${receiptNo}"></span></p>
+<p>As On Date: <span th:text="${asondate}"></span></p>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 col-md-12 mt-4" th:if="${collectionList != null}">
+				<h3 class="heading text-center">कलेक्शन सूची</h3>
+				<div class="text-center">
+					<div class="table-responsive" id="table">
+						<div id="printContent">
+							<p class="fs-3">
+								34/2 अ ब मोती तबेला कलेक्टर ऑफिस के सामने इंदौर<br>
+								रजि क्र. जे.आर/आय.डी.आर.288/2013
+							</p>
+							<h3 class="text-center">रसीद</h3>
+							<div id="tableContent">
+								<div class="d-flex flex-row justify-content-around">
+									<div>
+										<h3><b>ग्राहक क्रमांक : </b><span
+												th:text="${collectionList[0].customerId}"></span>
+										</h3>
+										<h3><b>ग्राहक नाम :<span th:utext="${collectionList[0].localLanguageName}">
+											</b></span>
+										</h3>
+									</div>
+									<div>
+										<h3><b>कलेक्शन तारीख : </b><span
+												th:text="${collectionList[0].collectionDate}"></span>
+										</h3>
+										<h3><b>रसीद क्रमांक : </b><span th:text="${collectionList[0].receiptNo}"></span>
+										</h3>
+									</div>
+								</div>
+								<table class="table table-bordered" id="myTablePrintCollection">
+									<thead class="thead-light">
+										<tr class="table-success">
+											<!--<th>ग्राहक क्रमांक</th>
+										<th>कलेक्शन तारीख</th>
+										<th>रसीद क्रमांक</th>-->
+											<th>ग्राहक खाता क्रमांक</th>
+											<th>खाता प्रकार</th>
+											<th>कलेक्शन राशि</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="collection : ${collectionList }">
+											<!--<td th:text="${collection.customerId}"></td>
+										<td th:utext="${collection.collectionDate}"></td>
+										<td th:text="${collection.receiptNo}"></td>-->
+											<td class="fs-3" th:text="${collection.accountCode}"></td>
+											<td class="fs-3" th:utext="${collection.accountType}"></td>
+											<td class="fs-3" th:text="${collection.collectionAmount}"></td>
+										</tr>
+
+										<tr>
+											<td class="fs-3">कुल रूपए</td>
+											<td></td>
+											<td class="fs-3" th:text="${collectionList[0].collectionTotal}"></td>
+										</tr>
+
+									</tbody>
+								</table>
+							</div>
+
+							<p class="fs-3">· सदस्य द्वारा खाते में जमा की गई राशि का विवरण ऊपर दिया गया है |</p>
+							<p class="fs-3">· सदस्य को सदैव दिए गए पैसो की रसीद तुरंत लेना है |</p>
+							<p class="fs-3">· सदस्य को सदैव दी गई राशि की जांच करना अनिवार्य है |</p>
+							<p class="fs-3">· सदस्य द्वारा दिए गए राशि की एंट्री तत्काल पासबुक में करना अनिवार्य है |
+							</p>
+							<p class="fs-3">· सदस्य को दी गई रसीद की फोटोकॉपी करवाकर सदैव अपने पास रखना है |</p>
+
+							<p class="fs-3"><strong>संस्था में संपर्क हेतु फोन न. 0731-2484865 / 7804980306</strong></p>
+
+						</div>
+					</div>
+					<button id="printButton" class="btn btn-success" onclick="printJS({ printable: 'printContent', type: 'html', 
+					style: `
+			        @page {
+			          size: mobile;
+			          margin: 0;
+			        }
+			        @media print and (max-width: 480px) {
+			          body {
+			            margin: 0;
+			          }
+			        }
+			        th, td { border: 1px solid black; padding: 2px; }
+			        body{text-align:left}
+			      `, header: 'स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर' })">Print</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<script th:replace="includes/script :: script"></script>
+
+
+	<script th:if="${isDataMissing != null}" th:inline="javascript">
+		alert("No data available!");
+	</script>
+	<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+		//alert(th:text = "${isCollectionSaved}");
+		alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+	</script>
+
+
+
+	<!--<footer th:replace="includes/footer :: footer"></footer>-->
+</body>
+
+</html>

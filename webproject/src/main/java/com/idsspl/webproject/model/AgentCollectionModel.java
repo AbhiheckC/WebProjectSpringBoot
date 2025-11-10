@@ -29,6 +29,20 @@ public class AgentCollectionModel {
 	private Long receiptNo;
 	
 	private String paymentMethod;
+	
+	private String isMultipleDenomination;
+
+	private String particular;
+	
+	
+	
+	public String getParticular() {
+		return particular;
+	}
+
+	public void setParticular(String particular) {
+		this.particular = particular;
+	}
 
 	public String getId() {
 		return id;
@@ -142,4 +156,14 @@ public class AgentCollectionModel {
 		this.paymentMethod = paymentMethod;
 	}
 
+	public String getIsMultipleDenomination() {
+		return isMultipleDenomination;
+	}
+
+	public void setIsMultipleDenomination(String isMultipleDenomination) {
+		this.isMultipleDenomination = isMultipleDenomination;
+	}
+
+	
+	
 }

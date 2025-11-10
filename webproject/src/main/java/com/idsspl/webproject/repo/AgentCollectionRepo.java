@@ -22,5 +22,16 @@ public interface AgentCollectionRepo extends JpaRepository<AgentCollectionEntity
 	@Transactional
     @Query("UPDATE AgentCollectionEntity u SET u.collectionAmount = 0 WHERE u.customerId = ?1 and u.receiptNo = ?2")
     void updateCollectionAmt(String customerId, long receiptNo);
+
+	
+	@Modifying
+	@Transactional
+    @Query("UPDATE AgentCollectionEntity u SET u.multipleDenominationno = ?1 WHERE u.agentName = ?2 and u.collectionDate = ?3 and u.isMultipleDenomination = 'Y' and u.multipleDenominationno is null")
+	void updateMultipleDenominationno(Long multidenominationno,String agentName, String asondate);
+	
+	
+	 // FUNCTION CALL
+    @Query(value = "SELECT Fn_Get_Cust_Name(:customerId) FROM DUAL", nativeQuery = true)
+    String getCustomerNameByCustomerId(@Param("customerId") String customerId);
 	
 }

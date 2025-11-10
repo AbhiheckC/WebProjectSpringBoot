@@ -37,6 +37,7 @@ import com.idsspl.webproject.entity.AgentEntity;
 import com.idsspl.webproject.entity.Denomination;
 import com.idsspl.webproject.entity.DenominationSummaryEntity;
 import com.idsspl.webproject.entity.DenominationViewEntity;
+import com.idsspl.webproject.entity.OpeningDenominationEntity;
 import com.idsspl.webproject.model.AccountModel;
 import com.idsspl.webproject.model.AgentCollectionModel;
 import com.idsspl.webproject.model.AgentLocationModel;
@@ -62,17 +63,16 @@ public class UserController {
 
 	@Autowired
 	private AgentService agentService;
-	
+
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private AccountService accountService;
 
 	@Autowired
-    private DenominationServiceImpl denominationService;
+	private DenominationServiceImpl denominationService;
 
-	
 	// TO GET THE USERNAME OF THE USER LOGIN TO DISPLAY AND USE IN ALL THE ROUTES
 	@ModelAttribute("userName")
 	public String addUserNameToModel(Model model) {
@@ -142,6 +142,8 @@ public class UserController {
 	// TO GET VIEW AGENT PAGE
 	@GetMapping(path = "/viewAgent")
 	public String GetViewAgentPage(Model model) {
+		model.addAttribute("isReadonly", false); 
+		model.addAttribute("hidden", "submit");
 		return "ViewAgent";
 	}
 
@@ -155,10 +157,14 @@ public class UserController {
 		System.out.println("agent======" + agents);
 		if (agents == null || agents.isEmpty()) {
 			String isDataMissing = "No data Found!";
+			model.addAttribute("isReadonly", false); 
+			model.addAttribute("hidden", "submit");
 			model.addAttribute("isDataMissing", isDataMissing);
 		} else if (agents != null || !agents.isEmpty()) {
 			System.out.println("--------------" + agents.get(0));
 			model.addAttribute("agentList", agents);
+			model.addAttribute("isReadonly", true);
+			model.addAttribute("hidden", "hidden");
 		}
 		return "ViewAgent";
 	}
@@ -272,15 +278,22 @@ public class UserController {
 //		return "ViewCustomer";
 //	}
 
+	
+	
+	
+	
+	
 	// TO GET VIEW AGENT PAGE
-	@GetMapping(path = "/printCollection")
-	public String GetPrintCollectionPage(Model model) {
-		return "PrintCollection";
-	}
-
+		@GetMapping(path = "/printCollection")
+		public String GetPrintCollectionPage(Model model) {
+			return "PrintCollection";
+		}
+		
 	@PostMapping(path = "/printCollectionList")
 	public String PostPrintCollectionPage(PrintAgentCollectionModel collection, Model model,
 			Authentication authentication) {
+		 System.out.println("Receipt No: " + collection.getReceiptNo());
+		System.out.println("====printCollectionList===");
 		List<PrintAgentCollectionModel> collections;
 		collections = agentService.getCollectionList(collection);
 		System.out.println("collections======" + collections);
@@ -289,36 +302,88 @@ public class UserController {
 			model.addAttribute("isDataMissing", isDataMissing);
 		} else if (collections != null || !collections.isEmpty()) {
 			System.out.println("--------------" + collections.get(0));
+
+			// ✅ Calculate total collection amount using streams
+			double totalCollectionAmount = collections.stream().filter(c -> c.getCollectionAmount() != null)
+					.mapToDouble(PrintAgentCollectionModel::getCollectionAmount).sum();
+
 			model.addAttribute("collectionList", collections);
+			model.addAttribute("collectionTotal", totalCollectionAmount);
 		}
 		return "PrintCollection";
 	}
 
 	
-	// TO GET VIEW STATEMENT PAGE
-		@GetMapping(path = "/viewAccountStatement")
-		public String GetAccountStatementPage(Model model) {
-			return "viewAccountStatement";
-		}
-		
-		@PostMapping(path = "/printAccountStatement")
-		public String PostPrintAccountStmtPage(PrintAccountStatementModel collection, Model model,
-				Authentication authentication) {
-			List<PrintAccountStatementModel> collections;
+	// TO GET VIEW AGENT PAGE
+		@GetMapping(path = "/printCollectionAfterConfirm")
+		public String GetPrintCollectionPageNew(@RequestParam String customerId,
+	            @RequestParam String receiptNo,
+	            @RequestParam String asondate,
+	            Model model) {
+			// Optionally print/log values
+		    System.out.println("customerId = " + customerId);
+		    System.out.println("receiptNo = " + receiptNo);
+		    System.out.println("asondate = " + asondate);
+		    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+
+			String str = ft.format(new Date());
+		    
+		    System.out.println("ason str===="+str);
+	PrintAgentCollectionModel collection = new PrintAgentCollectionModel();
+	collection.setCustomerId(customerId);
+	collection.setReceiptNo(Long.parseLong(receiptNo));
+	collection.setCollectionDate(str);
+
+			List<PrintAgentCollectionModel> collections;
 			collections = agentService.getCollectionList(collection);
-			System.out.println("collections======" + collections);
+			System.out.println("new collections======" + collections);
 			if (collections == null || collections.isEmpty()) {
 				String isDataMissing = "No data Found!";
 				model.addAttribute("isDataMissing", isDataMissing);
 			} else if (collections != null || !collections.isEmpty()) {
 				System.out.println("--------------" + collections.get(0));
-				model.addAttribute("AccountcollectionList", collections);
+
+				// ✅ Calculate total collection amount using streams
+				double totalCollectionAmount = collections.stream().filter(c -> c.getCollectionAmount() != null)
+						.mapToDouble(PrintAgentCollectionModel::getCollectionAmount).sum();
+
+				model.addAttribute("collectionList", collections);
+				model.addAttribute("collectionTotal", totalCollectionAmount);
 			}
-			return "viewAccountStatement";
+		    
+
+		    
+		    
+		    // Pass to Thymeleaf
+		    model.addAttribute("customerId", customerId);
+		    model.addAttribute("receiptNo", receiptNo);
+		    model.addAttribute("asondate", asondate);
+			return "PrintCollectionAfterConfirm";
 		}
 	
 	
-	
+	// TO GET VIEW STATEMENT PAGE
+	@GetMapping(path = "/viewAccountStatement")
+	public String GetAccountStatementPage(Model model) {
+		return "viewAccountStatement";
+	}
+
+	@PostMapping(path = "/printAccountStatement")
+	public String PostPrintAccountStmtPage(PrintAccountStatementModel collection, Model model,
+			Authentication authentication) {
+		List<PrintAccountStatementModel> collections;
+		collections = agentService.getCollectionList(collection);
+		System.out.println("collections======" + collections);
+		if (collections == null || collections.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (collections != null || !collections.isEmpty()) {
+			System.out.println("--------------" + collections.get(0));
+			model.addAttribute("AccountcollectionList", collections);
+		}
+		return "viewAccountStatement";
+	}
+
 	// TO GET VIEW COLLECTION INFORMATION PAGE
 	@GetMapping(path = "/viewCollectionInfo")
 	public String GetCollectionInfoPage(Model model) {
@@ -441,23 +506,35 @@ public class UserController {
 //		return "redirect:/viewAgent";
 //	}
 
-
 	@PostMapping("/saveDenomination")
 	@ResponseBody
 	public ResponseEntity<?> saveDenomination(@RequestBody DenominationRequest request, Authentication authentication) {
 		try {
 			String userName = authentication.getName();
-	        denominationService.save(request,userName);
-	        return ResponseEntity.ok(Collections.singletonMap("message", "Denomination saved successfully"));
-	    } catch (Exception e) {
-	        e.printStackTrace(); // ⬅️ Print the real exception to console/log
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                             .body(Collections.singletonMap("message", "Failed to save denomination"));
-	    }
+			denominationService.save(request, userName);
+			return ResponseEntity.ok(Collections.singletonMap("message", "Denomination saved successfully"));
+		} catch (Exception e) {
+			e.printStackTrace(); // ⬅️ Print the real exception to console/log
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Collections.singletonMap("message", "Failed to save denomination"));
+		}
 	}
 
-	
-	
+	@PostMapping("/saveMultipleDenomination")
+	@ResponseBody
+	public ResponseEntity<?> saveMultipleDenomination(@RequestBody DenominationRequest request,
+			Authentication authentication) {
+		try {
+			String userName = authentication.getName();
+			denominationService.saveMultipleDenomination(request, userName);
+			return ResponseEntity.ok(Collections.singletonMap("message", "Multiple Denomination saved successfully"));
+		} catch (Exception e) {
+			e.printStackTrace(); // ⬅️ Print the real exception to console/log
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Collections.singletonMap("message", "Failed to save denomination"));
+		}
+	}
+
 	// TO GET DENOMINATION TOTAL PAGE
 	@GetMapping(path = "/viewDenominationCollection")
 	public String GetDenominationInfoPage(Model model) {
@@ -465,12 +542,12 @@ public class UserController {
 	}
 
 	@PostMapping(path = "/getDenominationInfo")
-	public String PostDenominationInfoPage( DenominationRequest request,Model model, Authentication authentication) {
+	public String PostDenominationInfoPage(DenominationRequest request, Model model, Authentication authentication) {
 		List<DenominationRequest> denominations;
 //		List<DenominationViewEntity> denominationview;
 		String type = "collection";
 		String userName = authentication.getName();
-		denominations = denominationService.getDenominationInfoList(request, userName,type);
+		denominations = denominationService.getDenominationInfoList(request, userName, type);
 		System.out.println("denominations======" + denominations);
 		if (denominations == null || denominations.isEmpty()) {
 			String isDataMissing = "No data Found!";
@@ -480,18 +557,18 @@ public class UserController {
 			model.addAttribute("denominationList", denominations);
 			model.addAttribute("selectedType", type);
 		}
-		
+
 //		denominationview = denominationService.getDenominationViewList(userName);
 //		model.addAttribute("denominationViewList", denominationview);
 		return "DenominationInfo";
 	}
-	
+
 	@PostMapping(path = "/getReturnDenominationInfo")
 	public String ReturnDenominationInfoPage(DenominationRequest request, Model model, Authentication authentication) {
 		List<DenominationRequest> denominations;
 		String type = "return";
 		String userName = authentication.getName();
-		denominations = denominationService.getDenominationInfoList(request, userName,type);
+		denominations = denominationService.getDenominationInfoList(request, userName, type);
 		System.out.println("denominations======" + denominations);
 		if (denominations == null || denominations.isEmpty()) {
 			String isDataMissing = "No data Found!";
@@ -503,43 +580,121 @@ public class UserController {
 		}
 		return "DenominationInfo";
 	}
-	
-	
-	
+
 //	@GetMapping(path = "/viewDenominationSummary")
 //	public String GetDenominationSUmmaryPage(Model model) {
 //		return "DenominationSummary";
 //	}
-	
+
 	// TO GET DENOMINATION SUMMARY PAGE
-		@GetMapping(path = "/viewDenominationSummary")
-		public String GetDenominationSummaryPage(Model model, Authentication authentication) {
-			
-			List<DenominationSummaryEntity> denominations;
-//			List<DenominationViewEntity> denominationview;
-		
-			SimpleDateFormat ft
-            = new SimpleDateFormat("dd-MMM-yy");
+	@GetMapping(path = "/viewDenominationSummary")
+	public String GetDenominationSummaryPage(Model model, Authentication authentication) {
 
-        String str = ft.format(new Date());
+		List<DenominationSummaryEntity> denominations;
+		List<OpeningDenominationEntity> openingdenomination;
 
-        // Printing the formatted date
-        System.out.println("Formatted Date : " + str.toUpperCase());
-			
-			String userName = authentication.getName();
-			denominations = denominationService.getDenominationSummaryList(userName,str.toUpperCase());
-			System.out.println("denominations======" + denominations);
-			if (denominations == null || denominations.isEmpty()) {
-				String isDataMissing = "No data Found!";
-				model.addAttribute("isDataMissing", isDataMissing);
-			} else if (denominations != null || !denominations.isEmpty()) {
-				System.out.println("--------------" + denominations.get(0));
-				model.addAttribute("denominationSummaryList", denominations);
+		SimpleDateFormat ft = new SimpleDateFormat("dd-MMM-yy");
+
+		String str = ft.format(new Date());
+
+		// Printing the formatted date
+		System.out.println("Formatted Date : " + str.toUpperCase());
+
+		String userName = authentication.getName();
+		denominations = denominationService.getDenominationSummaryList(userName, str.toUpperCase());
+
+//		    openingdenomination = denominationService.getOpeningDenomination("1", str.toUpperCase()); // You need to implement this method
+
+		System.out.println("denominations======" + denominations);
+		if (denominations == null || denominations.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (denominations != null || !denominations.isEmpty()) {
+			System.out.println("--------------" + denominations.get(0));
+
+			List<DenominationRequest> dtoList = new ArrayList<>();
+
+			for (DenominationSummaryEntity summary : denominations) {
+				DenominationRequest dto = new DenominationRequest();
+//					   System.out.println("openingdenomination-----------------"+openingdenomination);
+				/*
+				 * for(OpeningDenominationEntity openingdenominationsummary :
+				 * openingdenomination) { // Compute balances safely (null checks)
+				 * System.out.println("==openingdenominationsummary.getR2000() =="
+				 * +openingdenominationsummary.getR2000() );
+				 * dto.setR2000(openingdenominationsummary.getR2000() + summary.getR2000() -
+				 * summary.getC2000()); dto.setR500(openingdenominationsummary.getR500() +
+				 * summary.getR500() - summary.getC500());
+				 * dto.setR200(openingdenominationsummary.getR200() + summary.getR200() -
+				 * summary.getC200()); dto.setR100(openingdenominationsummary.getR100() +
+				 * summary.getR100() - summary.getC100());
+				 * dto.setR50(openingdenominationsummary.getR50() + summary.getR50() -
+				 * summary.getC50()); dto.setR20(openingdenominationsummary.getR20() +
+				 * summary.getR20() - summary.getC20());
+				 * dto.setR10(openingdenominationsummary.getR10() + summary.getR10() -
+				 * summary.getC10()); dto.setR5(openingdenominationsummary.getR5() +
+				 * summary.getR5() - summary.getC5());
+				 * dto.setR2(openingdenominationsummary.getR2() + summary.getR2() -
+				 * summary.getC2()); dto.setR1(openingdenominationsummary.getR1() +
+				 * summary.getR1() - summary.getC1());
+				 * dto.setTotalAmount(openingdenominationsummary.getOpeningAmount()+summary.
+				 * getOfflineAmt()); }
+				 */
+
+//							   System.out.println("==openingdenominationsummary.getR2000() =="+openingdenominationsummary.getR2000() );
+				dto.setR2000(summary.getR2000() - summary.getC2000());
+				dto.setR500(summary.getR500() - summary.getC500());
+				dto.setR200(summary.getR200() - summary.getC200());
+				dto.setR100(summary.getR100() - summary.getC100());
+				dto.setR50(summary.getR50() - summary.getC50());
+				dto.setR20(summary.getR20() - summary.getC20());
+				dto.setR10(summary.getR10() - summary.getC10());
+				dto.setR5(summary.getR5() - summary.getC5());
+				dto.setR2(summary.getR2() - summary.getC2());
+				dto.setR1(summary.getR1() - summary.getC1());
+				dto.setTotalAmount(summary.getOfflineAmt());
+
+				dto.setAgentName(summary.getAgentName());
+				dto.setDenominationDate(summary.getDenominationDate());
+				dto.setFtreceiptNo(summary.getReceiptNo());
+				dto.setOnlineAmt(summary.getOnlineAmt());
+				dto.setOfflineAmt(summary.getOfflineAmt());
+//				dto.setTotalAmount(summary.getTotalAmount() - summary.getChangeReturn());
+				dto.setOnlineOfflineAmt(summary.getOfflineAmt() + summary.getOnlineAmt());
+
+				dtoList.add(dto);
 			}
-			return "DenominationSummary";
+
+			//
+
+			model.addAttribute("denominationSummaryList", dtoList);
 		}
-	
-	
+		return "DenominationSummary";
+	}
+
+	@GetMapping(path = "/viewMultipleDenomination")
+	public String GetMultipleDenominationPage(Model model, Authentication authentication) {
+
+		List<CollectionInfoModel> agents;
+		String userName = authentication.getName();
+
+		SimpleDateFormat ft = new SimpleDateFormat("dd-MMM-yy");
+
+		String str = ft.format(new Date());
+
+		agents = agentService.getMultipleCollectionList(userName, str);
+		System.out.println("agent======" + agents);
+		if (agents == null || agents.isEmpty()) {
+			String isDataMissing = "No data Found!";
+			model.addAttribute("isDataMissing", isDataMissing);
+		} else if (agents != null || !agents.isEmpty()) {
+			System.out.println("--------------" + agents.get(0));
+			model.addAttribute("MultipleCollectionList", agents);
+		}
+
+		return "MultipleDenominationInfo";
+	}
+
 	@GetMapping(path = "/hello")
 	public String sayHello(Model model) {
 		String username = agentService.sayHello();

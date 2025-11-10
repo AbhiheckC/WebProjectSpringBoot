@@ -223,7 +223,9 @@ input:checked + .slider:before {
   text-align: left;
 }
 
-
+.highlight-row {
+        background-color:rgb(192, 192, 192) !important; /* Light yellow or change as needed */
+    }
 
 /*#total{
 

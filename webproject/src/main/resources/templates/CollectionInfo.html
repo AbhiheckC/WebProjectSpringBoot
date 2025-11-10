@@ -55,6 +55,7 @@
 								<th>ग्राहक नाम</th>
 								<th>रसीद क्रमांक</th>
 								<th>पेमेंट</th>
+								<th>मल्टीपल डेनोमिनेशन</th>
 								<th>कलेक्शन राशि</th>
 								<!--<th></th>-->
 							</tr>
@@ -72,6 +73,7 @@
 								<td th:utext="${collection.localLanguageName}"></td>
 								<td th:text="${collection.receiptNo}"></td>
 								<td th:text="${collection.paymentMethod}"></td>
+								<td th:text="${collection.isMultipleDenomination}"></td>
 								<td th:text="${collection.collectionAmount}" id="collectionAMT"></td>
 								<input type="hidden" name="customerId" th:value="${collection.customerId}" />
 								<input type="hidden" name="collectionDate" th:value="${collection.collectionDate}" />
@@ -88,12 +90,12 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<!--<td></td>-->
+							<td></td>
 							<!--<td>TOTAL</td>
 									<td id="totalCollectionAmount"></td>
 									<td></td>-->
 							<tr class="table-dark" id="totalRow">
-								<td colspan="4"></td>
+								<td colspan="5"></td>
 								<td><strong>TOTAL</strong></td>
 								<td id="totalCollectionAmount"></td>
 							</tr>
@@ -132,7 +134,7 @@
 					if (row.id === 'totalRow') return;
 
 					const paymentCell = row.querySelector('td:nth-child(5)');
-					const amountCell = row.querySelector('td:nth-child(6)');
+					const amountCell = row.querySelector('td:nth-child(7)');
 
 					const method = paymentCell?.textContent.trim();
 					const amount = parseFloat(amountCell?.textContent.trim()) || 0;

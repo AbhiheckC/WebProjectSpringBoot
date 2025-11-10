@@ -18,6 +18,19 @@ public class CollectionInfoModel {
 	    private String agentId;
 	    
 	    private String paymentMethod;
+	    
+	    private String isMultipleDenomination;
+	    
+	    
+	    
+
+		public String getIsMultipleDenomination() {
+			return isMultipleDenomination;
+		}
+
+		public void setIsMultipleDenomination(String isMultipleDenomination) {
+			this.isMultipleDenomination = isMultipleDenomination;
+		}
 
 		public String getCustomerId() {
 			return customerId;

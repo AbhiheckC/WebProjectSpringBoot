@@ -52,6 +52,92 @@ public class DenominationSummaryEntity {
 	private Long changeReturn;
 	@Column(name = "onlineamt")
 	private Long onlineAmt;
+	
+	
+	
+	@Column(name = "c2000")
+	private Long c2000;
+	@Column(name = "c500")
+	private Long c500;
+	@Column(name = "c200")
+	private Long c200;
+	@Column(name = "c100")
+	private Long c100;
+	@Column(name = "c50")
+	private Long c50;
+	@Column(name = "c20")
+	private Long c20;
+	@Column(name = "c10")
+	private Long c10;
+	@Column(name = "c5")
+	private Long c5;
+	@Column(name = "c2")
+	private Long c2;
+	@Column(name = "c1")
+	private Long c1;
+	
+	
+	
+	public Long getC2000() {
+		return c2000;
+	}
+	public Long getC500() {
+		return c500;
+	}
+	public Long getC200() {
+		return c200;
+	}
+	public Long getC100() {
+		return c100;
+	}
+	public Long getC50() {
+		return c50;
+	}
+	public Long getC20() {
+		return c20;
+	}
+	public Long getC10() {
+		return c10;
+	}
+	public Long getC5() {
+		return c5;
+	}
+	public Long getC2() {
+		return c2;
+	}
+	public Long getC1() {
+		return c1;
+	}
+	public void setC2000(Long c2000) {
+		this.c2000 = c2000;
+	}
+	public void setC500(Long c500) {
+		this.c500 = c500;
+	}
+	public void setC200(Long c200) {
+		this.c200 = c200;
+	}
+	public void setC100(Long c100) {
+		this.c100 = c100;
+	}
+	public void setC50(Long c50) {
+		this.c50 = c50;
+	}
+	public void setC20(Long c20) {
+		this.c20 = c20;
+	}
+	public void setC10(Long c10) {
+		this.c10 = c10;
+	}
+	public void setC5(Long c5) {
+		this.c5 = c5;
+	}
+	public void setC2(Long c2) {
+		this.c2 = c2;
+	}
+	public void setC1(Long c1) {
+		this.c1 = c1;
+	}
 	public Long getSrNo() {
 		return srNo;
 	}

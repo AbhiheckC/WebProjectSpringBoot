@@ -25,6 +25,17 @@ public class AgentModel {
 	private String reviewDate;
 
     private Long receiptNo;
+    
+    private String localName;
+    
+
+	public String getLocalName() {
+		return localName;
+	}
+
+	public void setLocalName(String localName) {
+		this.localName = localName;
+	}
 
 	public String getAccountCode() {
 		return accountCode;

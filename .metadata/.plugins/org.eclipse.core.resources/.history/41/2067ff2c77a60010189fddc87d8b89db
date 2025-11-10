@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+  <style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 30px;
+      color: #000;
+    }
+
+    .receipt-container {
+      width: 100%;
+      max-width: 950px;
+      margin: auto;
+      border: 1px solid #000;
+      padding: 20px;
+    }
+
+h2 {
+			text-align: center;
+			margin-bottom: 10px;
+		}
+		
+			table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 15px;
+		}
+
+		th,
+		
+		td {
+			border: 1px solid #000;
+			padding: 6px;
+			text-align: center;
+		}
+
+    .header {
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .content-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .left-side {
+      width: 45%;
+      font-size: 16px;
+    }
+
+    .left-side .field {
+      margin-bottom: 10px;
+    }
+
+    .left-side .field label {
+      font-weight: bold;
+      display: inline-block;
+      width: 140px;
+    }
+
+    .right-side {
+      width: 50%;
+    }
+
+    .note-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+
+    .note-table th,
+    .note-table td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: center;
+    }
+
+    .total-row td {
+      font-weight: bold;
+    }
+
+    .amount-words {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .footer {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body  class="backgroundColor">
+ <header th:replace="includes/header :: header"></header>
+ <div class="col-sm-12 col-md-12">
+				<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+			</div>
+  <div class="receipt-container"  th:each="denom : ${denominationSummaryList}">
+   <div class="header">स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</div>
+
+    <div class="content-row">
+ <div class="field">
+          <label>सेवा मित्र का नाम:</label>
+          <span id="agentName" th:text="${denom.agentName}">राधिका शर्मा</span>
+        </div>
+        <div class="field">
+          <label>दिनांक:</label>
+          <span id="denominationDate" th:text="${denom.denominationDate}">10/10/2025</span>
+        </div>
+      <!-- LEFT SIDE: DETAILS -->
+      <div class="left-side">
+       
+        <div class="field">
+          <label>टेब:</label>
+          
+        </div>
+        <div class="field">
+          <label>रसीद नम्बर:</label>
+          <span id="receiptNo" th:text="${denom.receiptNo}">12345</span>
+        </div>
+       <!-- <div class="field">
+          <label>रसीद नम्बर:</label>
+          <span id="receiptNo" th:text="${denom.receiptNo}">12345</span>
+        </div>-->
+        <div class="field">
+          <label>ऑनलाइन:</label>
+          <span  id="onlineAmt" th:text="${denom.onlineAmt}">500</span>
+        </div>
+        <div class="field">
+          <label>बैंक मे जमा:</label>
+          <span  id="offlineAmt" th:text="${denom.offlineAmt}">4500</span>
+        </div>	
+        <div class="field">
+          <label>नगद:</label>
+          
+        </div>
+        <div class="field">
+          <label>अक्षरी रुपये:</label>
+          
+        </div>	
+					<!--<div class="summary">
+						<p><strong>बैंक मे जमा(Offline+Online):</strong> ₹<span id="OnlineofflineAmt"
+								th:text="${denom.offlineAmt+denom.onlineAmt}">4500</span></p>
+						<p><strong>ऑनलाइन प्राप्त राशि:</strong> ₹<span id="onlineAmt"
+								th:text="${denom.onlineAmt}">500</span>
+						</p>
+						<p><strong>ऑफलाइन (नगद) प्राप्त राशि:</strong> ₹<span id="offlineAmt"
+								th:text="${denom.offlineAmt}">4500</span></p>
+						<p><strong>वापसी राशि (Change Return):</strong> ₹<span id="changeReturn"
+								th:text="${denom.changeReturn}">0</span></p>
+
+						<p><strong>कुल राशि (Offline + Change):</strong> ₹<span id="totalAmount"
+								th:text="${denom.totalAmount}">5000</span></p>
+
+					</div>-->
+        <!--<div class="field">
+          <label>नगद:</label>
+          ₹ <span th:text="${denom.offlineAmt}">4000</span>
+        </div>-->
+      </div>
+
+      <!-- RIGHT SIDE: TABLE -->
+      <div class="right-side">
+        <table class="note-table">
+          <thead>
+            <tr>
+              <th>नोट</th>
+              <th>संख्या</th>
+              <th>रकम</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>500x</td>
+              <td th:text="${denom.r500}">2</td>
+              <td th:text="${denom.r500 * 500}">1000</td>
+            </tr>
+            <tr>
+              <td>200x</td>
+              <td th:text="${denom.r200}">2</td>
+              <td th:text="${denom.r200 * 200}">400</td>
+            </tr>
+            <tr>
+              <td>100x</td>
+              <td th:text="${denom.r100}">3</td>
+              <td th:text="${denom.r100 * 100}">300</td>
+            </tr>
+            <tr>
+              <td>50x</td>
+              <td th:text="${denom.r50}">2</td>
+              <td th:text="${denom.r50 * 50}">100</td>
+            </tr>
+            <tr>
+              <td>10x</td>
+              <td th:text="${denom.r10}">5</td>
+              <td th:text="${denom.r10 * 10}">50</td>
+            </tr>
+            <tr>
+              <td>5x</td>
+              <td th:text="${denom.r5}">1</td>
+              <td th:text="${denom.r5 * 5}">5</td>
+            </tr>
+            <tr>
+              <td>2x</td>
+              <td th:text="${denom.r2}">1</td>
+              <td th:text="${denom.r2 * 2}">2</td>
+            </tr>
+            <tr>
+              <td>1x</td>
+              <td th:text="${denom.r1}">1</td>
+              <td th:text="${denom.r1 * 1}">1</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="2">₹ कुल राशि</td>
+              <td th:text="${denom.totalAmount}">1858</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AMOUNT IN WORDS -->
+    <!--<div class="amount-words">
+      <strong>अक्षरी रुपये:</strong>
+      <span th:text="${denom.amountInWords}">एक हजार आठ सौ अठावन रुपये</span>
+    </div>-->
+
+    <!-- FOOTER SIGNATURES -->
+    <div class="footer">
+      <div>जांचकर्ता के हस्ताक्षर</div>
+      <div>कैश प्राप्तकर्ता के हस्ताक्षर</div>
+      <div>कैश जमाकर्ता के हस्ताक्षर</div>
+    </div>
+  </div>
+
+</body>
+
+</html>

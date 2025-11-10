@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!--<title>कलेक्शन</title> -->
+	<title>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</title>
+	<style th:replace="includes/style :: style"></style>
+	<link href="style/viewAgentStyle.css" rel="stylesheet" />
+	<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+	
+	<style>
+		/*denomination summary*/
+		body {
+			font-family: "Arial", sans-serif;
+			margin: 20px;
+			color: #000;
+		}
+
+		.receipt-container {
+			border: 2px solid #000;
+			padding: 20px;
+			width: 700px;
+			margin: auto;
+		}
+
+		h2 {
+			text-align: center;
+			margin-bottom: 10px;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 15px;
+		}
+
+		th,
+		td {
+			border: 1px solid #000;
+			padding: 6px;
+			text-align: center;
+		}
+
+		.note-header {
+			background-color: #f0f0f0;
+			font-weight: bold;
+		}
+
+		.details-row {
+			margin-bottom: 10px;
+		}
+
+		.details-row label {
+			font-weight: bold;
+			margin-right: 10px;
+		}
+
+		.summary {
+			margin-top: 15px;
+		}
+
+		.signature {
+			margin-top: 40px;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		/*******/
+	</style>
+	
+</head>
+
+<body class="backgroundColor">
+	<header th:replace="includes/header :: header"></header>
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-sm-12 col-md-12">
+				<a href="/myapp/home" class="btn btn-info text-white float-end">पीछे जाइये</a>
+			</div>
+			
+			<div class="receipt-container" th:each="denom : ${denominationSummaryList}">
+			<div id="printContent">
+				<div id="tableContent">
+					<h2>स्वश्रयी महिला सख सहकारी संस्था मर्यादित, इंदौर</h2>
+
+					<div class="details-row">
+						<label>दिनांक:</label> <span id="denominationDate"
+							th:text="${denom.denominationDate}">13/06/2025</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>एजेंट का नाम:</label> <span id="agentName" th:text="${denom.agentName}">राधिका
+							शर्मा</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>रसीद नं:</label> <span id="receiptNo" th:text="${denom.receiptNo}">1245</span>
+					</div>
+
+					<table>
+						<thead>
+							<tr class="note-header">
+								<th>नोट</th>
+								<th>संख्या</th>
+								<th>रकम</th>
+								</trclass="note-header">
+						</thead>
+						<tbody>
+							<tr>
+								<td>2000x</td>
+								<td th:text="${denom.r2000}">2</td>
+								<td th:text="${denom.r2000 * 2000}">1000</td>
+							</tr>
+							<tr>
+								<td>500x</td>
+								<td th:text="${denom.r500}">2</td>
+								<td th:text="${denom.r500 * 500}">1000</td>
+							</tr>
+							<tr>
+								<td>200x</td>
+								<td th:text="${denom.r200}">1</td>
+								<td th:text="${denom.r200 * 200}">200</td>
+							</tr>
+							<tr>
+								<td>100x</td>
+								<td th:text="${denom.r100}">4</td>
+								<td th:text="${denom.r100 * 100}">400</td>
+							</tr>
+							<tr>
+								<td>50x</td>
+								<td th:text="${denom.r50}">2</td>
+								<td th:text="${denom.r50 * 50}">100</td>
+							</tr>
+							<tr>
+								<td>10x</td>
+								<td th:text="${denom.r10}">5</td>
+								<td th:text="${denom.r10 * 10}">50</td>
+							</tr>
+							<tr>
+								<td>5x</td>
+								<td th:text="${denom.r5}">0</td>
+								<td th:text="${denom.r5 * 5}">0</td>
+							</tr>
+							<tr>
+								<td>2x</td>
+								<td th:text="${denom.r2}">0</td>
+								<td th:text="${denom.r2 * 2}">0</td>
+							</tr>
+							<tr>
+								<td>1x</td>
+								<td th:text="${denom.r1}">0</td>
+								<td th:text="${denom.r1 * 1}">0</td>
+							</tr>
+							<tr>
+								<td colspan="2"><strong>₹ डेनोमिनेशन प्राप्त राशि</strong></td>
+
+								<!----><td th:text="${denom.totalAmount}">5000</td>
+								<!--<td th:text="${(denom.r2000 ?: 0 * 2000) + (denom.r500 ?: 0 * 500) + (denom.r200 ?: 0 * 200) + (denom.r100 ?: 0 * 100) + (denom.r50 ?: 0 * 50) + (denom.r20 ?: 0 * 20) + (denom.r10 ?: 0 * 10) + (denom.r5 ?: 0 * 5) + (denom.r2 ?: 0 * 2) + (denom.r1 ?: 0 * 1)}">कुल</td>
+-->
+
+							</tr>
+						</tbody>
+					</table>
+					<!--<table>
+						<thead>
+							<tr class="note-header">
+								<th>नोट</th>
+								<th>₹2000</th>
+								<th>₹500</th>
+								<th>₹200</th>
+								<th>₹100</th>
+								<th>₹50</th>
+								<th>₹20</th>
+								<th>₹10</th>
+								<th>₹5</th>
+								<th>₹2</th>
+								<th>₹1</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>संख्या</td>
+								<td id="r2000" th:text="${denom.r2000}">1</td>
+								<td id="r500" th:text="${denom.r500}">2</td>
+								<td id="r200" th:text="${denom.r200}">1</td>
+								<td id="r100" th:text="${denom.r100}">4</td>
+								<td id="r50" th:text="${denom.r50}">2</td>
+								<td id="r20" th:text="${denom.r20}">3</td>
+								<td id="r10" th:text="${denom.r10}">5</td>
+								<td id="r5" th:text="${denom.r5}">0</td>
+								<td id="r2" th:text="${denom.r2}">0</td>
+								<td id="r1" th:text="${denom.r1}">0</td>
+							</tr>
+						</tbody>
+					</table>-->
+
+					<div class="summary">
+						<p><strong>बैंक मे जमा(Offline+Online):</strong> ₹<span id="OnlineofflineAmt"
+								th:text="${denom.offlineAmt+denom.onlineAmt}">4500</span></p>
+						<p><strong>ऑनलाइन प्राप्त राशि:</strong> ₹<span id="onlineAmt"
+								th:text="${denom.onlineAmt}">500</span>
+						</p>
+						<p><strong>ऑफलाइन (नगद) प्राप्त राशि:</strong> ₹<span id="offlineAmt"
+								th:text="${denom.offlineAmt}">4500</span></p>
+						<p><strong>वापसी राशि (Change Return):</strong> ₹<span id="changeReturn"
+								th:text="${denom.changeReturn}">0</span></p>
+
+						<p><strong>कुल राशि (Offline + Change):</strong> ₹<span id="totalAmount"
+								th:text="${denom.totalAmount}">5000</span></p>
+
+					</div>
+
+					<!--<div class="signature">
+						<span>केश प्राप्तकर्ता के हस्ताक्षर</span>
+						<span>एजेंट के हस्ताक्षर</span>
+					</div>-->
+				</div>
+			</div>
+
+		</div>
+			
+			
+			<div class="col-sm-12 col-md-12">
+				<h3 class="text-center heading" id="hehe">डेनोमिनेशन की जानकारी</h3>
+
+
+
+
+				<!--<form th:action="@{/getDenominationInfo}" method="post" class="singleInputButtonForm">
+					<input type="submit" class="submitBtn" value="Submit" />
+				</form>-->
+				<form id="denominationForm" method="post" class="singleInputButtonForm">
+    <div class="mb-2">
+        <label><input type="radio" name="type" value="collection"  th:checked="${selectedType == null or selectedType == 'collection'}"> कलेक्शन राशि</label>
+        &nbsp;&nbsp;
+        <label><input type="radio" name="type" value="return"  th:checked="${selectedType == 'return'}"> वापस राशि</label>
+    </div>
+    <input type="hidden" id="asondate" name="asondate" th:value="${#dates.format(#dates.createNow(), 'dd-MMM-yy')}" />
+    <input type="submit" class="submitBtn" value="Submit" />
+</form>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 col-md-12 mt-4" th:if="${denominationList != null}">
+				<!--<h3 class="heading text-center">कलेक्शन सूची</h3>-->
+				<!--<div class="text-center mb-3">
+					<label><strong>पेमेंट प्रकार:</strong></label>
+					<div></div>
+					<div class="radio-group">
+						<input type="radio" id="filterAll" name="paymentFilter" value="All" checked />
+						<label for="filterAll">All</label>
+
+						<input type="radio" id="filterOnline" name="paymentFilter" value="Online" />
+						<label for="filterOnline">Online</label>
+
+						<input type="radio" id="filterOffline" name="paymentFilter" value="Offline" />
+						<label for="filterOffline">Offline</label>
+					</div>-->
+				<!--</div>-->
+
+
+				<div class="text-center">
+					<div class="table-responsive" id="table">
+						<table class="table table-editable">
+							<thead class="thead">
+								<tr class="table-success">
+									<!--<th></th>-->
+									<!--<th>एजेंट नाम</th>-->
+									<th>रसीद क्रमांक</th>
+									<th>डेनोमिनेशन तारीख</th>
+									<th>ग्राहक क्रमांक</th>
+									<th>ग्राहक नाम</th>
+									<th>₹ 2000</th>
+									<th>₹ 500</th>
+									<th>₹ 200</th>
+									<th>₹ 100</th>
+									<th>₹ 50</th>
+									<th>₹ 20</th>
+									<th>₹ 10</th>
+									<th>₹ 5</th>
+									<th>₹ 2</th>
+									<th>₹ 1</th>
+									<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">डेनोमिनेशन राशि</th>
+									<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">जमा राशि</th>
+									<!--<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">ऑनलाइन राशि</th>-->
+									<!--<th th:style="${selectedType == 'return'} ? 'display:none;' : ''">कुल राशि</th>-->
+
+									<th>वापस राशि</th>
+									<!--<th>पेमेंट</th>-->
+									<!--<th></th>-->
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="denomination : ${denominationList}">
+									<!--<form th:action="@{/makeCollection0}" method="post"
+										th:object="${collectionInfoList}">-->
+									<!--<td>
+											<input class="form-check-input" type="checkbox" id="checkbox"
+												name="checkbox" th:value="${collection.customerId}">
+										</td>-->
+									<!--<td th:text="${denomination.agentName}"></td>-->
+
+									<td th:text="${denomination.receiptNo}"></td>
+									<td th:text="${denomination.asondate}"></td>
+									<td th:text="${denomination.customerId}"></td>
+									<td th:text="${denomination.customerName}" class="small-left"></td>
+									<td th:text="${denomination.r2000}"></td>
+									<td th:text="${denomination.r500}"></td>
+									<td th:text="${denomination.r200}"></td>
+									<td th:text="${denomination.r100}"></td>
+									<td th:text="${denomination.r50}"></td>
+									<td th:text="${denomination.r20}"></td>
+									<td th:text="${denomination.r10}"></td>
+									<td th:text="${denomination.r5}"></td>
+									<td th:text="${denomination.r2}"></td>
+									<td th:text="${denomination.r1}"></td>
+									<!--<td>
+									
+										<li th:each="note : ${denomination.denominations}"
+											th:text="'₹' + ${note.value} + ' × ' + ${note.count}"></li>
+								</td>-->
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.totalAmount}" id="totalAmt"></td>
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.amountReceived}"></td>
+									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.onlineAmt}"></td>-->
+									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" th:text="${denomination.onlineOfflineAmt}"></td>-->
+									<td th:text="${denomination.changeReturn}"></td>
+									<!--<input type="hidden" name="customerId" th:value="${collection.customerId}" />
+								<input type="hidden" name="collectionDate" th:value="${collection.collectionDate}" />
+								<input type="hidden" name="localLanguageName"
+									th:value="${collection.localLanguageName}" />
+								<input type="hidden" name="receiptNo" th:value="${collection.receiptNo}" />
+								<input type="hidden" name="collectionAmount"
+									th:value="${collection.collectionAmount}" />-->
+									<!--<td><input type="submit" class="btn btn-success" value="Cancel" /></td>-->
+									<!--</form>-->
+								</tr>
+								<!--<tr class="table-dark">-->
+								<!--	<td></td>
+								<td>TOTAL</td>
+									<td id="totalCollectionAmount"></td>
+									<td></td>
+							
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>-->
+
+								<!--	<tr class="table-dark" id="totalRow">
+								<td colspan="4"></td>
+								<td><strong>TOTAL</strong></td>
+								<td id="totalCollectionAmount"></td>
+							</tr>-->
+								<!--</tr>-->
+							</tbody>
+							<tfoot>
+								<tr class="table-dark">
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><strong>कुल</strong></td>
+									<td id="totalR2000"></td>
+									<td id="totalR500"></td>
+									<td id="totalR200"></td>
+									<td id="totalR100"></td>
+									<td id="totalR50"></td>
+									<td id="totalR20"></td>
+									<td id="totalR10"></td>
+									<td id="totalR5"></td>
+									<td id="totalR2"></td>
+									<td id="totalR1"></td>
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandTotalAmount"></td>
+									<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandAmountReceived"></td>
+									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandonlineAmt"></td>-->
+									<!--<td th:style="${selectedType == 'return'} ? 'display:none;' : ''" id="grandonlineofflineAmt"></td>-->
+									<td id="grandChangeReturn"></td>
+								</tr>
+							</tfoot>
+						</table>
+						<!--				<div class="container mt-4">
+    <h4 class="mb-3 text-center">कुल डेनोमिनेशन</h4>
+     <div class="row g-3" >
+		  <div class="col-md-4">
+            <label class="form-label">₹ नोट मूल्य</label>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">नोट संख्या</label>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">एकूण राशि</label>
+        </div>
+     </div>
+    <div class="row g-3" th:each="denominationview : ${denominationViewList}">
+        <div class="col-md-4">
+            <input type="text" class="form-control" th:value="${denominationview.noteValue}" readonly>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" th:value="${denominationview.noOfNotes}" readonly>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" th:value="${denominationview.totalAmt}" readonly>
+        </div>
+    </div>
+</div>-->
+
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+	<!--</div>-->
+	<script th:replace="includes/script :: script"></script>
+	<script th:if="${isDataMissing != null}" th:inline="javascript">
+		alert("No data available!");
+	</script>
+	<script th:if="${isCollectionSaved != null}" th:inline="javascript">
+		//alert(th:text = "${isCollectionSaved}");
+		alert([[${#strings.escapeJavaScript(isCollectionSaved)}]]);
+	</script>
+
+	<!-- Total calculation script -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			let rows = document.querySelectorAll("table tbody tr");
+
+			let totalR2000 = 0;
+			let totalR500 = 0;
+			let totalR200 = 0;
+			let totalR100 = 0;
+			let totalR50 = 0;
+			let totalR20 = 0;
+			let totalR10 = 0;
+			let totalR5 = 0;
+			let totalR2 = 0;
+			let totalR1 = 0;
+			let totalAmount = 0;
+			let amountReceived = 0;
+			let changeReturn = 0;
+		
+
+			rows.forEach((row) => {
+				let cells = row.querySelectorAll("td");
+				if (cells.length >= 12) {
+					totalR2000 += parseInt(cells[4].innerText) || 0;
+					totalR500 += parseInt(cells[5].innerText) || 0;
+					totalR200 += parseInt(cells[6].innerText) || 0;
+					totalR100 += parseInt(cells[7].innerText) || 0;
+					totalR50 += parseInt(cells[8].innerText) || 0;
+					totalR20 += parseInt(cells[9].innerText) || 0;
+					totalR10 += parseInt(cells[10].innerText) || 0;
+					totalR5 += parseInt(cells[11].innerText) || 0;
+					totalR2 += parseInt(cells[12].innerText) || 0;
+					totalR1 += parseInt(cells[13].innerText) || 0;
+					totalAmount += parseFloat(cells[14].innerText) || 0;
+					amountReceived += parseFloat(cells[15].innerText) || 0;
+					changeReturn += parseFloat(cells[16].innerText) || 0;
+				}
+			});
+
+			document.getElementById("totalR2000").innerText = totalR2000;
+			document.getElementById("totalR500").innerText = totalR500;
+			document.getElementById("totalR200").innerText = totalR200;
+			document.getElementById("totalR100").innerText = totalR100;
+			document.getElementById("totalR50").innerText = totalR50;
+			document.getElementById("totalR20").innerText = totalR20;
+			document.getElementById("totalR10").innerText = totalR10;
+			document.getElementById("totalR5").innerText = totalR5;
+			document.getElementById("totalR2").innerText = totalR2;
+			document.getElementById("totalR1").innerText = totalR1;
+			document.getElementById("grandTotalAmount").innerText = totalAmount.toFixed(2);
+			document.getElementById("grandAmountReceived").innerText = amountReceived.toFixed(2);
+			document.getElementById("grandChangeReturn").innerText = changeReturn.toFixed(2);
+		});
+	</script>
+
+<!--
+		let onlineAmt = 0;
+			let onlineofflineAmt = 0;
+	
+		onlineAmt += parseFloat(cells[16].innerText) || 0;
+					onlineofflineAmt += parseFloat(cells[17].innerText) || 0;
+	
+	document.getElementById("grandonlineAmt").innerText = onlineAmt.toFixed(2);
+			document.getElementById("grandonlineofflineAmt").innerText = onlineofflineAmt.toFixed(2);
+	
+-->
+<script>
+    document.getElementById("denominationForm").addEventListener("submit", function (event) {
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
+        if (selectedType === "collection") {
+            this.action = "/myapp/getDenominationInfo"; // Existing API
+        } else if (selectedType === "return") {
+            this.action = "/myapp/getReturnDenominationInfo"; // Another API (change this as needed)
+        }
+    });
+</script>
+
+
+<!--<script>
+    document.getElementById('denominationForm').addEventListener('submit', function (e) {
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
+        this.action = `/myapp/getDenominationInfo/${selectedType}`;
+    });
+</script>-->
+
+	<!--<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const radios = document.getElementsByName('paymentFilter');
+			const tbody = document.querySelector('table tbody');
+			const totalRow = document.getElementById('totalRow');
+			const totalCell = document.getElementById('totalCollectionAmount');
+
+			function updateTable(selectedValue) {
+				const rows = tbody.querySelectorAll('tr');
+				let total = 0;
+
+				rows.forEach(row => {
+					// Skip the total row from logic
+					if (row.id === 'totalRow') return;
+
+					const paymentCell = row.querySelector('td:nth-child(5)');
+					const amountCell = row.querySelector('td:nth-child(6)');
+
+					const method = paymentCell?.textContent.trim();
+					const amount = parseFloat(amountCell?.textContent.trim()) || 0;
+
+					const shouldShow = selectedValue === 'All' || method === selectedValue;
+					row.style.display = shouldShow ? '' : 'none';
+
+					if (shouldShow) {
+						total += amount;
+					}
+				});
+
+				// Update and re-append the total row to keep it at the end
+				totalCell.textContent = total.toFixed(2);
+				tbody.appendChild(totalRow); // move it to the end
+			}
+
+			// Attach event listeners
+			radios.forEach(radio => {
+				radio.addEventListener('change', () => {
+					updateTable(radio.value);
+				});
+			});
+
+			// Initial load
+			updateTable('All');
+		});
+	</script>-->
+
+
+	<!--<script>
+		window.addEventListener('DOMContentLoaded', function () {
+			const collectionAmountCells = document.querySelectorAll('#collectionAMT');
+			let totalCollectionAmount = 0;
+			collectionAmountCells.forEach(function (cell) {
+				totalCollectionAmount += parseFloat(cell.textContent);
+			});
+			const totalCollectionAmountElement = document.getElementById('totalCollectionAmount');
+			totalCollectionAmountElement.textContent = totalCollectionAmount;
+		});
+	</script>-->
+	<!--<footer th:replace="includes/footer :: footer"></footer>-->
+</body>
+
+</html>

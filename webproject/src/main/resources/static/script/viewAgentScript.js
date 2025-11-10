@@ -9,6 +9,7 @@ function handleResponse(response) {
 }
 
 
+
 ///// TO GIVE RECEIPT NUMBER TO ALL OF THE INPUTS IN TABLE ROW THAT ARE HIDDEN FROM THE INPUT ABOVE THE TABLE
 const input1 = document.getElementById('receiptNoInput');
 const input1value = input1.value;
@@ -42,6 +43,21 @@ const buttons = document.querySelectorAll('#saveBtn');
 buttons.forEach(button => {
 	button.addEventListener('click', function() {
 		// this.style.background = "#FF0000";
+		
+		const customerId = document.getElementById('denominationCustomerId').value;
+	  const mainParticular = document.getElementById('mainParticular').value;
+		
+		
+		console.log("customerId===",customerId.trim())
+	console.log("mainParticular===",mainParticular)
+		if(customerId=="0"){
+			if(mainParticular==""){
+		//  alert("कृपया particular ऐड करे.");
+        return;
+        }
+	}
+		
+		
 		this.style.display = 'none';
 	});
 });
@@ -49,12 +65,22 @@ buttons.forEach(button => {
 document.querySelectorAll('tr').forEach(row => {
 	const radios = row.querySelectorAll('input[name="paymentMethod"]');
 	const saveBtn = row.querySelector('#saveBtn');
+const collectionamount = document.querySelectorAll('#collectionAmount');
+
 
 	radios.forEach(radio => {
 		radio.addEventListener('change', () => {
 			// Enable save button only if one radio is checked
 			const isChecked = Array.from(radios).some(r => r.checked);
 			saveBtn.disabled = !isChecked;
+			
+		/*		collectionamount.forEach((input) => {
+					 console.log("collectionamount====",input.value.trim(),"====")
+		if (input.value.trim() == " ") {
+			saveBtn.disabled=isChecked;
+		}
+		});*/
+			
 		});
 	});
 });
@@ -83,10 +109,9 @@ function totalAmount() {
         alert("कृपया पहले पेमेंट मोड (ऑफलाइन या ऑनलाइन) चुनें।");
         return;
     }
-	
-	
-	
-	
+	const customerId = document.getElementById('denominationCustomerId').value;
+	console.log("customerId===",customerId)
+
 	console.log("total =====total;", total)
 	document.getElementById('total').style.display = "block"
 	//document.getElementById('total').textContent = total;
@@ -95,16 +120,29 @@ function totalAmount() {
 	
 	
 	//if online then dont want to display modal
+		const receiptNo =  document.getElementById("receiptNo").value;
+
+const asondate = document.getElementById("asondate").value;
 	if(onlineChecked){
-		 alert("डेनोमिनेशन की केवल ऑफ़लाइन राशि के लिए अनुमति है");
+	//	 alert("डेनोमिनेशन की केवल ऑफ़लाइन राशि के लिए अनुमति है");
+		 	 window.location.href = `/myapp/printCollectionAfterConfirm?customerId=${encodeURIComponent(customerId)}&receiptNo=${encodeURIComponent(receiptNo)}&asondate=${encodeURIComponent(asondate)}`;
+
 		return;
 	}
 	
+	
+const isMultiple = document.getElementById("isMultipleDenomination").value;
+	  //console.log("isMultiple====",isMultiple)
+	  if (isMultiple && isMultiple === "Y") {
+          alert("कृपया मल्टीपल डेनोमिनेशन से डेनोमिनेशन ऐड करे.");
+            return; // Do nothing
+        }
 	
 	 document.querySelectorAll('tr').forEach(row => {
         const collectionInput = row.querySelector('input[name="collectionAmount"]');
         const paymentRadio = row.querySelector('input[name="paymentMethod"]:checked');
 
+  
         if (collectionInput && paymentRadio) {
             const amount = parseFloat(collectionInput.value) || 0;
        
@@ -223,13 +261,10 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
 	const modal = document.getElementById('denominationModal');
 	const openButtons = document.querySelectorAll('.openDenominationModal');
-	const cancelBtn = document.getElementById('cancelDenomination');
-	const confirmBtn = document.getElementById('confirmDenomination');
-
+	//const cancelBtn = document.getElementById('cancelDenomination');
 	
-	let currentForm = null;
-
-	openButtons.forEach(button => {
+console.log("Buttons found:", openButtons.length);
+	/*openButtons.forEach(button => {
 		button.addEventListener('click', function () {
 			currentForm = this.closest('form');
 			  const customerId = this.getAttribute("data-customer-id");
@@ -238,11 +273,18 @@ console.log("customerId data----", customerId)
         document.getElementById("denominationCustomerId").value = customerId;
 			modal.style.display = 'block';
 		});
-	});
+	});*/
 
-	cancelBtn.addEventListener('click', function () {
+const customerId = document.getElementById('customerIdSpan')?.textContent?.trim();
+    console.log("Customer ID from outside form:", customerId);
+
+    // Set it in the modal input
+    document.getElementById("denominationCustomerId").value = customerId;
+//modal.style.display = 'block';
+
+	/*cancelBtn.addEventListener('click', function () {
 		modal.style.display = 'none';
-	});
+	});*/
 
 	// Elements
 	const noteInputs = [
@@ -258,16 +300,43 @@ console.log("customerId data----", customerId)
 		{ id: "r1", value: 1 }
 	];
 
+
+// Elements
+	const changenoteInputs = [
+		{ id: "c2000", value: 2000 },
+		{ id: "c500", value: 500 },
+		{ id: "c200", value: 200 },
+		{ id: "c100", value: 100 },
+		{ id: "c50", value: 50 },
+		{ id: "c20", value: 20 },
+		{ id: "c10", value: 10 },
+		{ id: "c5", value: 5 },
+		{ id: "c2", value: 2 },
+		{ id: "c1", value: 1 }
+	];
+
 	const amountReceivedInput = document.getElementById("amountReceived");
 	const totalDenominationEl = document.getElementById("totalDenomination");
 	const changeReturnEl = document.getElementById("changeReturn");
+const totalChangeEl = document.getElementById("totalChange");
+
 
 	noteInputs.forEach(note => {
 		const input = document.getElementById(note.id);
 		input.addEventListener('input', calculateTotals);
 	});
 
+changenoteInputs.forEach(note => {
+		const input = document.getElementById(note.id);
+		input.addEventListener('input', calculateTotals);
+	});
+
 	amountReceivedInput.addEventListener('input', calculateTotals);
+
+
+	
+
+
 
 	function calculateTotals() {
 		let total = 0;
@@ -276,11 +345,24 @@ console.log("customerId data----", customerId)
 			total += count * note.value;
 		});
 		totalDenominationEl.textContent = total;
+		
+		
+		let changetotall = 0;
+		changenoteInputs.forEach(note => {
+			const count = parseInt(document.getElementById(note.id).value) || 0;
+			changetotall += count * note.value;
+		});
+		totalChangeEl.textContent = changetotall;
+		
 
 		const received = parseInt(amountReceivedInput.value) || 0;
 		const change = total - received;
 		changeReturnEl.textContent = change > 0 ? change : 0;
 	}
+	
+	
+	
+	
 	
 	
 });
@@ -314,6 +396,20 @@ console.log("customerId data----", customerId)
 });*/
 
 
+document.addEventListener('DOMContentLoaded', function () {
+		const confirmBtn = document.getElementById('confirmDenomination');
+
+		confirmBtn.addEventListener('click', function () {
+			confirmBtn.disabled = true; // disable the button
+			confirmBtn.textContent = '⏳ Processing...'; // optional: show feedback
+
+			// ✅ Continue your logic here (like form submission or other actions)
+			// e.g., submit hidden form or trigger next step
+			// document.getElementById('hiddenForm').submit();
+		});
+	});
+
+
 /*******************SAVE DENOMINATION CONFIRM***************/
 document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("confirmDenomination").addEventListener("click", function () {
@@ -321,6 +417,7 @@ document.getElementById("confirmDenomination").addEventListener("click", functio
 	const amountReceivedInput = document.getElementById("amountReceived");
 		const amountReceived = parseInt(document.getElementById("amountReceived").value) || 0;
 
+	const changeReturnreceived = parseInt(document.getElementById("changeReturn").textContent) || 0;
 
 	if (!amountReceived || amountReceived <= 0) {
 		alert("कृपया प्राप्त राशि दर्ज करें");
@@ -337,6 +434,21 @@ document.getElementById("confirmDenomination").addEventListener("click", functio
 	
 	if (amountReceived > totalAmount) {
 		alert("कृपया डेनोमिनेशन नोट और डेनोमिनेशन राशि चेक करें");
+		return;
+	}
+	
+	const totalChangeAmount = parseInt(document.getElementById("totalChange").textContent) || 0;
+	
+	if(changeReturnreceived != 0){
+	if (!totalChangeAmount || totalChangeAmount <= 0) {
+		alert("कृपया चेन्ज डेनोमिनेशन नोट दर्ज करें");
+		return;
+	}
+	}
+	console.log("totalChangeAmount data", totalChangeAmount)
+	console.log("changeReturnreceived data", changeReturnreceived)
+	if (changeReturnreceived != totalChangeAmount) {
+		alert("कृपया चेन्ज डेनोमिनेशन नोट और चेन्ज डेनोमिनेशन राशि चेक करें");
 		return;
 	}
 	
@@ -440,17 +552,33 @@ console.log("denomination data", data)
     document.getElementById('totalDenomination').innerText = "0";
     document.getElementById('changeReturn').innerText = "0";
 		document.getElementById("denominationModal").style.display = "none";
+		
+		
+		console.log("customerId data", customerId)
+		console.log("receiptNo data", receiptNo)
+		console.log("collectionDate data", asondate)
+		document.getElementById("customerId").value = customerId;
+		document.getElementById("receiptNo").value = receiptNo;
+		document.getElementById("asondate").value = asondate;
+		
+		
+	// Redirect to ViewAgent page 
+	// window.location.href = '/myapp/printCollection';
+	//	window.location.href = '/myapp/viewAgent';
+	 window.location.href = `/myapp/printCollectionAfterConfirm?customerId=${encodeURIComponent(customerId)}&receiptNo=${encodeURIComponent(receiptNo)}&asondate=${encodeURIComponent(asondate)}`;
+
 	})
 	.catch(error => {
 		console.error('Error:', error);
 		alert('Failed to save denomination.');
+		window.location.href = '/myapp/viewAgent';
 	});
 });
 });
 
 
 // Cancel button in modal
-document.addEventListener("DOMContentLoaded", function () {
+/*document.addEventListener("DOMContentLoaded", function () {
 	document.getElementById('cancelDenomination').addEventListener('click', function () {
 		
 		 const total = parseInt(document.getElementById('totalDenomination').innerText);
@@ -473,8 +601,39 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.getElementById('denominationModal').style.display = 'none';
 		window.collectionFormToSubmit = null;
 	});
-});
+});*/
 /**/
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to update total
+    function updateTotal() {
+        const collectionamount = document.querySelectorAll('#collectionAmount');
+        let total = 0;
+
+        collectionamount.forEach((input) => {
+            let value = parseFloat(input.value);
+            if (isNaN(value)) value = 0;
+            total += value;
+        });
+
+        // Set the total value
+        document.getElementById('total').value = total;//.toFixed(2);
+    }
+
+    // Attach 'input' event listener to all collectionAmount fields
+    const inputs = document.querySelectorAll('#collectionAmount');
+    inputs.forEach(input => {
+        input.addEventListener('input', updateTotal);
+    });
+
+    // Initial total calculation in case some fields have default values
+    updateTotal();
+});
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
 	const accountCode = document.querySelectorAll('#accountCode');
@@ -485,12 +644,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		const substring = input.value.substring(4, 7);
 
-		if (substring === "901" || substring === "902" || substring === "401" || substring === "402") {
+		if (substring === "901" || substring === "401" || substring === "402") {
 			//var collectionAmountInput = document.getElementById('collectionAmount');
 			// collectionAmountInput.disabled = true;
 			console.log("disable code", input.value.substring(4, 7))
 			const collectionAmountInput = input.closest('tr').querySelector('#collectionAmount');
 			const collsavebtn = input.closest('tr').querySelector('#saveBtn');
+		
 			// Disable the collectionAmount input if it exists
 			if (collectionAmountInput) {
 				collectionAmountInput.disabled = true;
@@ -509,6 +669,52 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Ensure the accountCode is a string and check if it contains "901"
 	//    collectionAmountInput.disabled = true;
 
+});
+
+/*window.addEventListener('DOMContentLoaded', () => {
+	updateMultiDenominationFlag();
+	});*/
+
+//function updateMultiDenominationFlag() {
+	document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById('multiDenominationCheckbox');
+    const hiddenInput = document.getElementById('isMultipleDenominationInput');
+    hiddenInput.value = checkbox.checked ? 'Y' : 'N';
+   
+      const isMultipleDenomination = document.querySelectorAll('#isMultipleDenomination');
+    for (var i = 0; i < isMultipleDenomination.length; i++) {
+		isMultipleDenomination[i].value = 'N';
+	}
+    
+    checkbox.addEventListener('change', function() {
+		var isChecked = checkbox.checked;
+		var selectedValue = isChecked ? 'Y' : 'N';
+		for (var i = 0; i < isMultipleDenomination.length; i++) {
+			isMultipleDenomination[i].value = selectedValue;
+		}
+		});
+    console.log("Multiple Denomination:", hiddenInput.value);
+    });
+//}
+
+
+
+// for Particular
+document.addEventListener('DOMContentLoaded', function () {
+    const mainParticular = document.getElementById('mainParticular');
+    const hiddenParticularInputs = document.querySelectorAll('.particularHidden');
+
+    // Initialize all hidden fields as empty
+    hiddenParticularInputs.forEach(input => input.value = '');
+
+    // Whenever user types or changes "Particular", update all hidden inputs
+    mainParticular.addEventListener('input', function () {
+        const value = mainParticular.value.trim();
+        hiddenParticularInputs.forEach(input => {
+            input.value = value;
+        });
+       // console.log("✅ Particular updated for all forms:", value);
+    });
 });
 
 
