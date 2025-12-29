@@ -31,6 +31,25 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 });
 
+
+/********************VALIDATION FOR POSITIVE VALUES*******************************/
+document.querySelectorAll('input[type="number"][id^="r"]').forEach(input => {
+  input.addEventListener('input', () => {
+    input.value = input.value.replace(/[^0-9]/g, '0');
+    if (input.value < 0) input.value = 0;
+  });
+});
+
+document.querySelectorAll('input[type="number"][id^="c"]').forEach(input => {
+  input.addEventListener('input', () => {
+    input.value = input.value.replace(/[^0-9]/g, '0');
+    if (input.value < 0) input.value = 0;
+  });
+});
+/********************************************************************************/
+
+
+
 //input1.addEventListener('input', () => {
 //	updateInputValues(input1.value);
 //});
@@ -52,7 +71,7 @@ buttons.forEach(button => {
 	console.log("mainParticular===",mainParticular)
 		if(customerId=="0"){
 			if(mainParticular==""){
-		//  alert("कृपया particular ऐड करे.");
+		  alert("Please Enter particular for GL Entry.");
         return;
         }
 	}
@@ -88,82 +107,193 @@ const collectionamount = document.querySelectorAll('#collectionAmount');
 ///// TO MAKE THE TOTAL OF THE COLLECION AMOUNT FROM THE TABLE INPUT
 const collectionamount = document.querySelectorAll('#collectionAmount');
 //document.getElementById('total').style.display = "none"
-var total;
-function totalAmount() {
-	total = 0
-	  let offlineTotal = 0;
+//var total;
+function totalAmount(event) {
+	event.preventDefault(); // stop normal form submit (we’ll do it manually)
+    let total = 0;
+    let offlineTotal = 0;
     let onlineTotal = 0;
-	collectionamount.forEach((input) => {
-		if (input.value == "") {
-			input.value = 0;
-		}
-		var no = parseInt(input.value);
-		console.log("fhsdklfjsdlkfjflk;", no)
-		total += no;
-	});
-	
-	 const offlineChecked = document.querySelector('input[type="radio"][value="Offline"]:checked');
-    const onlineChecked = document.querySelector('input[type="radio"][value="Online"]:checked');
+    let validationFailed = false;
 
-    if (!offlineChecked && !onlineChecked) {
-        alert("कृपया पहले पेमेंट मोड (ऑफलाइन या ऑनलाइन) चुनें।");
-        return;
-    }
-	const customerId = document.getElementById('denominationCustomerId').value;
-	console.log("customerId===",customerId)
+    const rows = document.querySelectorAll("tbody tr");
+    const customerId = document.getElementById('denominationCustomerId')?.value || '';
+    const particularInput = document.getElementById('mainParticular'); 
 
-	console.log("total =====total;", total)
-	document.getElementById('total').style.display = "block"
-	//document.getElementById('total').textContent = total;
-	document.getElementById('total').value = total;
-	/*document.getElementById('amountReceived').value = total;*/
-	
-	
-	//if online then dont want to display modal
-		const receiptNo =  document.getElementById("receiptNo").value;
-
-const asondate = document.getElementById("asondate").value;
-	if(onlineChecked){
-	//	 alert("डेनोमिनेशन की केवल ऑफ़लाइन राशि के लिए अनुमति है");
-		 	 window.location.href = `/myapp/printCollectionAfterConfirm?customerId=${encodeURIComponent(customerId)}&receiptNo=${encodeURIComponent(receiptNo)}&asondate=${encodeURIComponent(asondate)}`;
-
-		return;
-	}
-	
-	
-const isMultiple = document.getElementById("isMultipleDenomination").value;
-	  //console.log("isMultiple====",isMultiple)
-	  if (isMultiple && isMultiple === "Y") {
-          alert("कृपया मल्टीपल डेनोमिनेशन से डेनोमिनेशन ऐड करे.");
-            return; // Do nothing
+// ✅ 1️⃣ Validation: If customerId is 0 → "Particular" is mandatory
+    if (customerId === "0") {
+        const particularValue = particularInput?.value.trim() || "";
+        if (particularValue === "") {
+            alert("❌ कृपया GL एंट्री के लिए PARTICULAR दर्ज करें।");
+            if (particularInput) particularInput.focus();
+            if (event) event.preventDefault();
+            return false;
         }
-	
-	 document.querySelectorAll('tr').forEach(row => {
-        const collectionInput = row.querySelector('input[name="collectionAmount"]');
-        const paymentRadio = row.querySelector('input[name="paymentMethod"]:checked');
-
-  
-        if (collectionInput && paymentRadio) {
-            const amount = parseFloat(collectionInput.value) || 0;
-       
-
-            if (paymentRadio.value === 'Offline') {
-                offlineTotal += amount;
-            } else if (paymentRadio.value === 'Online') {
-                onlineTotal += amount;
-            }
-        }
-     /*   console.log("onlineTotal =====onlineTotal;", onlineTotal)*/
-         document.getElementById("amountReceived").value = offlineTotal;
-    document.getElementById("onlineAmt").value = onlineTotal;
-    });
-	
-	 const modal = document.getElementById('denominationModal');
-    if (modal) {
-        modal.style.display = 'block';
     }
-	
+    let hasOffline = false;
+let hasOnline = false;
+    
+    rows.forEach((row, index) => {
+        // ✅ find input dynamically by partial name match
+        const collectionInput = row.querySelector('input[name*=".collectionAmount"]');
+        const amount = parseFloat(collectionInput?.value || 0);
+        const checkedRadio = row.querySelector('input[type="radio"][name*=".paymentMethod"]:checked');
+        const accountCodeInput = row.querySelector('input[name*=".accountCode"]');
+        const accountCode = accountCodeInput?.value;
+        
+        // 🧠 Debug log (you can open console to verify)
+        //console.log(`Row ${index + 1} → Amount: ${amount}, Payment: ${checkedRadio?.value || 'None'}`);
+
+
+ // ✅ 2️⃣ Validation: If payment mode selected → amount must be > 0
+        if (checkedRadio && amount <= 0) {
+          //  alert(`कृपया पंक्ति ${index + 1} के लिए संग्रह राशि दर्ज करें।`);
+             alert(`❌ कृपया खाता क्रं. ${accountCode} के लिए कलेक्शन राशि दर्ज करें।`);
+            collectionInput?.focus();
+            validationFailed = true;
+            return;
+        }
+
+
+
+        if (amount > 0 && !checkedRadio) {
+            alert(`❌ कृपया खाता क्रं. ${accountCode} के लिए पेमेंट मोड (ऑफलाइन या ऑनलाइन) चुनें।`);
+            validationFailed = true;
+            return;
+        }
+
+if (checkedRadio) {
+        if (checkedRadio.value === "Offline") hasOffline = true;
+        if (checkedRadio.value === "Online") hasOnline = true;
+          // ❌ If both payment modes selected → show error and stop process
+if (hasOffline && hasOnline) {
+    alert("⚠️ आप ऑफलाइन और ऑनलाइन दोनों पेमेंट मोड एक साथ नहीं चुन सकते!\nकृपया एक रसीद के लिए एक ही पेमेंट मोड चुनें।");
+     validationFailed = true;
+            return;
 }
+        
+    }
+    
+  
+
+
+        total += amount;
+        if (checkedRadio) {
+            if (checkedRadio.value === 'Offline') offlineTotal += amount;
+            else if (checkedRadio.value === 'Online') onlineTotal += amount;
+        }
+    });
+
+
+    if (validationFailed) {
+        if (event) event.preventDefault();
+        console.log("❌ Validation failed — data not saved.");
+        return false;
+    }
+
+// ✅ NEW VALIDATION: must have at least one nonzero collection
+if (total === 0) {
+    alert("❌ कृपया कम से कम एक कलेक्शन राशि दर्ज करें। (Please enter at least one collection amount)");
+    if (event) event.preventDefault();
+    return false;
+}
+
+
+    // ✅ Update totals
+    document.getElementById('total').style.display = "block";
+    document.getElementById('total').value = total;
+
+    const amountReceived = document.getElementById("amountReceived");
+    const onlineAmt = document.getElementById("onlineAmt");
+    if (amountReceived) amountReceived.value = offlineTotal;
+    if (onlineAmt) onlineAmt.value = onlineTotal;
+
+  // const customerId = document.getElementById('denominationCustomerId')?.value || '';
+    const receiptNo = document.getElementById('receiptNo')?.value || '';
+    const asondate = document.getElementById('asondate')?.value || '';
+
+//Multiple denomination collection logic
+    const isMultiple = document.getElementById("isMultipleDenomination")?.value;
+    if (isMultiple === "Y") {
+        alert("❌ कृपया मल्टीपल डेनोमिनेशन से डेनोमिनेशन ऐड करे.");
+        	 // 🧩 Step 3: Show loader
+    	showLoader(true);
+        console.log("🟢 Online collection found — saving directly.");
+        const form = document.getElementById('collectionForm');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(text => {
+            console.log("Server response:", text);
+            if (text.includes("Saved Successfully") || text.includes("success")) {
+                // ✅ Only redirect if save was successful
+                window.location.href = `/myapp/printCollectionAfterConfirm?customerId=${encodeURIComponent(customerId)}&receiptNo=${encodeURIComponent(receiptNo)}&asondate=${encodeURIComponent(asondate)}`;
+            } else {
+                alert("❌ कलेक्शन सेव करने में त्रुटि हुई। कृपया पुनः प्रयास करें।");
+                console.error("Save failed response:", text);
+            }
+        })
+        .catch(err => {
+			showLoader(false);
+            console.error("❌ Error saving collection:", err);
+            alert("❌ सर्वर त्रुटि: कलेक्शन सेव नहीं हुआ।");
+        });
+        return false; // stop normal form submit
+      //  if (event) event.preventDefault();
+       // return false;
+    }
+
+ 
+
+  // ✅ If any Online collection exists → save directly without denomination
+    if (onlineTotal > 0) {
+		 // 🧩 Step 3: Show loader
+    	showLoader(true);
+        console.log("🟢 Online collection found — saving directly.");
+
+        const form = document.getElementById('collectionForm');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(text => {
+            console.log("Server response:", text);
+            if (text.includes("Saved Successfully") || text.includes("success")) {
+                // ✅ Only redirect if save was successful
+                window.location.href = `/myapp/printCollectionAfterConfirm?customerId=${encodeURIComponent(customerId)}&receiptNo=${encodeURIComponent(receiptNo)}&asondate=${encodeURIComponent(asondate)}`;
+            } else {
+				showLoader(false);
+                alert("❌ कलेक्शन सेव करने में त्रुटि हुई। कृपया पुनः प्रयास करें।");
+                console.error("Save failed response:", text);
+            }
+        })
+        .catch(err => {
+			showLoader(false);
+            console.error("❌ Error saving collection:", err);
+            alert("❌ सर्वर त्रुटि: कलेक्शन सेव नहीं हुआ।");
+        });
+        return false; // stop normal form submit
+    }
+
+
+
+    const modal = document.getElementById('denominationModal');
+    if (modal && offlineTotal > 0) {
+        modal.style.display = 'block';
+        if (event) event.preventDefault();
+        return false;
+    }
+
+    document.getElementById('collectionForm').submit();
+    return true;
+}
+
 
 
 ///// TO GET THE VALUE FROM SEND SMS CHECKBOX SWITCH TO INPUT TEXT IN FORM
@@ -204,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Get all the checkboxes
+/*// Get all the checkboxes
 var onlinecheckboxes = document.querySelectorAll('#online');
 
 const onlinePaymentInput = document.querySelectorAll('#onlinePaymentInput');
@@ -253,8 +383,26 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-});
+});*/
 
+document.addEventListener("DOMContentLoaded", function() {
+    // Loop through all table rows
+    document.querySelectorAll("tbody tr").forEach((row, index) => {
+        // Get both radio buttons for that row
+        const radios = row.querySelectorAll(`input[name="agentCollectionList[${index}].paymentMethod"]`);
+
+        // Get the hidden field (optional)
+        const hiddenInput = row.querySelector(".selected-payment-method");
+
+        // Add listeners for both "Offline" and "Online"
+        radios.forEach(radio => {
+            radio.addEventListener("change", function() {
+                if (hiddenInput) hiddenInput.value = this.value;
+                console.log(`Row ${index + 1}: Payment Method = ${this.value}`);
+            });
+        });
+    });
+});
 
 /***************************************************/
 
@@ -396,7 +544,7 @@ changenoteInputs.forEach(note => {
 });*/
 
 
-document.addEventListener('DOMContentLoaded', function () {
+/*document.addEventListener('DOMContentLoaded', function () {
 		const confirmBtn = document.getElementById('confirmDenomination');
 
 		confirmBtn.addEventListener('click', function () {
@@ -407,11 +555,152 @@ document.addEventListener('DOMContentLoaded', function () {
 			// e.g., submit hidden form or trigger next step
 			// document.getElementById('hiddenForm').submit();
 		});
-	});
+	});*/
+
+function showLoader(show) {
+  const overlay = document.getElementById("loaderOverlay");
+  if (!overlay) return;
+  overlay.style.display = show ? "flex" : "none";
+  if (show) {
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+  }
+}
 
 
 /*******************SAVE DENOMINATION CONFIRM***************/
-document.addEventListener("DOMContentLoaded", function () {
+
+document.getElementById("confirmDenomination").addEventListener("click", async function () {
+    const confirmBtn = this;
+    const amountReceivedInput = document.getElementById("amountReceived");
+    const amountReceived = parseInt(amountReceivedInput.value) || 0;
+    const totalAmount = parseInt(document.getElementById("totalDenomination").textContent) || 0;
+    const changeReturnreceived = parseInt(document.getElementById("changeReturn").textContent) || 0;
+
+    // 🧩 Step 1: Validate Inputs
+    if (!amountReceived || amountReceived <= 0) {
+        alert("❌ कृपया प्राप्त राशि दर्ज करें");
+        amountReceivedInput.focus();
+        return;
+    }
+    if (!totalAmount || totalAmount <= 0) {
+        alert("❌ कृपया डेनोमिनेशन नोट दर्ज करें");
+        return;
+    }
+    if (amountReceived > totalAmount) {
+        alert("❌ कृपया डेनोमिनेशन नोट और डेनोमिनेशन राशि चेक करें");
+        return;
+    }
+
+const totalChangeAmount = parseInt(document.getElementById("totalChange").textContent) || 0;
+	
+	if(changeReturnreceived != 0){
+	if (!totalChangeAmount || totalChangeAmount <= 0) {
+		alert("❌ कृपया चेन्ज डेनोमिनेशन नोट दर्ज करें");
+		return;
+	}
+	}
+	console.log("totalChangeAmount data", totalChangeAmount)
+	console.log("changeReturnreceived data", changeReturnreceived)
+	if (changeReturnreceived != totalChangeAmount) {
+		alert("❌ कृपया चेन्ज डेनोमिनेशन नोट और चेन्ज डेनोमिनेशन राशि चेक करें");
+		return;
+	}
+
+
+    // 🧩 Step 2: Prepare data
+    const data = {
+        amountReceived,
+        totalAmount,
+        changeReturn: parseInt(document.getElementById("changeReturn").textContent) || 0,
+        customerId: document.getElementById("denominationCustomerId").value,
+        receiptNo: document.getElementById("receiptNo").value,
+        asondate: document.getElementById("asondate").value,
+        onlineAmt: parseInt(document.getElementById("onlineAmt").value) || 0,
+        r2000: parseInt(document.getElementById("r2000").value) || 0,
+        r500: parseInt(document.getElementById("r500").value) || 0,
+        r200: parseInt(document.getElementById("r200").value) || 0,
+        r100: parseInt(document.getElementById("r100").value) || 0,
+        r50: parseInt(document.getElementById("r50").value) || 0,
+        r20: parseInt(document.getElementById("r20").value) || 0,
+        r10: parseInt(document.getElementById("r10").value) || 0,
+        r5: parseInt(document.getElementById("r5").value) || 0,
+        r2: parseInt(document.getElementById("r2").value) || 0,
+        r1: parseInt(document.getElementById("r1").value) || 0,
+        c2000: parseInt(document.getElementById("c2000").value) || 0,
+        c500: parseInt(document.getElementById("c500").value) || 0,
+        c200: parseInt(document.getElementById("c200").value) || 0,
+        c100: parseInt(document.getElementById("c100").value) || 0,
+        c50: parseInt(document.getElementById("c50").value) || 0,
+        c20: parseInt(document.getElementById("c20").value) || 0,
+        c10: parseInt(document.getElementById("c10").value) || 0,
+        c5: parseInt(document.getElementById("c5").value) || 0,
+        c2: parseInt(document.getElementById("c2").value) || 0,
+        c1: parseInt(document.getElementById("c1").value) || 0
+    };
+
+    // 🧩 Step 3: Show loader
+    showLoader(true);
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = "⏳ Processing...";
+
+    try {
+        // 🧩 Step 4: Save collection first
+        const form = document.getElementById("collectionForm");
+        const formData = new FormData(form);
+
+        const collectionResponse = await fetch('/myapp/saveCollection', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!collectionResponse.ok) throw new Error("Collection save failed");
+
+        // ✅ Convert response text (because your controller returns a view, not JSON)
+        const responseText = await collectionResponse.text();
+
+        // 🔍 Check if "Saved Successfully" is present
+        if (!responseText.includes("Saved Successfully")) {
+            showLoader(false);
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = "Confirm";
+            alert("❌ कलेक्शन सेव नहीं हुआ। कृपया जांचें और पुनः प्रयास करें।",responseText);
+           // console.error("Collection Save Response:", responseText);
+            return;
+        }
+
+        console.log("✅ Collection saved successfully, now saving denomination...");
+
+        // 🧩 Step 5: Save denomination
+        const denomResponse = await fetch('/myapp/saveDenomination', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (!denomResponse.ok) throw new Error("Denomination save failed");
+
+        const result = await denomResponse.json();
+        alert(result.message || "✅ Collection And Denomination Saved Successfully!");
+
+        // 🧩 Step 6: Redirect to print page
+        const { customerId, receiptNo, asondate } = data;
+        window.location.href = `/myapp/printCollectionAfterConfirm?customerId=${encodeURIComponent(customerId)}&receiptNo=${encodeURIComponent(receiptNo)}&asondate=${encodeURIComponent(asondate)}`;
+
+    } catch (error) {
+        console.error("❌ Error:", error);
+        alert("❌ कलेक्शन या डेनोमिनेशन सेव करने में त्रुटि हुई। कृपया पुनः प्रयास करें।");
+        showLoader(false);
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = "Confirm";
+    }
+});
+
+
+
+
+
+/*document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("confirmDenomination").addEventListener("click", function () {
 	
 	const amountReceivedInput = document.getElementById("amountReceived");
@@ -452,7 +741,7 @@ document.getElementById("confirmDenomination").addEventListener("click", functio
 		return;
 	}
 	
-	/*const notes = document.querySelectorAll(".note");
+	const notes = document.querySelectorAll(".note");
 	const denominationData = [];
 
 	notes.forEach(note => {
@@ -461,8 +750,18 @@ document.getElementById("confirmDenomination").addEventListener("click", functio
 		if (count > 0) {
 			denominationData.push({ value, count });
 		}
-	});*/
+	});
 
+	const confirmBtn = document.getElementById('confirmDenomination');
+
+		confirmBtn.addEventListener('click', function () {
+			confirmBtn.disabled = true; // disable the button
+			confirmBtn.textContent = '⏳ Processing...'; // optional: show feedback
+
+			// ✅ Continue your logic here (like form submission or other actions)
+			// e.g., submit hidden form or trigger next step
+			// document.getElementById('hiddenForm').submit();
+		});
 	
 	const changeReturn = parseInt(document.getElementById("changeReturn").textContent) || 0;
 	const onlineAmt = parseInt(document.getElementById("onlineAmt").value) || 0;
@@ -528,14 +827,14 @@ const data = {
 	};
 
 
-	/*const data = {
+	const data = {
 		denominations: denominationData,
 		amountReceived,
 		totalAmount,
 		changeReturn,
 		customerId,
 		receiptNo
-	};*/
+	};
 	
 console.log("denomination data", data)
 	fetch('/myapp/saveDenomination', {
@@ -574,7 +873,7 @@ console.log("denomination data", data)
 		window.location.href = '/myapp/viewAgent';
 	});
 });
-});
+});*/
 
 
 // Cancel button in modal

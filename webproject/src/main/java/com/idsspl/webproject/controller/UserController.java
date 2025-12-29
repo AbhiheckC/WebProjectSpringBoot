@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.idsspl.webproject.dto.AgentCollectionListDto;
 import com.idsspl.webproject.entity.AgentEntity;
 import com.idsspl.webproject.entity.Denomination;
 import com.idsspl.webproject.entity.DenominationSummaryEntity;
@@ -168,19 +169,45 @@ public class UserController {
 		}
 		return "ViewAgent";
 	}
-
+	
 	@PostMapping(path = "/saveCollection")
-	public String updateAgent(@ModelAttribute("agentCollectionList") AgentCollectionModel agentCollectionList,
+	public String updateAgent(@ModelAttribute AgentCollectionListDto agentCollectionList,
 			BindingResult bindingResult, Model model, Authentication authentication) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/home";
 		}
+		String result="";
+//		System.out.println("===== customer id = " + agentCollectionList.getAgentCollectionList());
 		String userName = authentication.getName();
-		String result = agentService.saveAgentCollection(agentCollectionList, userName);
+		for (AgentCollectionModel agentCollectionModel : agentCollectionList.getAgentCollectionList()) {
+
+			System.out.println("===== customer id = " + agentCollectionModel.getCustomerId());
+//			System.out.println("accountCode = " + agentCollectionModel.getAccountCode());
+//			System.out.println("collection amt = " + agentCollectionModel.getCollectionAmount());
+//			System.out.println("balance = " + agentCollectionModel.getLedgerbalance());
+			System.out.println("===payment method==="+agentCollectionModel.getPaymentMethod());
+			if(agentCollectionModel.getCollectionAmount()!=null) {
+				if(agentCollectionModel.getCollectionAmount()!=0.0) { 
+	result = agentService.saveAgentCollection(agentCollectionModel, userName);
+				}
+}
+		}
 		model.addAttribute("isCollectionSaved", result);
 		System.out.println("result===============" + result);
 		return "ViewAgent";
 	}
+	
+
+	/*
+	 * @PostMapping(path = "/saveCollection") public String
+	 * updateAgent(@ModelAttribute("agentCollectionList") AgentCollectionModel
+	 * agentCollectionList, BindingResult bindingResult, Model model, Authentication
+	 * authentication) { if (bindingResult.hasErrors()) { return "redirect:/home"; }
+	 * String userName = authentication.getName(); String result =
+	 * agentService.saveAgentCollection(agentCollectionList, userName);
+	 * model.addAttribute("isCollectionSaved", result);
+	 * System.out.println("result===============" + result); return "ViewAgent"; }
+	 */
 
 //	@PostMapping(path = "/addGuarantor")
 //	public String AddGuarantorPage(@ModelAttribute AddGuarantorListDto customerGuarantorList,
@@ -512,7 +539,7 @@ public class UserController {
 		try {
 			String userName = authentication.getName();
 			denominationService.save(request, userName);
-			return ResponseEntity.ok(Collections.singletonMap("message", "Denomination saved successfully"));
+			return ResponseEntity.ok(Collections.singletonMap("message", "✅ Collection And Denomination Saved Successfully."));
 		} catch (Exception e) {
 			e.printStackTrace(); // ⬅️ Print the real exception to console/log
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -527,7 +554,7 @@ public class UserController {
 		try {
 			String userName = authentication.getName();
 			denominationService.saveMultipleDenomination(request, userName);
-			return ResponseEntity.ok(Collections.singletonMap("message", "Multiple Denomination saved successfully"));
+			return ResponseEntity.ok(Collections.singletonMap("message", "✅ Multiple Denomination Saved Successfully."));
 		} catch (Exception e) {
 			e.printStackTrace(); // ⬅️ Print the real exception to console/log
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

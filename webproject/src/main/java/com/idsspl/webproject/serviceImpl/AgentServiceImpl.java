@@ -285,7 +285,11 @@ public class AgentServiceImpl implements AgentService {
 			collectionModel.setCustomerId(collectionEntity.getCustomerId());
 			collectionModel.setCollectionAmount(collectionEntity.getCollectionAmount());
 			collectionModel.setReceiptNo(collectionEntity.getReceiptNo());
-			collectionModel.setAccountType(collectionEntity.getAccountType());
+			if(collectionEntity.getAccountCode().substring(4, 7).equals("000")) {
+				collectionModel.setAccountType(collectionEntity.getAccountType()+" - "+collectionEntity.getParticular());
+			}else {
+				collectionModel.setAccountType(collectionEntity.getAccountType());
+			}
 			collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName());
 
 			
@@ -368,6 +372,8 @@ public class AgentServiceImpl implements AgentService {
 		System.out.println("agentId in collection list----------" + agentId);
 		System.out.println("agentName in collection list----------" + agentName);
 		System.out.println("collection.getCollectionDate()====" + collection.getCollectionDate());
+		
+	
 //		agentCollectionEntityList = collectionInfoRepo.findByAgentId(agentId);
 //		agentCollectionEntityList = collectionInfoRepo.findInfoByAgentIdAndAgentName(agentId, agentName);
 		agentCollectionEntityList = collectionInfoRepo.findInfoByAgentIdAndAgentName(agentId, agentName,
@@ -380,7 +386,27 @@ public class AgentServiceImpl implements AgentService {
 			collectionModel.setCustomerId(collectionEntity.getCustomerId());
 			collectionModel.setCollectionAmount(collectionEntity.getCollectionAmount());
 			collectionModel.setReceiptNo(collectionEntity.getReceiptNo());
+			
+//			System.out.println("agentName in getCustomerId ----------" + collectionEntity.getCustomerId());
+			if(collectionEntity.getCustomerId().trim().equals("0")) {
+				
+				System.out.println("agentCollectionRepo----------" + collectionEntity.getCustomerId().trim()+"=="+collectionEntity.getCollectionDate().substring(0,10)+"===collectionEntity.getReceiptNo()==="+collectionEntity.getReceiptNo());
+				AgentCollectionEntity pre = agentCollectionRepo.findParticularByAgentId(
+						collectionEntity.getCustomerId().trim(), 
+						collectionEntity.getCollectionDate(),
+						collectionEntity.getReceiptNo());
+				
+				String particualrgl = "";
+				
+				if (pre != null) {
+					particualrgl = pre.getParticular();
+				}
+				
+				collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName()+" "+particualrgl);
+			}else {
 			collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName());
+			}
+			
 			collectionModel.setPaymentMethod(collectionEntity.getPaymentMethod());
 			collectionModel.setIsMultipleDenomination(collectionEntity.getIsMultipleDenomination());
 			

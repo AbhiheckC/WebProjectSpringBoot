@@ -42,8 +42,8 @@ public class CollectionInfoEntity {
     @Column(name= "multiple_denomination_no")
 	private Long multipleDenominationno;
     
-    
-    
+   
+
 	public Long getMultipleDenominationno() {
 		return multipleDenominationno;
 	}

@@ -75,6 +75,8 @@
 
 				<div class="text-center">
 					<div class="table-responsive" id="table">
+						<form method="post" th:action="@{/saveCollection}" th:target="hiddenFrame"
+										th:object="${agentCollectionListDto}" id="collectionForm">
 						<table class="table table-editable">
 							<thead class="thead">
 								<tr class="table-success">
@@ -86,13 +88,12 @@
 									<th>पेमेंट</th>
 									<!--<th>मल्टीपल कलेक्शन</th>-->
 									<th>कलेक्शन मात्रा</th>
-									<th>सेव</th>
+									<!--<th>सेव</th>-->
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="agent  : ${agentList}">
-									<form method="post" th:action="@{/saveCollection}" th:target="hiddenFrame"
-										th:object="${agentCollectionList}" id="collectionForm">
+							<!--	<tr th:each="agent  : ${agentList}">-->
+									<tr th:each="agent, iterStat : ${agentList}" th:attr="data-index=${iterStat.index}">
 										<td th:text="${agent.accountCode}"></td>
 										<td th:utext="${agent.accountType}"></td>
 										<td th:text="${agent.reviewDate}"></td>
@@ -100,10 +101,10 @@
 										<td th:text="${agent.ledgerbalance}"></td>
 
 										<td>
-											<label><input type="radio" name="paymentMethod" value="Offline">
+											<label><input type="radio" th:name="|agentCollectionList[${iterStat.index}].paymentMethod|" value="Offline">
 												Offline</label>
 											&nbsp;&nbsp;
-											<label><input type="radio" name="paymentMethod" value="Online">
+											<label><input type="radio" th:name="|agentCollectionList[${iterStat.index}].paymentMethod|" value="Online">
 												Online</label>
 										</td>
 										<input type="hidden" id="selectedPaymentMethod" name="selectedPaymentMethod" />
@@ -112,28 +113,28 @@
 
 										<!--10oct2025-->
 										<!--<input type="hidden" name="customerId" th:value="${agent.customerId}" />-->
-										<input type="hidden" name="customerId" th:value="${agentList[0].customerId}" />
-										<input type="hidden" id="accountCode" name="accountCode"
+										<input type="hidden"  th:name="|agentCollectionList[${iterStat.index}].customerId|" th:value="${agentList[0].customerId}" />
+										<input type="hidden" id="accountCode" th:name="|agentCollectionList[${iterStat.index}].accountCode|"
 											th:value="${agent.accountCode}" />
-										<input type="hidden" name="accountType" th:value="${agent.accountType}" />
-										<input type="hidden" name="name" th:value="${agent.name}" />
-										<input type="hidden" name="ledgerbalance" th:value="${agent.ledgerbalance}" />
-										<td><input type="number" id="collectionAmount" name="collectionAmount" min="0"
-												required /></td>
-										<input type="hidden" id="latitude" name="latitude" />
-										<input type="hidden" id="longitude" name="longitude" />
-										<input type="hidden" id="receiptNo" name="receiptNo" />
-										<input type="hidden" id="sendSMSInput" readonly />
-										<input type="hidden" id="isMultipleDenomination" name ="isMultipleDenomination" />
+										<input type="hidden" th:name="|agentCollectionList[${iterStat.index}].accountType|" th:value="${agent.accountType}" />
+										<input type="hidden" th:name="|agentCollectionList[${iterStat.index}].name|" th:value="${agent.name}" />
+										<input type="hidden" th:name="|agentCollectionList[${iterStat.index}].ledgerbalance|" th:value="${agent.ledgerbalance}" />
+										<td><input type="number" id="collectionAmount" th:name="|agentCollectionList[${iterStat.index}].collectionAmount|" min="0"
+												 /></td>
+										<input type="hidden" id="latitude" th:name="|agentCollectionList[${iterStat.index}].latitude|" /> <!--name="latitude"-->
+										<input type="hidden" id="longitude" th:name="|agentCollectionList[${iterStat.index}].longitude|" />
+										<input type="hidden" id="receiptNo" th:name="|agentCollectionList[${iterStat.index}].receiptNo|" />
+										<input type="hidden" id="sendSMSInput" th:name="|agentCollectionList[${iterStat.index}].sendSMSInput|" readonly />
+										<input type="hidden" id="isMultipleDenomination" th:name="|agentCollectionList[${iterStat.index}].isMultipleDenomination|" />
 
-<input type="hidden" name="particular" class="particularHidden" />
+<input type="hidden" th:name="|agentCollectionList[${iterStat.index}].particular|" class="particularHidden" /><!--name="particular"-->
 										<!-- <input type="hidden" id="collectionResponse" name="collectionResponse"
 											th:value="${isCollectionSaved}" />-->
-										<td>
-											<!--<input type="submit" id="saveBtn" class="btn" value="Save" />-->
+										<!--<td>
+											<input type="submit" id="saveBtn" class="btn" value="Save" />
 											<input type="submit" id="saveBtn" class="btn" value="Save" disabled />
-										</td>
-									</form>
+										</td>-->
+									
 								</tr>
 								<tr>
 									<td></td>
@@ -144,11 +145,22 @@
 									<td></td>
 									<!--<td></td>-->
 									<td><input type="text" id="total" name="total" disabled /></td>
-									<td><button onclick="totalAmount()" class="btn btn-success"
-											th:attr="data-customer-id=${agentList[0].customerId}">कुल रूपए</button></td>
+									<!--<td><button onclick="totalAmount()" class="btn btn-success"
+											th:attr="data-customer-id=${agentList[0].customerId}">कुल रूपए</button></td>-->
 								</tr>
 							</tbody>
 						</table>
+<div class="text-center mt-4">
+  
+  <!--<button type="button" onclick="totalAmount(event)" id="mainSaveBtn" class="btn btn-success">Save Collection</button>
+  -->
+  <button type="button" id="mainSaveBtn" class="btn btn-success" onclick="totalAmount(event)">
+            Save Collection
+        </button>
+  <span id="saveStatus" style="margin-left:12px;"></span>
+  
+</div>
+</form>
 
 						<!-- Denomination Modal -->
 						<div id="denominationModal" class="modal" style="display: none;">
@@ -262,6 +274,13 @@
 
 		</div>
 	</div>
+	<!-- loader overlay: paste once, near bottom of page -->
+<div id="loaderOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999;
+     backdrop-filter: blur(4px); background: rgba(255,255,255,0.6); justify-content:center; align-items:center; flex-direction:column;">
+  <div class="spinner" style="border:6px solid #f3f3f3; border-top:6px solid #3498db; border-radius:50%; width:50px; height:50px; animation:spin 1s linear infinite;"></div>
+  <span style="margin-top:12px; font-size:1.05rem; color:#222">Processing... कृपया प्रतीक्षा करें</span>
+</div>
+	
 	<script th:replace="includes/script :: script"></script>
 	<script src="script/viewAgentScript.js"></script>
 	<script th:if="${isDataMissing != null}" th:inline="javascript">
@@ -273,6 +292,7 @@
 	</script>
 	<script src="script/location.js"></script>
 	<script src="script/idNameSwitchBtn.js"></script>
+
 
 
 	<!--<footer th:replace="includes/footer :: footer"></footer>-->

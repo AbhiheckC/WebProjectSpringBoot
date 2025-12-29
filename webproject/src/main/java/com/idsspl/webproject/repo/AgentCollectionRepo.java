@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idsspl.webproject.entity.AgentCollectionEntity;
+import com.idsspl.webproject.entity.CollectionInfoEntity;
 
 @Repository
 public interface AgentCollectionRepo extends JpaRepository<AgentCollectionEntity, String>{
@@ -26,7 +27,7 @@ public interface AgentCollectionRepo extends JpaRepository<AgentCollectionEntity
 	
 	@Modifying
 	@Transactional
-    @Query("UPDATE AgentCollectionEntity u SET u.multipleDenominationno = ?1 WHERE u.agentName = ?2 and u.collectionDate = ?3 and u.isMultipleDenomination = 'Y' and u.multipleDenominationno is null")
+    @Query("UPDATE AgentCollectionEntity u SET u.multipleDenominationno = ?1 WHERE u.agentName = ?2 and u.collectionDate = ?3 and u.isMultipleDenomination = 'Y' and u.multipleDenominationno = 0 ")
 	void updateMultipleDenominationno(Long multidenominationno,String agentName, String asondate);
 	
 	
@@ -34,4 +35,8 @@ public interface AgentCollectionRepo extends JpaRepository<AgentCollectionEntity
     @Query(value = "SELECT Fn_Get_Cust_Name(:customerId) FROM DUAL", nativeQuery = true)
     String getCustomerNameByCustomerId(@Param("customerId") String customerId);
 	
+    @Query("SELECT a FROM AgentCollectionEntity a WHERE a.customerId= :customerId and to_char(a.collectionDate,'YYYY-MM-DD') = :collectionDate and a.receiptNo = :receiptNo and substr(a.accountCode,5,3) = '000'")
+    AgentCollectionEntity findParticularByAgentId(@Param("customerId") String customerId,@Param("collectionDate") String collectionDate, @Param("receiptNo") Long receiptNo);
+	
+    
 }
