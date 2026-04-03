@@ -942,18 +942,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	accountCode.forEach((input) => {
 
 		const substring = input.value.substring(4, 7);
-
+console.log("fhsdklfjsdlkfjflk;", substring)
 		if (substring === "901" || substring === "401" || substring === "402") {
 			//var collectionAmountInput = document.getElementById('collectionAmount');
 			// collectionAmountInput.disabled = true;
-			console.log("disable code", input.value.substring(4, 7))
+			//console.log("disable code", input.value.substring(4, 7))
 			const collectionAmountInput = input.closest('tr').querySelector('#collectionAmount');
-			const collsavebtn = input.closest('tr').querySelector('#saveBtn');
+			//const collsavebtn = input.closest('tr').querySelector('#saveBtn');
 		
 			// Disable the collectionAmount input if it exists
 			if (collectionAmountInput) {
 				collectionAmountInput.disabled = true;
-				collsavebtn.disabled = true;
+				//collsavebtn.disabled = true;
 			}
 		}
 

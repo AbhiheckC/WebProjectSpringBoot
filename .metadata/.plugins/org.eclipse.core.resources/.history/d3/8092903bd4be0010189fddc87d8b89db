@@ -1,9 +1,0 @@
-package com.idsspl.webproject.dto;
-
-import java.util.List;
-
-public class AgentCollectionListDto {
-
-//	 private List<AgentCollectionModel> agentCollectionList;
-	
-}

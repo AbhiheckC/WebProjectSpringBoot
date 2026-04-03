@@ -20,7 +20,9 @@
 				<h3 class="text-center heading" id="hehe">कलेक्शन की जानकारी</h3>
 
 				<form th:action="@{/getCollectionInfo}" method="post" class="singleInputButtonForm">
-					 <input type="hidden" id="collectionDate" name="collectionDate" th:value="${#dates.format(#dates.createNow(), 'dd-MMM-yy')}" />
+					<!--<input type="hidden" id="collectionDate" name="collectionDate" th:value="${#dates.format(#dates.createNow(), 'dd-MMM-yy')}" />-->
+					<input type="date" id="collectionDate" name="collectionDate" class=".ui-box .top-leftStart-backward"
+						required />
 					<input type="submit" class="submitBtn" value="Submit" />
 				</form>
 			</div>

@@ -1,4 +1,0 @@
-package com.idsspl.webproject.repo;
-
-public interface OpeningDenominationRepository extends JpaRepository<OpeningDenominationEntity, OpeningDenominationId> {
-}

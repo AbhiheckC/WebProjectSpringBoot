@@ -2,6 +2,8 @@ package com.idsspl.webproject.serviceImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -372,12 +374,22 @@ public class AgentServiceImpl implements AgentService {
 		System.out.println("agentId in collection list----------" + agentId);
 		System.out.println("agentName in collection list----------" + agentName);
 		System.out.println("collection.getCollectionDate()====" + collection.getCollectionDate());
-		
+	
+			LocalDate dateformat = LocalDate.parse(collection.getCollectionDate());
+
+			// Format to dd-MMM-yy
+			String formattedDate = dateformat.format(DateTimeFormatter.ofPattern("dd-MMM-yy"));
+			System.out.println("===date==="+formattedDate);
 	
 //		agentCollectionEntityList = collectionInfoRepo.findByAgentId(agentId);
 //		agentCollectionEntityList = collectionInfoRepo.findInfoByAgentIdAndAgentName(agentId, agentName);
-		agentCollectionEntityList = collectionInfoRepo.findInfoByAgentIdAndAgentName(agentId, agentName,
-				collection.getCollectionDate());
+		agentCollectionEntityList = collectionInfoRepo
+				.findInfoByAgentIdAndAgentName(
+						agentId, 
+						agentName,
+//				collection.getCollectionDate()
+						formattedDate
+				);
 
 		List<CollectionInfoModel> agentCollectionModelList = new ArrayList<>();
 
@@ -416,6 +428,7 @@ public class AgentServiceImpl implements AgentService {
 			try {
 				Date date = inputFormat.parse(collectionDate);
 				String outputDate = outputFormat.format(date);
+//				System.out.println("==outputDate=="+outputDate);
 				collectionModel.setCollectionDate(outputDate);
 			} catch (Exception e) {
 				e.printStackTrace();
