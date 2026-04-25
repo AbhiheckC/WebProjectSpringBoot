@@ -26,7 +26,7 @@ public interface AgentRepo extends JpaRepository<AgentEntity, String>{
 	
 //	public List<AgentEntity> findByCustomerId(String customerId);
 	
-	@Query("SELECT a FROM AgentEntity a WHERE a.customerId in (:customerId, '0')")
+	@Query("SELECT a FROM AgentEntity a WHERE a.customerId in (:customerId, '0') and (a.idDisplayOnApp = 'Y' OR a.idDisplayOnApp is null)")
 	public List<AgentEntity> findByCustomerId(@Param("customerId") String customerId);
 	
 	@Query("SELECT a FROM AgentEntity a WHERE a.customerId in (:customerId)")
@@ -40,6 +40,10 @@ public interface AgentRepo extends JpaRepository<AgentEntity, String>{
 	
 	@Query("SELECT a FROM AgentEntity a WHERE UPPER(a.name) LIKE UPPER(CONCAT('%', :name, '%'))")
 	public List<AgentEntity> findByCustomerName(@Param("name") String name);
+	
+	
+	@Query("SELECT a FROM AgentEntity a WHERE a.customerId in ('0') AND a.isBankGLDisplayOnApp = 'Y' ORDER BY a.accountCode")
+	public List<AgentEntity> findByCustomerIdForBank();//@Param("customerId") String customerId
 	
 //	@Query("SELECT a FROM AgentEntity a WHERE UPPER(a.name) LIKE UPPER(CONCAT('%', :name, '%')) AND UPPER(a.agentName) = UPPER(:agentName)")
 //	public List<AgentEntity> findByCustomerName(@Param("name") String name, @Param("agentName") String agentName);

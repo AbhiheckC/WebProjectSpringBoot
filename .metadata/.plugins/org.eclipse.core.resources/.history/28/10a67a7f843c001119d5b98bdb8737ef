@@ -1,0 +1,13 @@
+package com.idsspl.webproject.dto;
+
+public class AccountGLDto {
+
+	 private String accountCode;
+	    private String glName;
+
+	    public AccountGLDTO(String accountCode, String glName) {
+	        this.accountCode = accountCode;
+	        this.glName = glName;
+	    }
+	
+}

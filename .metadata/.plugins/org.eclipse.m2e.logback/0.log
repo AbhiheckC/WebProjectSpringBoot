@@ -44924,3 +44924,4 @@ org.eclipse.core.runtime.CoreException: Could not resolve artifact org.springfra
 2026-02-17 18:27:56,906 [Worker-75: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory D:\NewProjectWorkspace\webproject\src\test\resources
 2026-02-17 18:29:13,500 [Worker-118: Launching webproject] INFO  o.e.m.i.launch.MavenLaunchDelegate - Run build in "D:\NewProjectWorkspace\webproject":
 2026-02-17 18:29:13,500 [Worker-118: Launching webproject] INFO  o.e.m.i.launch.MavenLaunchDelegate -  mvn  -B -Dmaven.test.skip=true -DskipTests -Dstyle.color=always clean install
+2026-03-30 16:15:36,900 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.

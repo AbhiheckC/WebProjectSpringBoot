@@ -7,9 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.idsspl.webproject.dto.AccountGLDto;
 import com.idsspl.webproject.entity.AccountStatementEntity;
 import com.idsspl.webproject.entity.AgentCollectionEntity;
 import com.idsspl.webproject.entity.AgentEntity;
@@ -104,11 +107,11 @@ public class AgentServiceImpl implements AgentService {
 			agentModel.setAccountCode(agentEntity.getAccountCode());
 			agentModel.setCustomerId(agentEntity.getCustomerId());
 			agentModel.setLedgerbalance(agentEntity.getLedgerbalance());
-			
-			if(agentEntity.getCustomerId().equals("0")) {
+
+			if (agentEntity.getCustomerId().equals("0")) {
 				agentModel.setName("GL");
-			}else {
-			agentModel.setName(agentEntity.getName());
+			} else {
+				agentModel.setName(agentEntity.getName());
 			}
 			agentModel.setAccountType(agentEntity.getAccountType());
 			agentModel.setLocalLanguageName(agentEntity.getLocalLanguageName());
@@ -161,31 +164,32 @@ public class AgentServiceImpl implements AgentService {
 		newAgent.setAgentName(userName);
 		newAgent.setReceiptNo(agentCollection.getReceiptNo());
 		newAgent.setPaymentMethod(agentCollection.getPaymentMethod());
-		
+
 		String account = agentCollection.getAccountCode();
 		String customer = agentCollection.getCustomerId();
-		System.out.println("==product==="+account.substring(4, 7)+"==="+customer);
-		if(account.substring(4, 7).equals("000")) {
-			
-			if(customer.equals("0")) {
-				System.out.println("==="+agentCollection.getParticular()+"===");
-				if(agentCollection.getParticular().equals("")) {
+		System.out.println("==product===" + account.substring(4, 7) + "===" + customer);
+		if (account.substring(4, 7).equals("000")) {
+
+			if (customer.equals("0")) {
+				System.out.println("===" + agentCollection.getParticular() + "===");
+				if (agentCollection.getParticular().equals("")) {
 					System.out.println("----error particular----");
 					return "Please Enter particular for GL Entry.";
 				}
-				
-				newAgent.setParticular(agentCollection.getParticular());							
-			}else {
-				
-				System.out.println("name ==="+agentCollectionRepo.getCustomerNameByCustomerId(agentCollection.getCustomerId()));
-				newAgent.setParticular(agentCollectionRepo.getCustomerNameByCustomerId(agentCollection.getCustomerId()));	
+
+				newAgent.setParticular(agentCollection.getParticular());
+			} else {
+
+				System.out.println(
+						"name ===" + agentCollectionRepo.getCustomerNameByCustomerId(agentCollection.getCustomerId()));
+				newAgent.setParticular(
+						agentCollectionRepo.getCustomerNameByCustomerId(agentCollection.getCustomerId()));
 			}
-			
-		}else {
+
+		} else {
 			newAgent.setParticular("");
 		}
-		
-		
+
 		System.out.println(
 				"===agentCollection.getIsMultipleDenomination()===" + agentCollection.getIsMultipleDenomination());
 
@@ -239,20 +243,20 @@ public class AgentServiceImpl implements AgentService {
 
 		try {
 			String nullobj = "null";
-			if(agentCollection.getCollectionAmount()!=null) {
+			if (agentCollection.getCollectionAmount() != null) {
 				String obj = "";
-			if (!agentCollection.getReceiptNo().equals(obj)) {
-				agentCollectionRepo.save(newAgent);
-				// userEntity.setReceiptNo(agentCollection.getReceiptNo());
-				// userRepo.save(userEntity);
-				userRepo.updateReceiptNoByUserName(userName, agentCollection.getReceiptNo());
-				System.out.println("----------------Saving Agent Collection END--------------");
-				return "Saved Successfully";
+				if (!agentCollection.getReceiptNo().equals(obj)) {
+					agentCollectionRepo.save(newAgent);
+					// userEntity.setReceiptNo(agentCollection.getReceiptNo());
+					// userRepo.save(userEntity);
+					userRepo.updateReceiptNoByUserName(userName, agentCollection.getReceiptNo());
+					System.out.println("----------------Saving Agent Collection END--------------");
+					return "Saved Successfully";
+				} else {
+					System.out.println("----------------Saving Agent Collection END--------------");
+					return "Error Saving Data.";
+				}
 			} else {
-				System.out.println("----------------Saving Agent Collection END--------------");
-				return "Error Saving Data.";
-			}
-			}else {
 				return "Please Enter Collection Amount";
 			}
 		} catch (Exception e) {
@@ -271,14 +275,11 @@ public class AgentServiceImpl implements AgentService {
 		System.out.println("print receipt no----------" + collection.getReceiptNo());
 		agentCollectionEntityList = printAgentCollectionRepo.findByCustomerIdAndCollectionDate(
 				collection.getCustomerId(), collection.getCollectionDate(), collection.getReceiptNo());
-		
-		
+
 		// Calculate total using stream
-		double totalCollectionAmount = agentCollectionEntityList.stream()
-		    .filter(e -> e.getCollectionAmount() != null)
-		    .mapToDouble(PrintAgentCollectionEntity::getCollectionAmount)
-		    .sum();
-		
+		double totalCollectionAmount = agentCollectionEntityList.stream().filter(e -> e.getCollectionAmount() != null)
+				.mapToDouble(PrintAgentCollectionEntity::getCollectionAmount).sum();
+
 		List<PrintAgentCollectionModel> agentCollectionModelList = new ArrayList<>();
 
 		agentCollectionEntityList.stream().forEach(collectionEntity -> {
@@ -287,15 +288,14 @@ public class AgentServiceImpl implements AgentService {
 			collectionModel.setCustomerId(collectionEntity.getCustomerId());
 			collectionModel.setCollectionAmount(collectionEntity.getCollectionAmount());
 			collectionModel.setReceiptNo(collectionEntity.getReceiptNo());
-			if(collectionEntity.getAccountCode().substring(4, 7).equals("000")) {
-				collectionModel.setAccountType(collectionEntity.getAccountType()+" - "+collectionEntity.getParticular());
-			}else {
+			if (collectionEntity.getAccountCode().substring(4, 7).equals("000")) {
+				collectionModel
+						.setAccountType(collectionEntity.getAccountType() + " - " + collectionEntity.getParticular());
+			} else {
 				collectionModel.setAccountType(collectionEntity.getAccountType());
 			}
 			collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName());
 
-			
-			
 			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
 			String collectionDate = collectionEntity.getCollectionDate();
@@ -307,9 +307,9 @@ public class AgentServiceImpl implements AgentService {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			collectionModel.setCollectionTotal(totalCollectionAmount);
-			
+
 			agentCollectionModelList.add(collectionModel);
 
 			System.out.println("print customer Id---------" + collectionEntity.getCustomerId());
@@ -374,22 +374,18 @@ public class AgentServiceImpl implements AgentService {
 		System.out.println("agentId in collection list----------" + agentId);
 		System.out.println("agentName in collection list----------" + agentName);
 		System.out.println("collection.getCollectionDate()====" + collection.getCollectionDate());
-	
-			LocalDate dateformat = LocalDate.parse(collection.getCollectionDate());
 
-			// Format to dd-MMM-yy
-			String formattedDate = dateformat.format(DateTimeFormatter.ofPattern("dd-MMM-yy"));
-			System.out.println("===date==="+formattedDate);
-	
+		LocalDate dateformat = LocalDate.parse(collection.getCollectionDate());
+
+		// Format to dd-MMM-yy
+		String formattedDate = dateformat.format(DateTimeFormatter.ofPattern("dd-MMM-yy"));
+		System.out.println("===date===" + formattedDate);
+
 //		agentCollectionEntityList = collectionInfoRepo.findByAgentId(agentId);
 //		agentCollectionEntityList = collectionInfoRepo.findInfoByAgentIdAndAgentName(agentId, agentName);
-		agentCollectionEntityList = collectionInfoRepo
-				.findInfoByAgentIdAndAgentName(
-						agentId, 
-						agentName,
+		agentCollectionEntityList = collectionInfoRepo.findInfoByAgentIdAndAgentName(agentId, agentName,
 //				collection.getCollectionDate()
-						formattedDate
-				);
+				formattedDate);
 
 		List<CollectionInfoModel> agentCollectionModelList = new ArrayList<>();
 
@@ -398,30 +394,72 @@ public class AgentServiceImpl implements AgentService {
 			collectionModel.setCustomerId(collectionEntity.getCustomerId());
 			collectionModel.setCollectionAmount(collectionEntity.getCollectionAmount());
 			collectionModel.setReceiptNo(collectionEntity.getReceiptNo());
-			
-//			System.out.println("agentName in getCustomerId ----------" + collectionEntity.getCustomerId());
-			if(collectionEntity.getCustomerId().trim().equals("0")) {
-				
-				System.out.println("agentCollectionRepo----------" + collectionEntity.getCustomerId().trim()+"=="+collectionEntity.getCollectionDate().substring(0,10)+"===collectionEntity.getReceiptNo()==="+collectionEntity.getReceiptNo());
-				AgentCollectionEntity pre = agentCollectionRepo.findParticularByAgentId(
-						collectionEntity.getCustomerId().trim(), 
-						collectionEntity.getCollectionDate(),
-						collectionEntity.getReceiptNo());
-				
-				String particualrgl = "";
-				
-				if (pre != null) {
-					particualrgl = pre.getParticular();
-				}
-				
-				collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName()+" "+particualrgl);
-			}else {
-			collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName());
+
+			System.out.println("agentName in getCustomerId ----------" + collectionEntity.getCustomerId());
+
+			/*
+			 * if(collectionEntity.getCustomerId().trim().equals("0")) {
+			 * 
+			 * System.out.println("agentCollectionRepo----------" +
+			 * collectionEntity.getCustomerId().trim()+"=="+collectionEntity.
+			 * getCollectionDate().substring(0,10)+"===collectionEntity.getReceiptNo()==="+
+			 * collectionEntity.getReceiptNo()); AgentCollectionEntity pre =
+			 * agentCollectionRepo.findParticularByCustomerId(
+			 * collectionEntity.getCustomerId().trim(), //
+			 * collectionEntity.getCollectionDate().substring(0,10), // formattedDate,
+			 * collectionEntity.getReceiptNo(), agentId);
+			 * 
+			 * String particualrgl = "";
+			 * System.out.println("==pre.getParticular()=="+pre.getParticular()); if (pre !=
+			 * null) { particualrgl = pre.getParticular(); }
+			 * System.out.println("===="+collectionEntity.getLocalLanguageName()+" "
+			 * +particualrgl);
+			 * collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName()
+			 * +" "+particualrgl); }else {
+			 * collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName())
+			 * ; }
+			 */
+
+			if (collectionEntity.getLocalLanguageName().equals("GL")) {
+
+				System.out.println("agentCollectionRepo----------" + collectionEntity.getCustomerId().trim() + "=="
+						+ collectionEntity.getCollectionDate().substring(0, 10)
+						+ "===collectionEntity.getReceiptNo()===" + collectionEntity.getReceiptNo());
+
+				List<String> accountcodelist = agentCollectionRepo
+						.findParticularByCustomerId(collectionEntity.getCustomerId().trim(), //
+//						  collectionEntity.getCollectionDate().substring(0,10),
+								// formattedDate,
+								collectionEntity.getReceiptNo(), agentId);
+
+				/*
+				 * Map<String, String> map = accountcodelist.stream() .collect(Collectors.toMap(
+				 * AccountGLDto::getAccountCode, AccountGLDto::getGlName ));
+				 * 
+				 * System.out.println("accountcode===="+map);
+				 */
+//				System.out.println("==accountcodelist=="+accountcodelist);
+
+				String glname="";
+				  for(String adto : accountcodelist) {
+				  System.out.println("===="+adto); 
+				  if(accountcodelist.size()>1) {
+				  glname = glname +""+agentCollectionRepo.findGLName(adto)+"/";
+				  }else {
+					  glname = agentCollectionRepo.findGLName(adto);  
+				  }
+				  }
+				 
+
+
+				collectionModel.setLocalLanguageName(glname);
+			} else {
+				collectionModel.setLocalLanguageName(collectionEntity.getLocalLanguageName());
 			}
-			
+
 			collectionModel.setPaymentMethod(collectionEntity.getPaymentMethod());
 			collectionModel.setIsMultipleDenomination(collectionEntity.getIsMultipleDenomination());
-			
+
 			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
 			String collectionDate = collectionEntity.getCollectionDate();
@@ -581,6 +619,69 @@ public class AgentServiceImpl implements AgentService {
 		});
 
 		return agentCollectionModelList;
+	}
+
+	@Override
+	public List<AgentModel> getAgentsBankBranchList(AgentModel agent, String userName) {
+		System.out.println("customerID----" + agent.getCustomerId());
+		List<AgentEntity> agentEntityList = null;
+//		
+//		if (agent.getCustomerId().length() == 10 && !agent.getCustomerId().isEmpty()) {
+//			
+		agentEntityList = agentRepo.findByCustomerIdForBank();
+
+//		System.out.println("customerID----" + agent.getCustomerId() + "---------");
+//		System.out.println("customerID length----" + agent.getCustomerId().length() + "---------");
+
+//		}
+
+		List<AgentModel> agentModelList = new ArrayList<>();
+
+		agentEntityList.stream().forEach(agentEntity -> {
+			AgentModel agentModel = new AgentModel();
+			agentModel.setAccountCode(agentEntity.getAccountCode());
+			agentModel.setCustomerId(agentEntity.getCustomerId());
+			agentModel.setLedgerbalance(agentEntity.getLedgerbalance());
+
+			if (agentEntity.getCustomerId().equals("0")) {
+				agentModel.setName("GL");
+			} else {
+				agentModel.setName(agentEntity.getName());
+			}
+			agentModel.setAccountType(agentEntity.getAccountType());
+			agentModel.setLocalLanguageName(agentEntity.getLocalLanguageName());
+			agentModel.setMobile(agentEntity.getMobile());
+			agentModel.setInstallmentAmount(agentEntity.getInstallmentAmount());
+
+			// TO GET RECEIPT NO FROM USERREGISTER TABLE
+			UserEntity userEntity = null;
+			userEntity = userRepo.findByUserName(userName);
+
+			long receiptNo = userEntity.getReceiptNo();
+			receiptNo += 1;
+			agentModel.setReceiptNo(receiptNo);
+
+//			System.out.println("review date----" + agentEntity.getReviewDate() + "---------");
+			String reviewDate = agentEntity.getReviewDate();
+
+			if (reviewDate != null) {
+				SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+				try {
+					Date date = inputFormat.parse(reviewDate);
+					String outputDate = outputFormat.format(date);
+					agentModel.setReviewDate(outputDate);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+			agentModelList.add(agentModel);
+
+		});
+
+		return agentModelList;
 	}
 
 //	@Override

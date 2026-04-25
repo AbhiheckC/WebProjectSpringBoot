@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
+
+
+
 /********************VALIDATION FOR POSITIVE VALUES*******************************/
 document.querySelectorAll('input[type="number"][id^="r"]').forEach(input => {
   input.addEventListener('input', () => {
@@ -118,16 +122,25 @@ function totalAmount(event) {
     const rows = document.querySelectorAll("tbody tr");
     const customerId = document.getElementById('denominationCustomerId')?.value || '';
     const particularInput = document.getElementById('mainParticular'); 
+    const addressInput = document.getElementById('Address'); 
 
 // ✅ 1️⃣ Validation: If customerId is 0 → "Particular" is mandatory
     if (customerId === "0") {
         const particularValue = particularInput?.value.trim() || "";
+        const addressValue = addressInput?.value.trim() || "";
         if (particularValue === "") {
             alert("❌ कृपया GL एंट्री के लिए PARTICULAR दर्ज करें।");
             if (particularInput) particularInput.focus();
             if (event) event.preventDefault();
             return false;
         }
+         if (addressValue === "") {
+            alert("❌ कृपया GL एंट्री के लिए ADDRESS दर्ज करें।");
+            if (addressInput) addressInput.focus();
+            if (event) event.preventDefault();
+            return false;
+        }
+        
     }
     let hasOffline = false;
 let hasOnline = false;
@@ -1000,7 +1013,31 @@ console.log("fhsdklfjsdlkfjflk;", substring)
 
 // for Particular
 document.addEventListener('DOMContentLoaded', function () {
+   
+   // Optional: auto update on typing
+document.querySelectorAll("#Parti, #Address").forEach(el => {
+    el.addEventListener("input", updateParticular);
+});
+
+function updateParticular() {
+    let parti = document.getElementById("Parti").value;
+    let address = document.getElementById("Address").value;
+
+    let fullAddress = parti + "  " + address;
+
+    document.getElementById("mainParticular").value = fullAddress;
+    
+    // ✅ Update hidden fields directly
+        hiddenParticularInputs.forEach(input => {
+            input.value = fullAddress;
+        });
+    
+}
+
+
     const mainParticular = document.getElementById('mainParticular');
+    console.log("✅ Particular :", mainParticular);
+   
     const hiddenParticularInputs = document.querySelectorAll('.particularHidden');
 
     // Initialize all hidden fields as empty

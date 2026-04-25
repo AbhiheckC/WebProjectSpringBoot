@@ -722,6 +722,35 @@ public class UserController {
 		return "MultipleDenominationInfo";
 	}
 
+	
+	// TO GET VIEW BRANCH BANK PAGE
+		@GetMapping(path = "/viewBranchCollection")
+		public String PostViewBranchCollectionPage(AgentModel agent, Model model, Authentication authentication) {
+			List<AgentModel> agents;
+			String userName = authentication.getName();
+
+			agents = agentService.getAgentsBankBranchList(agent, userName);
+			System.out.println("agent======" + agents);
+			if (agents == null || agents.isEmpty()) {
+				String isDataMissing = "No data Found!";
+				model.addAttribute("isReadonly", false); 
+				model.addAttribute("hidden", "submit");
+				model.addAttribute("isDataMissing", isDataMissing);
+			} else if (agents != null || !agents.isEmpty()) {
+				System.out.println("--------------" + agents.get(0));
+				model.addAttribute("agentList", agents);
+				model.addAttribute("isReadonly", true);
+				model.addAttribute("hidden", "hidden");
+			}
+			return "ViewBranchCollectionPage";
+		}
+		/*
+		 * public String GetViewBranchCollectionPage(Model model) { //
+		 * model.addAttribute("isReadonly", false); // model.addAttribute("hidden",
+		 * "submit"); return "ViewBranchCollectionPage"; }
+		 */
+	
+	
 	@GetMapping(path = "/hello")
 	public String sayHello(Model model) {
 		String username = agentService.sayHello();

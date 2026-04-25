@@ -42,11 +42,41 @@ public class AgentEntity {
 	@Column(name = "local_name")
 	private String localName;
 	
+	@Column(name = "is_display_on_app")
+	private String idDisplayOnApp;
+	
+	@Column(name = "is_bank_gl_display_on_app")
+	private String isBankGLDisplayOnApp;
+	
 //	@Column(name = "receipt_no")
 //    private Long receiptNo;
 
+	
+	
 	public String getLocalName() {
 		return localName;
+	}
+
+	
+	
+	public String getIdDisplayOnApp() {
+		return idDisplayOnApp;
+	}
+
+
+
+	public void setIdDisplayOnApp(String idDisplayOnApp) {
+		this.idDisplayOnApp = idDisplayOnApp;
+	}
+
+
+
+	public String getIsBankGLDisplayOnApp() {
+		return isBankGLDisplayOnApp;
+	}
+
+	public void setIsBankGLDisplayOnApp(String isBankGLDisplayOnApp) {
+		this.isBankGLDisplayOnApp = isBankGLDisplayOnApp;
 	}
 
 	public void setLocalName(String localName) {

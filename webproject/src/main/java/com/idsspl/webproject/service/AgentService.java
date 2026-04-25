@@ -37,5 +37,8 @@ public interface AgentService {
 	public List<PrintAccountStatementModel> getCollectionList(PrintAccountStatementModel collection);
 
 	public List<CollectionInfoModel> getMultipleCollectionList(String userName, String collectionDate);
+	
+	public List<AgentModel> getAgentsBankBranchList(AgentModel agent, String userName);
+
 
 }
